@@ -1,0 +1,792 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>HC-ERP-Add Medication</title>
+  <link rel="icon" type="image/x-icon" href="includes/images/favicon.ico">
+  <link rel="stylesheet" href="assets/css/bootstrap-icons.css">
+  <link rel="stylesheet" href="assets/css/responsive.bootstrap5.min.css">
+  <link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="assets/css/bootstrap-datepicker.min.css">
+  <link rel="stylesheet" href="../../../../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/bootstrap.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+<body>
+  <div id="preloader"></div>
+  <div class="d-flex body-main body-color" id="wrapper">
+    <div class="sidebar-backdrop"></div>
+    <div class="sidebar-main">
+      <div class="sidebar h-100 bg-dark-primary close" id="sidebar-wrapper">
+        <div class="sidebar-box text-center position-fixed slim-outer bg-dark-primary">
+          <div class="sidebar-heading bg-dark d-flex align-items-center justify-content-between p-3 border-dark border-bottom">
+            <a href="index.html">
+              <img src="includes/images/healthcare-logo.png" width="200" alt="">
+            </a>
+            <button class="btn btn-primary rounded closesidebar d-lg-none btn-sm"> 
+              <i class="fa-solid fa-xmark text-white"></i>
+            </button> 
+          </div>
+          <div class="sidebar-box-data text-start px-3" id="sidebar-data">
+            <div class="list-group list-group-flush mt-3">
+              <div class="accordion" id="accordionExampleOne"> 
+                <div class="accordion-item mb-4">
+                  <a href="pharmacistdashboard.html" class="active no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                    <i class="bi bi-grid-1x2-fill px-2"></i><span> Pharmacist Dashboard</span>
+                  </a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <a href="patientlist.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                    <i class="fa-regular fa-address-book px-2"></i>Patient List
+                  </a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <div class="accordion-header" id="headingTwo">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
+                      <i class="fa-solid fa-users px-2"></i>
+                      <span class="fw-600">Medication</span>
+                    </button>
+                  </div>
+                  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <ul class="navbar-nav d-block">
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="medicationlist.html">Medication List</a>
+                        </li>
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" aria-current="page" href="addmedication.html">Add Medication</a>
+                        </li>
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="editmedication.html">Edit Medication</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4">
+                  <a href="reports.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                    <i class="bi bi-file-earmark-pdf-fill px-2"></i> <span>Reports</span>
+                  </a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <a href="departmentlist.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                    <i class="fa-solid fa-timeline px-2"></i>Prescription
+                  </a>
+                </div>
+                <div class="accordion-item mb-4 d-block d-sm-none">
+                  <div class="accordion-header" id="headingSeven">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                      <i class="bi bi-bell-fill text-white px-2"></i>
+                      <span class="fw-600">Notification</span>
+                    </button>
+                  </div>
+                  <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExampleTwo">
+                    <div class="accordion-body">
+                      <div class="slim-outer">
+                        <div class="card border-0 shadow bg-white rounded-2 overflow-hidden">
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu">
+                            <li class="rounded-end-3">
+                              <a href="javascript:void(0)">
+                                <div class="d-flex align-items-center notification-row py-2 px-1">
+                                  <div class="text-center notification-user-img">
+                                    <img src="includes/images/01.jpg" width="30" height="30" alt="">
+                                  </div>
+                                  <div class="notification-content px-1">
+                                    <div class="text-dark mb-0 fw-500 notification-msg">
+                                      <span class="text-dark fw-bold mb-0 fs-12"> Dr. Mark</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                      <div class="fw-500 fs-10">1 New Notification</div>
+                                      <p class="text-dark text-end mb-0 fs-10 fw-500">25 mins ago </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                            <li class="rounded-end-3">
+                              <a href="javascript:void(0)">
+                                <div class="d-flex align-items-center notification-row py-2 px-1">
+                                  <div class="text-center notification-user-img">
+                                    <img src="includes/images/02.jpg" width="30" height="30" alt="">
+                                  </div>
+                                  <div class="notification-content px-1">
+                                    <div class="text-dark mb-0 fw-500 notification-msg">
+                                      <span class="text-dark fw-bold mb-0 fs-12"> Dr. Anna</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                      <div class="fw-500 fs-10">5 New Notification</div>
+                                      <p class="text-dark text-end mb-0 fs-10 fw-500">3mins ago </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                            <li class="rounded-end-3">
+                              <a href="javascript:void(0)">
+                                <div class="d-flex align-items-center notification-row py-2 px-1">
+                                  <div class="text-center notification-user-img">
+                                    <img src="includes/images/03.jpg" width="30" height="30" alt="">
+                                  </div>
+                                  <div class="notification-content px-1">
+                                    <div class="text-dark mb-0 fw-500 notification-msg">
+                                      <span class="text-dark fw-bold mb-0 fs-12"> Dr.June</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                      <div class="fw-500 fs-10">4New Notification</div>
+                                      <p class="text-dark text-end mb-0 fs-10 fw-500">6 hrs ago</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4 d-block d-sm-none">
+                  <div class="accordion-header" id="headingEight">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
+                      <i class="bi bi-envelope-fill text-white px-2"></i>
+                      <span class="fw-600">Messages</span>
+                    </button>
+                  </div>
+                  <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                      <div class="slim-outer">
+                        <div class="card border-0 shadow bg-white rounded-2 overflow-hidden">
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu">
+                            <li class="rounded-end-3">
+                              <a href="javascript:void(0)">
+                                <div class="d-flex align-items-center notification-row py-2 px-1">
+                                  <div class="text-center notification-user-img">
+                                    <img src="includes/images/01.jpg" width="30" height="30" alt="">
+                                  </div>
+                                  <div class="notification-content px-1">
+                                    <div class="text-dark mb-0 fw-500 notification-msg">
+                                      <span class="text-dark fw-bold mb-0 fs-12"> Dr. Mark</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                      <div class="fw-500 fs-10">1 New Notification</div>
+                                      <p class="text-dark text-end mb-0 fs-10 fw-500">25 mins ago </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                            <li class="rounded-end-3">
+                              <a href="javascript:void(0)">
+                                <div class="d-flex align-items-center notification-row py-2 px-1">
+                                  <div class="text-center notification-user-img">
+                                    <img src="includes/images/02.jpg" width="30" height="30" alt="">
+                                  </div>
+                                  <div class="notification-content px-1">
+                                    <div class="text-dark mb-0 fw-500 notification-msg">
+                                      <span class="text-dark fw-bold mb-0 fs-12"> Dr. Anna</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                      <div class="fw-500 fs-10">5 New Notification</div>
+                                      <p class="text-dark text-end mb-0 fs-10 fw-500">3mins ago </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                            <li class="rounded-end-3">
+                              <a href="javascript:void(0)">
+                                <div class="d-flex align-items-center notification-row py-2 px-1">
+                                  <div class="text-center notification-user-img">
+                                    <img src="includes/images/03.jpg" width="30" height="30" alt="">
+                                  </div>
+                                  <div class="notification-content px-1">
+                                    <div class="text-dark mb-0 fw-500 notification-msg">
+                                      <span class="text-dark fw-bold mb-0 fs-12"> Dr.June</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                      <div class="fw-500 fs-10">4New Notification</div>
+                                      <p class="text-dark text-end mb-0 fs-10 fw-500">6 hrs ago</p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4">
+                  <div class="accordion-header" id="headingSix">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSix" aria-expanded="true" aria-controls="collapseSix">
+                      <i class="fa-solid fa-user-shield px-2"></i>
+                      <span class="fw-600">Settings</span>
+                    </button>
+                  </div>
+                  <div id="collapseSix" class="accordion-collapse collapse" aria-labelledby="headingSix" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <ul class="navbar-nav d-block">
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" target="_blank" href="pharmacistprofile.html">Profile/a>
+                        </li>
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" target="_blank" href="resetpass.html">Reset password</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="page-content-wrapper" class="position-relative">
+      <div class="bg-white shadow-sm px-3 py-2 mb-4 header m-auto position-fixed">
+        <div class="row align-items-center">  
+          <div class="row flex-row-reverse justify-content-between align-items-center">
+            <div class="col-lg-6">
+              <div class="d-flex justify-content-lg-end justify-content-between align-items-center gap-2">
+                <div class="d-block d-lg-none">
+                  <button class="btn shadow-0 focus-0 sidebar-btn rounded border-0 sidebarToggle">
+                    <img src="includes/images/menu-icons.svg" alt="">
+                  </button>
+                  <a href="index.html">
+                    <img src="includes/images/ERP-Logo(1).png" width="180" alt="">
+                  </a>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="maximize d-none d-lg-block">
+                    <a class="badge-purple d-flex align-items-center text-primary" href="javascript:void(0)" id="fullscreen"></a>
+                  </div>
+                  <div class="position-relative rounded d-lg-none">
+                    <a class="text-primary py-2 px-3 btn btn-transparent outline-0 focus-0 rounded btn-cust-sm" data-bs-toggle="collapse" href="#searchcollapse" role="button" aria-expanded="false" aria-controls="searchcollapse">
+                      <i class="bi bi-search"></i>
+                    </a>
+                    <div class="collapse position-absolute top-100 mt-2 end-0 z-3 mw-250 mw-100" id="searchcollapse">
+                      <div class="card card-body">
+                        <form>
+                          <div class="border bg-light position-relative h-100 d-flex align-items-center header-search mw-100">
+                            <button class="btn btn-transparent border-0 position-absolute ms-1">
+                              <img src="includes/images/search2.svg" alt="">
+                            </button>
+                            <input type="search" class="form-control border-0 bg-transparent shadow-none ps-5 py-2" placeholder="Search here..">
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown d-none d-sm-block">
+                    <button type="button" class="btn rounded position-relative" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fa-solid fa-envelope fs-5 text-success pb-0 mb-0"></i>
+                      <span class="msg-lite">
+                        <span class="circles cust_circle">
+                          <span class="circle1"></span>
+                          <span class="circle2"></span>
+                          <span class="circle3"></span>
+                        </span>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-notification dropdown-menu-end dropdown-mega p-0 border-0 rounded-10 bg-transparent">
+                      <div class="animate slideIn">
+                        <div class="card border-0 shadow bg-white rounded-10 overflow-hidden slim-outer slim-outer">
+                          <div class="bg-light p-3">
+                            <h6 class="text-center mb-0">Messages</h6>
+                          </div>
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu px-2 py-3" id="message_box">
+                            <li class="p-2 rounded-end-3">
+                              <a href="javascript:void(0)">
+                                <div class="d-flex align-items-center notification-row">
+                                  <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                                    <img src="includes/images/01.jpg" width="48" height="48" alt="">
+                                  </div>
+                                  <div class="notification-content">
+                                    <div class="text-dark mb-0 fw-500 notification-msg">
+                                      <span class="text-dark fw-bold mb-0"> Dr. Mark</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                      <div class="w-100 text-truncate fs-12 fw-500">added new task patient appointment booking</div>
+                                      <p class="text-dark text-end mb-0 fs-12 fw-500 msg-time">25 mins ago </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                            <li class="p-2 rounded-end-3">
+                              <a href="javascript:void(0)">
+                                <div class="d-flex align-items-center notification-row">
+                                  <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                                    <img src="includes/images/02.jpg" width="48" height="48" alt="">
+                                  </div>
+                                  <div class="notification-content">
+                                    <div class="text-dark mb-0 fw-500 notification-msg">
+                                      <span class="text-dark fw-bold mb-0"> Dr. Allen</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                      <div class="w-100 text-truncate fs-12 fw-500">Lorem ipsum, dolor sit amet consectetur adipisicing elit.</div>
+                                      <p class="text-dark text-end mb-0 fs-12 fw-500 msg-time">50 mins ago </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                            <li class="p-2 rounded-end-3">
+                              <a href="javascript:void(0)">
+                                <div class="d-flex align-items-center notification-row">
+                                  <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                                    <img src="includes/images/03.jpg" width="48" height="48" alt="">
+                                  </div>
+                                  <div class="notification-content">
+                                    <div class="text-dark mb-0 fw-500 notification-msg">
+                                      <span class="text-dark fw-bold mb-0"> Dr.June</span>
+                                    </div>
+                                    <div class="d-flex justify-content-between">
+                                      <div class="w-100 text-truncate fs-12 fw-500">added new task patient appointment booking</div>
+                                      <p class="text-dark text-end mb-0 fs-12 fw-500 msg-time">6 hrs ago </p>
+                                    </div>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown d-none d-sm-block">
+                    <button type="button" class="btn rounded position-relative" data-bs-toggle="dropdown" aria-expanded="false">
+                      <i class="fa-solid fa-bell fs-5 text-orange pb-0 mb-0"></i>
+                      <span class="notification-lite">
+                        <span class="circles cust_circle">
+                          <span class="circle1"></span>
+                          <span class="circle2"></span>
+                          <span class="circle3"></span>
+                        </span>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-notification dropdown-menu-end dropdown-mega p-0 border-0 rounded-10 bg-transparent">
+                      <div class="animate slideIn">
+                        <div class="card border-0 shadow bg-white rounded-10 overflow-hidden slim-outer slim-outer">
+                          <div class="bg-light p-3">
+                            <h6 class="text-center mb-0">Notifications</h6>
+                          </div>
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu px-2 py-3" id="notification_box">
+                            <li class="p-2 rounded-end-3">
+                              <a href="javascript:void(0)">
+                                <div class="d-flex align-items-center notification-row">
+                                  <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                                    <img src="includes/images/01.jpg" width="48" height="48" alt="">
+                                  </div>
+                                  <div class="notification-content">
+                                    <div class="text-dark mb-0 fw-500 notification-msg">
+                                      <span class="text-dark fw-bold mb-0"> Dr. Mark</span>
+                                      <span class="fw-light fs-14">added new task patient appointment booking</span>
+                                    </div>
+                                    <p class="text-dark text-end mb-0 fs-12 fw-500">25 mins ago </p>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                            <li class="p-2 rounded-end-3">
+                              <a href="javascript:void(0)">
+                                <div class="d-flex align-items-center notification-row">
+                                  <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                                    <img src="includes/images/02.jpg" width="48" height="48" alt="">
+                                  </div>
+                                  <div class="notification-content">
+                                    <div class="text-dark mb-0 fw-500 notification-msg">
+                                      <span class="text-dark fw-bold mb-0"> Dr. Allen</span>
+                                      <span class="fw-light fs-14">added new task patient appointment booking</span>
+                                    </div>
+                                    <p class="text-dark text-end mb-0 fs-12 fw-500">25 mins ago </p>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                            <li class="p-2 rounded-end-3">
+                              <a href="javascript:void(0)">
+                                <div class="d-flex align-items-center notification-row">
+                                  <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                                    <img src="includes/images/03.jpg" width="48" height="48" alt="">
+                                  </div>
+                                  <div class="notification-content">
+                                    <div class="text-dark mb-0 fw-500 notification-msg">
+                                      <span class="text-dark fw-bold mb-0"> Dr.June</span>
+                                      <span class="fw-light fs-14">Deleted task patient appointment booking</span>
+                                    </div>
+                                    <p class="text-dark text-end mb-0 fs-12 fw-500">25 mins ago </p>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown user">
+                    <button type="button" class="pill-badge btn md-mw-150 me-xl-3 d-flex align-items-center text-start rounded px-0" data-bs-toggle="dropdown" aria-expanded="false">
+                      <img src="includes/images/01_2.png" alt="" class="border rounded">
+                      <span class="justify-content-between align-items-center gap-4 px-2 w-100 d-none d-xl-flex">
+                        <span class="my-0 py-0 lh-1">
+                          <span class="pill-badge-msg lh-sm text-capitalize pb-0 mb-0 d-block">Mark</span>
+                          <span class="fs-12 p-0 d-block">Admin</span>
+                        </span>
+                        <span class="my-0 py-0">
+                          <i class="bi bi-chevron-down"></i>
+                        </span>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-mega p-0 border-0 rounded-3 bg-transparent">
+                      <div class="animate slideIn">
+                        <div class="card bg-white rounded-10 shadow-sm overflow-hidden">
+                          <div class="bg-light p-3">
+                            <h6 class="mb-0 fs-14 fw-500 mb-1">Hello Mark</h6>
+                            <p class="mb-0 fs-12 fw-500 text-success">Available</p>
+                          </div>
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu p-3">
+                            <li class="py-3 px-2 rounded-end-3">
+                              <a href="adminprofile.html">
+                                <div class="d-flex align-items-center">
+                                  <div class="rounded bg-light reward-circle d-flex align-items-center justify-content-center me-3 text-center">
+                                    <i class="fa fa-user fs-5 text-primary"></i>
+                                  </div>
+                                  <div>
+                                    <h6 class="text-dark fs-14 mb-0">My Profile</h6>
+                                    <p class="text-light fs-12 mb-0">View Profile Details</p>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                            <li class="py-3 px-2 rounded-end-3">
+                              <a href="components.html">
+                                <div class="d-flex align-items-center">
+                                  <div class="rounded bg-light reward-circle d-flex align-items-center justify-content-center me-3 text-center">
+                                    <i class="fa-solid fa-toolbox text-primary fs-4"></i>
+                                  </div>
+                                  <div>
+                                    <h6 class="text-dark fs-14 mb-0">Components</h6>
+                                    <p class="text-light fs-12 mb-0">Explore Different Components</p>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                          <div class="mb-2 text-center">
+                            <a class="btn btn-primary btn-15 rounded-pill mw-120" href="login.html">Logout <i class="fa fa-sign-out"></i></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div> 
+                </div>
+              </div> 
+            </div>
+            <div class="col-6 d-none d-lg-block">
+              <div class="d-lg-flex align-items-center">
+                <button class="btn shadow-0 focus-0 d-none d-lg-block sidebar-btn rounded border-0 sidebarToggle">
+                  <img src="includes/images/menu-icons.svg" alt="">
+                </button>
+                <form class="d-none d-lg-block mw-200">
+                  <div class="bg-light-blue position-relative h-100 d-flex align-items-center header-search rounded-10">
+                    <button class="btn btn-transparent border-0 position-absolute top-0"> 
+                      <img src="includes/images/search2.svg" alt="">
+                    </button>
+                    <input type="search" class="form-control border-0 bg-transparent shadow-none ps-5 py-2" placeholder="Search here..">
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div> 
+        </div>
+      </div>
+      <div class="px-4 mb-4 min-vh-100 outer-main">
+        <h3 class="fw-600 text-dark-primary text-capitalize">Add Medicine</h3>
+        <div class="d-flex flex-wrap justify-content-between align-items-center my-3">
+          <div class="d-flex flex-wrap text-capitalize align-items-center">
+            <p class="mb-0 pb-0 fw-bold text-dark-primary"><a href="index.html">Home</a></p>
+            <i class="bi bi-chevron-right pagination-arrow text-dark"></i>
+            <p class="mb-0 pb-0 fw-600 text-dark"><a href="medicationlist.html">Medication List</a></p>
+            <i class="bi bi-chevron-right pagination-arrow text-dark-primary"></i>
+            <p class="mb-0 pb-0 text-dark">Add Medication</p>
+          </div>
+          <a href="medicationlist.html" class="btn btn-primary rounded-4 fw-500 py-2 rounded-pill mw-120 px-4 text-capitalize">
+            Back To Medication List <i class="fa-solid fa-right-to-bracket ms-2"></i>
+          </a>
+        </div>
+        <div class="mb-4 rounded-10">
+          <div class="border-0 shadow-sm py-3 h-100 bg-white rounded-10">
+            <div class="card-body p-4">
+              <form id="add_medication">
+                <div class="row">
+                  <div class="col-lg-6 mb-3">
+                    <label for="name" class="text-dark mb-2">Name <sup><span class="required">*</span></sup></label>
+                    <select class="form-select" id="name" name="name" required>
+                      <option value="">Select a medicine</option>
+                      <option value="Halothane|10 mg/ml in 20 ml|Per 1ml|250">Halothane - Inhalation, Liquid (10 mg/ml in 20 ml, Per 1ml) - 250</option>
+                      <option value="Ketamine|50mg/ml in 10ml, 100mg/ml in 5ml vial|Vial|2700">Ketamine - Injection (HCL) (50mg/ml in 10ml, 100mg/ml in 5ml vial) - 2,700</option>
+                      <option value="Nitrous oxide|Gas|Gas|11000">Nitrous oxide - Inhalation, medicinal gas (Gas) - 11,000</option>
+                      <option value="Oxygen|Gas per hour|Gas|4200">Oxygen - Inhalation, medicinal gas per hour (Gas) - 4,200</option>
+                      <option value="Thiopental|100 mg/ml in 5 ml|Vial|6500">Thiopental - Injection (powder) for IV as sodium salt (100 mg/ml in 5 ml) - 6,500</option>
+                      <option value="Atropine|0.5mg/amp|Amp.|155">Atropine - Injection (sulphate) (0.5mg/amp) - 155</option>
+                      <option value="Atropine|1mg/ 1ml|Amp.|970">Atropine - Injection (sulphate) (1mg/ 1ml) - 970</option>
+                      <option value="Diazepam|5mg/ml in 2 ml|Amp.|800">Diazepam - Injection (5mg/ml in 2 ml) - 800</option>
+                      <option value="Hyoscine N-Butylbromide|20mg/ml amp|Amp.|180">Hyoscine N-Butylbromide - Injection (20mg/ml amp) - 180</option>
+                      <option value="Midazolam|15mg|Injection|3900">Midazolam - Injection (15mg) - 3,900</option>
+                      <option value="Morphine|10 mg/ml, 15mg/ml in 1ml ampoules|Amp.|8500">Morphine - Injection (Sulphate or Hcl) (10 mg/ml, 15mg/ml in 1ml ampoules) - 8,500</option>
+                      <option value="Morphine|25mg (Hydrochloride)|Amp.|3526">Morphine - Injection (Sulphate or Hcl) (25mg, Hydrochloride) - 3,526</option>
+                      <option value="Promethazine|5mg|Tab.|10">Promethazine - Tablets (5mg) - 10</option>
+                      <option value="Promethazine|25mg/ml in 1 ml (60mls)|Syrup|670">Promethazine - Syrup (25mg/ml in 1 ml, 60mls) - 670</option>
+                      <option value="Promethazine|2ml Ampoule|Amp.|110">Promethazine - Injection (2ml Ampoule) - 110</option>
+                      <option value="Glycopyrrolate|0.2mg|Injection|1138">Glycopyrrolate - Injection (0.2mg) - 1,138</option>
+                      <option value="Atracurium|50 mg/ml|Amp.|4636">Atracurium - Injection (50 mg/ml) - 4,636</option>
+                      <option value="Edrophonium|10mg/ml|Amp.|2733">Edrophonium - Injection (chloride) (10mg/ml) - 2,733</option>
+                      <option value="Neostigmine|2.5mg/ml in 1ml ampoule|Amp.|1464">Neostigmine - Injection (methylsulphate) (2.5mg/ml in 1ml ampoule) - 1,464</option>
+                      <option value="Pancuronium|4mg/2ml|Amp.|2684">Pancuronium - Injection (Bromide) (4mg/2ml) - 2,684</option>
+                      <option value="Pancuronium|1mg/ml|Amp.|1985">Pancuronium - Injection (Bromide) (1mg/ml) - 1,985</option>
+                      <option value="Suxamethonium|100mg/2ml|Amp.|1687">Suxamethonium - Injection (Chloride) (100mg/2ml) - 1,687</option>
+                      <option value="Propofol|1%|Injection|3285">Propofol - Injection (1%) - 3,285</option>
+                      <option value="Lidocaine|1%, 2% + Adrenaline 1:200000|Vial 50mls|1342">Lidocaine - Injection (HCL) (1%, 2% + Adrenaline 1:200000, Vial 50mls) - 1,342</option>
+                      <option value="Bupivacaine|Plain or with epinephrine|Amp.|5000">Bupivacaine - Injection (HCL) (Plain or with epinephrine) - 5,000</option>
+                      <option value="Lidocaine|10%|N/A|1281">Lidocaine - (10%) - 1,281</option>
+                      <option value="Lidocaine|2-4%|Spray|4597">Lidocaine - Topical spray (2-4%) - 4,597</option>
+                      <option value="Lidocaine|2-5%|Jelly|2013">Lidocaine - Jelly (2-5%) - 2,013</option>
+                      <option value="Lidocaine|2% + epinephrine 1:80,000|Cream, Ointment|2879">Lidocaine - Cream, Ointment (2% + epinephrine 1:80,000) - 2,879</option>
+                      <option value="Lidocaine|0.25%, 0.5%, in 10ml amp (with or without epinephrine 1:200,000)|Dental cartridge|1174">Lidocaine - Dental cartridge (0.25%, 0.5%, in 10ml amp with or without epinephrine 1:200,000) - 1,174</option>
+                      <option value="Prilocaine|3% with felypressin 0.03units/ml|Amp.|1708">Prilocaine - Injection (3% with felypressin 0.03units/ml) - 1,708</option>
+                      <option value="Morphine|10mg (SO4 or HC1) in 1ml Ampoule|Amp.|8500">Morphine - Injection (10mg SO4 or HC1 in 1ml Ampoule) - 8,500</option>
+                      <option value="Morphine|15mg (SO4 or HC1) in 1ml Ampoule|Amp.|8500">Morphine - Injection (15mg SO4 or HC1 in 1ml Ampoule) - 8,500</option>
+                      <option value="Morphine|30mg|Tab.|920">Morphine - Tablet (30mg) - 920</option>
+                      <option value="Pentazocine|30mg/ml|Amp.|2300">Pentazocine - Injection (lactate) (30mg/ml) - 2,300</option>
+                      <option value="Pethidine|50mg/ml in 2 ml Ampoule|Amp.|4000">Pethidine - Injection (50mg/ml in 2 ml Ampoule) - 4,000</option>
+                      <option value="Tramadol|50mg|Tab.|85">Tramadol - Tablet (50mg) - 85</option>
+                      <option value="Tramadol|50mg/ml ampoule|Amp.|700">Tramadol - Injection (50mg/ml ampoule) - 700</option>
+                      <option value="Morphine|1mg/ml (200ml)|Syrup|2655">Morphine - Syrup (1mg/ml, 200ml) - 2,655</option>
+                      <option value="Morphine|1mg/ml (500ml)|Syrup|3076">Morphine - Syrup (1mg/ml, 500ml) - 3,076</option>
+                      <option value="Dihydrocodeine|30mg|Tablet|400">Dihydrocodeine - Tablet (30mg) - 400</option>
+                      <option value="Codeine/Paracetamol|8/500mg|Tablet|242">Codeine/Paracetamol - Tablet (8/500mg) - 242</option>
+                      <option value="Codeine/Paracetamol|30/500mg|Tablet|329">Codeine/Paracetamol - Tablet (30/500mg) - 329</option>
+                      <option value="Naloxone|0.4mg/ml in 1ml|Amp.|3900">Naloxone - Injection (0.4mg/ml in 1ml) - 3,900</option>
+                      <option value="Acetyl salicylic Acid|300mg|Tab/Caps.|30">Acetyl salicylic Acid - Tablet, capsule (300mg) - 30</option>
+                      <option value="Paracetamol|500mg|Tab.|27">Paracetamol - Tablets (500mg) - 27</option>
+                      <option value="Paracetamol|100 mg|Supp.|228">Paracetamol - Suppository (100 mg) - 228</option>
+                      <option value="Paracetamol|125mg/5ml|60mls|440">Paracetamol - Syrup/suspension (125mg/5ml, 60mls) - 440</option>
+                      <option value="Paracetamol|125mg/5ml|15mls|482">Paracetamol - Drop (125mg/5ml, 15mls) - 482</option>
+                      <option value="Paracetamol|150mg/ml|Amp.|120">Paracetamol - Injection (150mg/ml) - 120</option>
+                      <option value="Diclofenac|0.10%|5mls|1090">Diclofenac - Eye drops (0.10%, 5mls) - 1,090</option>
+                      <option value="Allopurinol|100mg|Tab.|100">Allopurinol - Tablet (100mg) - 100</option>
+                      <option value="Allopurinol|300mg|Tab.|180">Allopurinol - Tablet (300mg) - 180</option>
+                      <option value="Celecoxib|200mg|Caps.|210">Celecoxib - Capsules (200mg) - 210</option>
+                      <option value="Chondroitin sulphate+Glucoseamine|200mg+250mg|Caps.|350">Chondroitin sulphate+Glucoseamine - Capsules (200mg+250mg) - 350</option>
+                      <option value="Diclofenac|100mg|Tab.|60">Diclofenac - Tablet (sodium or potassium salt) (100mg) - 60</option>
+                      <option value="Diclofenac|50mg|Tab.|35">Diclofenac - Tablet (sodium or potassium salt) (50mg) - 35</option>
+                      <option value="Diclofenac|25mg/ml|Ampoule|125">Diclofenac - Injection (sodium or potassium salt) (25mg/ml) - 125</option>
+                      <option value="Diclofenac sodium|1%|Tube|1200">Diclofenac sodium - Gel (1%, Tube) - 1,200</option>
+                      <option value="Diclofenac sodium + misoprostol|75/200mg|Tab.|340">Diclofenac sodium + misoprostol - Tab (75/200mg) - 340</option>
+                      <option value="Diclofenac sodium+B1+B6+B12|N/A|Tab.|78">Diclofenac sodium+B1+B6+B12 - Tablet (78)</option>
+                      <option value="Diclofenac sodium + Cholestyramine|75mg/65mg|Tab.|317">Diclofenac sodium + Cholestyramine - Tablet (75mg/65mg) - 317</option>
+                      <option value="Ibuprofen|200mg|Tab.|43">Ibuprofen - Tablets, capsules (200mg) - 43</option>
+                      <option value="Ibuprofen|400mg|Tab.|55">Ibuprofen - Tablets, capsules (400mg) - 55</option>
+                      <option value="Ibuprofen|100mg/5ml|100mls|1000">Ibuprofen - Suspension (100mg/5ml, 100mls) - 1,000</option>
+                      <option value="Ketoprofen|200mg|Caps./tabs|200">Ketoprofen - Capsules (200mg) - 200</option>
+                      <option value="Ketoprofen|100mg 2ml|Amp.|281">Ketoprofen - Injection (100mg, 2ml) - 281</option>
+                      <option value="Ketoprofen|50gm|Tube|1700">Ketoprofen - Topical (50gm) - 1,700</option>
+                      <option value="Naproxen|250mg|Tab.|177">Naproxen - Tablet (250mg) - 177</option>
+                      <option value="Naproxen|500mg|Tab.|226">Naproxen - Tablet (500mg) - 226</option>
+                      <option value="Piroxicam|20mg|Caps.|25">Piroxicam - Capsules (20mg) - 25</option>
+                      <option value="Piroxicam|10mg/ml 2ml|Amp.|150">Piroxicam - Injection (10mg/ml, 2ml) - 150</option>
+                      <option value="Meloxicam|15mg|Capsule|120">Meloxicam - Capsule (15mg) - 120</option>
+                      <option value="Meloxicam|7.5mg|Capsule|100">Meloxicam - Capsule (7.5mg) - 100</option>
+                      <option value="Diclofenac|100mg|Suppository|940">Diclofenac - Suppository (100mg) - 940</option>
+                      <option value="Diclofenac|12.5mg|Suppository|623">Diclofenac - Suppository (12.5mg) - 623</option>
+                      <option value="Diclofenac|50mg|Suppository|871">Diclofenac - Suppository (50mg) - 871</option>
+                      <option value="Tenoxicam|20mg|Capsule|100">Tenoxicam - Capsule (20mg) - 100</option>
+                      <option value="Aceclofenac|100mg/tab|Tablet|110">Aceclofenac - Tablet (100mg/tab) - 110</option>
+                      <option value="Aceclofenac + paracetamol + Serratiopeptidase|100mg+325mg+15mg|Tablet|208">Aceclofenac + paracetamol + Serratiopeptidase - Tablet (100mg+325mg+15mg) - 208</option>
+                      <option value="Methyl salicylate|35gm|Tube|800">Methyl salicylate - Ointment (35gm) - 800</option>
+                      <option value="Orphenadrine|100mg|Tab.|160">Orphenadrine - Tablet (citrate) (100mg) - 160</option>
+                      <option value="Orphenadrine + Paracetamol|35mg+ 450mg|Tab.|180">Orphenadrine + Paracetamol - Tablet (citrate) (35mg+ 450mg) - 180</option>
+                      <option value="Tizanidine|4mg|Tab.|180">Tizanidine - Tablet (4mg) - 180</option>
+                      <option value="Tizanidine|2mg|Tab.|160">Tizanidine - Tablet (2mg) - 160</option>
+                      <option value="Baclofen|10mg|Tablet|146">Baclofen - Tablet (10mg) - 146</option>
+                      <option value="Methocarbamol|500mg|Tablet|120">Methocarbamol - Tablet (500mg) - 120</option>
+                      <option value="Cetrizine|10mg|Tab.|116">Cetrizine - Tablet (10mg) - 116</option>
+                      <option value="Cetrizine|1mg/5ml|100ml|2013">Cetrizine - Syrup (1mg/5ml, 100ml) - 2,013</option>
+                      <option value="Chlorpheniramine|4mg (Maleate)|Tab.|37">Chlorpheniramine - Tablet (4mg Maleate) - 37</option>
+                      <option value="Chlorpheniramine|2mg/5ml|60mls|683">Chlorpheniramine - Syrup (2mg/5ml, 60mls) - 683</option>
+                      <option value="Clemastine|1mg|Tab.|67">Clemastine - Tablet (1mg) - 67</option>
+                      <option value="Clemastine|500mcg/5ml|100ml|1046">Clemastine - Syrup (500mcg/5ml, 100ml) - 1,046</option>
+                      <option value="Loratidine|10mg|Tab.|50">Loratidine - Tablet (10mg) - 50</option>
+                      <option value="Loratidine|5mg/5ml|60ml|1100">Loratidine - Syrup (5mg/5ml, 60ml) - 1,100</option>
+                      <option value="Promethazine|25mg, (Hydrochloride)|Tab.|10">Promethazine - Tablets (25mg, Hydrochloride) - 10</option>
+                      <option value="Promethazine|5mg/5ml|60mls|670">Promethazine - Syrup (5mg/5ml, 60mls) - 670</option>
+                      <option value="Promethazine|25mg/ml in 1 ml and 2ml|Ampoule|85">Promethazine - Injection (25mg/ml HC1 in 1 ml and 2ml) - 85</option>
+                      <option value="Cinnarizine|25mg|Tablet|100">Cinnarizine - Tablet (25mg) - 100</option>
+                      <option value="Fexofenadine|120mg|Tablet|165">Fexofenadine - Tablet (120mg) - 165</option>
+                      <option value="Fexofenadine|180mg|Tablet|217">Fexofenadine - Tablet (180mg) - 217</option>
+                      <option value="Dexamethasone|4mg/1ml|Amp.|200">Dexamethasone - Injection (sodium phosphate) (4mg/1ml) - 200</option>
+                      <option value="Epinephrine (Adrenaline)|1mg/ml (1 in 1000) as Acid tartrate or|Amp.|650">Epinephrine (Adrenaline) - Injection (1mg/ml, 1 in 1000) - 650</option>
+                      <option value="Epinephrine (Adrenaline)|HC1 in 1ml|Ampoule|793">Epinephrine (Adrenaline) - Injection HC1 in 1ml - 793</option>
+                      <option value="Hydrocortisone|N/A|Vial|800">Hydrocortisone - Injection (Sodium Succinate) in vial - 800</option>
+                      <option value="Atropine|1.0mg (Sulphate) in 1ml|Ampoule|440">Atropine - Injection (1.0mg Sulphate in 1ml) - 440</option>
+                      <option value="Atropine|1 mg|Tab.|970">Atropine - Tablet (1 mg) - 970</option>
+                      <option value="Deferoxamine|500 mg/vial|Vial|5620">Deferoxamine - Injection (mesilate) (500 mg/vial) - 5,620</option>
+                      <option value="Dimercaprol|50 mg/ml in 2 ml|Ampoules|1398">Dimercaprol - Injection (50 mg/ml in 2 ml) - 1,398</option>
+                      <option value="Methylene blue|5ml|Amp.|1117">Methylene blue - Injection (5ml) - 1,117</option>
+                      <option value="Methylene blue|50 ml|Amp.|5048">Methylene blue - Injection (50 ml) - 5,048</option>
+                      <option value="Naloxone|400mcg/ml|Amp.|3900">Naloxone - Injection (HCL) (400mcg/ml) - 3,900</option>
+                      <option value="Phytomenadione (Vitamin K1)|10mg/ml in 1ml|Amp.|1093">Phytomenadione (Vitamin K1) - Ampoule (10mg/ml in 1ml) - 1,093</option>
+                      <option value="Potassium ferric hexacyanoferrate (11) (Prussian blue)|N/A|Powder|2415">Potassium ferric hexacyanoferrate (11) (Prussian blue) - Powder for oral administration - 2,415</option>
+                      <option value="Protamine sulphate|10mg/ml in 5 ml|Amp.|4819">Protamine sulphate - Injection (10mg/ml in 5 ml) - 4,819</option>
+                      <option value="Sodium calcium edetate|200mg/ml in 5 ml|N/A|N/A">Sodium calcium edetate - Injection (200mg/ml in 5 ml) - N/A</option>
+                      <option value="Sodium nitrite|30mg/ml in 10 ml|Vial|1738">Sodium nitrite - Injection (30mg/ml in 10 ml) - 1,738</option>
+                      <option value="Sodium thiosulphate|500mg/ml|Amp.|1525">Sodium thiosulphate - Injection (500mg/ml) - 1,525</option>
+                      <option value="Acetylcysteine|200mg|Injection|10004">Acetylcysteine - Injection (200mg/vial) - 10,004</option>
+                      <option value="Acetylcysteine|500mg|Tablet|404">Acetylcysteine - Tablet (500mg) - 404</option>
+                      <option value="Activated charcoal|N/A|Tablet|247">Activated charcoal - Tablet - 247</option>
+                      <option value="Activated charcoal|5g/satchet, 25 g, 50 g pack|Granule, Powder|1425">Activated charcoal - Granule, Powder (5g/satchet, 25 g, 50 g pack) - 1,425</option>
+                      <option value="Carbamazepine|200mg|Tab.|149">Carbamazepine - Tablet (200mg) - 149</option>
+                      <option value="Carbamazepine|400mg SR|Tab.|278">Carbamazepine - Tablet (400mg SR) - 278</option>
+                      <option value="Carbamazepine|100mg/5ml|100ml|10546">Carbamazepine - Syrup (100mg/5ml, 100ml) - 10,546</option>
+                      <option value="Ethosuximide|250 mg|Caps.|393">Ethosuximide - Caps/tablets (250 mg) - 393</option>
+                      <option value="Ethosuximide|250mg/5ml|100mls|3401">Ethosuximide - Syrup (250mg/5ml, 100mls) - 3,401</option>
+                      <option value="Magnesium sulphate|50% (500 mg/ml) in 2 ml|Amp.|2989">Magnesium sulphate - Injection (50%, 500 mg/ml in 2 ml) - 2,989</option>
+                      <option value="Paraldehyde|10ml, 5 mls|Amp.|1928">Paraldehyde - Injection (10ml, 5 mls) - 1,928</option>
+                      <option value="Phenobarbital|15mg|Tab.|40">Phenobarbital - Tablets (15mg) - 40</option>
+                      <option value="Phenobarbital|30mg, 60mg|Tab.|47">Phenobarbital - Tablets (30mg, 60mg) - 47</option>
+                      <option value="Phenobarbital|15mg/5ml|60mls|1406">Phenobarbital - Elixir, Syrup (15mg/5ml, 60mls) - 1,406</option>
+                      <option value="Phenobarbital|200mg/ml|Amp.|6094">Phenobarbital - Injection (200mg/ml) - 6,094</option>
+                      <option value="Phenytoin Sodium|100mg, 50 mg, 25, mg|Caps.|92">Phenytoin Sodium - Capsule (100mg, 50 mg, 25, mg) - 92</option>
+                      <option value="Sodium valproate|200mg|Tab.|174">Sodium valproate - Tablets (200mg) - 174</option>
+                      <option value="Sodium valproate|500mg SR|Tab.|354">Sodium valproate - Tablets (500mg SR) - 354</option>
+                      <option value="Sodium valproate|200mg/5ml|200mls|11000">Sodium valproate - Elixir/syrup (200mg/5ml, 200mls) - 11,000</option>
+                      <option value="Pregabalin|75mg|Tablet|228">Pregabalin - Tablet (75mg) - 228</option>
+                      <option value="Pregabalin|150mg|Tablet|364">Pregabalin - Tablet (150mg) - 364</option>
+                      <option value="Pregabalin + Methylcobalamin|75mg+750mcg|Tablet|343">Pregabalin + Methylcobalamin - Tablet (75mg+750mcg) - 343</option>
+                      <option value="Metronidazole|200mg|Tab.|12">Metronidazole - Tablets (200mg) - 12</option>
+                      <option value="Metronidazole|400mg|Tab.|23">Metronidazole - Tablet (400mg) - 23</option>
+                      <option value="Metronidazole|200mg/5ml|60mls|632">Metronidazole - Suspension (200mg/5ml, 60mls) - 632</option>
+                      <option value="Metronidazole|500mg in 100ml bottle|100mls|732">Metronidazole - IV Injection (500mg in 100ml bottle) - 732</option>
+                      <option value="Metronidazole|500mg|supp/ovule|453">Metronidazole - Suppository (500mg) - 453</option>
+                      <option value="Secnidazole|500mg|4 tabs|847">Secnidazole - 4 Tablets (single dose) (500mg) - 847</option>
+                      <option value="Tinidazole|500mg|4 tabs|311">Tinidazole - 4 Tablets (Single dose) (500mg) - 311</option>
+                      <option value="Albendazole|200mg|2 tabs|365">Albendazole - Tablet (200mg, 2 tabs) - 365</option>
+                      <option value="Albendazole|100mg/5ml|30mls|700">Albendazole - Suspension Oral (100mg/5ml, 30mls) - 700</option>
+                      <option value="Levamisole|40mg|Tab.|127">Levamisole - Tablet (40mg) - 127</option>
+                      <option value="Levamisole|40mg/5ml|30mls|374">Levamisole - Suspension (40mg/5ml, 30mls) - 374</option>
+                      <option value="Mebendazole|100mg, 6`s|N/A|564">Mebendazole - Tablet (100mg, 6`s) - 564</option>
+                      <option value="Mebendazole|500 mg x 1|N/A|777">Mebendazole - Tablet (500 mg x 1) - 777</option>
+                      <option value="Mebendazole|100mg/5ml|30mls|541">Mebendazole - Suspension (100mg/5ml, 30mls) - 541</option>
+                      <option value="Pyrantel Pamoate|125mg (pamoate)|6`s|746">Pyrantel Pamoate - Tablet (125mg pamoate, 6`s) - 746</option>
+                      <option value="Pyrantel Pamoate|125mg/5ml|15mls|760">Pyrantel Pamoate - Syrup (125mg/5ml, 15mls) - 760</option>
+                      <option value="Praziquantel|600mg|Tab.|145">Praziquantel - Tablet (600mg) - 145</option>
+                      <option value="Ivermectin|6mg|Tab.|54">Ivermectin - Tablet (6mg) - 54</option>
+                    </select>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <label for="category" class="text-dark mb-2">Medicine Category <sup><span class="required">*</span></sup></label>
+                    <input type="text" class="form-control" id="category" name="category" required>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <label for="description" class="text-dark mb-2">Description <sup><span class="required">*</span></sup></label>
+                    <textarea class="form-control" id="description" name="description" rows="3" required></textarea>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <label for="price" class="text-dark mb-2">Price <sup><span class="required">*</span></sup></label>
+                    <input type="number" step="0.01" class="form-control" id="price" name="price" required>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <label for="expiryDate" class="text-dark mb-2">Expiry Date <sup><span class="required">*</span></sup></label>
+                    <input type="date" class="form-control" id="expiryDate" name="expiryDate" required>
+                  </div>
+                  <div class="col-lg-6 mb-3">
+                    <label for="status" class="text-dark mb-2">Status <sup><span class="required">*</span></sup></label>
+                    <select class="form-select" id="status" name="status" required>
+                      <option value="Available">Available</option>
+                      <option value="Out of Stock">Out of Stock</option>
+                    </select>
+                  </div>
+                  <div class="col-12 mb-3 text-end">
+                    <button type="reset" class="btn btn-outline-dark mw-120 me-3 rounded-pill">Cancel</button>
+                    <button type="submit" class="btn btn-primary text-white rounded-pill mw-120 py-2">Save</button>
+                  </div>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="shadow-sm py-4 px-4 bg-white footer d-flex flex-wrap justify-content-between align-items-center fs-14">
+        <div>
+          <span id="currentYear"></span> © All Rights Reserved By Health Care ERP
+        </div>
+        <div>
+          <a href="javascript:void(0)" class="text-primary text-decoration-underline fw-600">Privacy Policy</a> | 
+          <a href="javascript:void(0)" class="text-primary text-decoration-underline fw-600">Terms & Conditions</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="assets/js/jquery-3.7.0.js"></script>
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/popper.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/jquery.dataTables.min.js"></script>
+  <script src="assets/js/dataTables.bootstrap5.min.js"></script>
+  <script src="assets/js/dataTables.responsive.min.js"></script>
+  <script src="assets/js/apexcharts.js"></script>
+  <script src="assets/js/jquery.validate.js"></script>
+  <script src="assets/js/bootstrap-datepicker.min.js"></script>
+  <script src="assets/js/jquery.slimscroll.min.js"></script>
+  <script src="assets/js/togglepassword.js"></script>
+  <script src="assets/js/all.min.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script>
+    $(document).ready(function () {
+      $('#add_medication').submit(function (e) {
+        e.preventDefault();
+
+        // Split the selected name value to extract the medicine name
+        const selectedName = $('#name').val();
+        const nameParts = selectedName.split('|');
+        const medicineName = nameParts[0]; // Extract the name before the first '|'
+
+        const medicineData = {
+          name: medicineName,
+          category: $('#category').val().trim(),
+          description: $('#description').val().trim(),
+          price: $('#price').val().trim(),
+          expiryDate: $('#expiryDate').val().trim(),
+          status: $('#status').val().trim()
+        };
+
+        $.ajax({
+          url: '/api/v1/medication/add',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(medicineData),
+          success: function (response) {
+            if (response.status_code === 200) {
+              alert('Medication added successfully!');
+              $('#add_medication')[0].reset();
+              window.location.href = 'medicationlist.html';
+            } else {
+              alert('Failed to add medication: ' + response.message);
+            }
+          },
+          error: function (xhr) {
+            let message = 'Failed to add medication.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            alert(message);
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

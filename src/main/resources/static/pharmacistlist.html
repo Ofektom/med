@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EMR Pharmacist List</title>
+  <link rel="icon" type="image/x-icon" href="includes/images/favicon.ico">
+  <link rel="stylesheet" href="assets/css/bootstrap-icons.css">
+  <link rel="stylesheet" href="assets/css/responsive.bootstrap5.min.css">
+  <link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="assets/css/bootstrap-datepicker.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/bootstrap.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
+</head>
+
+<body>
+  <div id="preloader"></div>
+
+  <div class="d-flex body-main body-color" id="wrapper">
+    <!-- Sidebar and header remain unchanged, omitted for brevity -->
+    <!-- ... (sidebar and header HTML remains the same) ... -->
+
+    <div id="page-content-wrapper" class="position-relative">
+      <div class="bg-white shadow-sm px-3 py-2 mb-4 header m-auto position-fixed">
+        <!-- ... (header HTML remains the same) ... -->
+      </div>
+
+      <div class="px-4 mb-4 min-vh-100 outer-main">
+        <h3 class="fw-600 text-dark-primary text-capitalize">Pharmacist's List</h3>
+        <div class="d-flex flex-wrap justify-content-between align-items-center my-3">
+          <div class="d-flex flex-wrap text-capitalize align-items-center">
+            <p class="mb-0 pb-0 fw-bold text-dark-primary"><a href="pharmacistdashboard.html">Home</a></p>
+            <i class="bi bi-chevron-right pagination-arrow text-dark-primary"></i>
+            <p class="mb-0 pb-0 text-dark">Pharmacist's List </p>
+          </div>
+          <div class="d-flex justify-content-start gap-1 flex-wrap">
+            <a href="addpharmacist.html" class="btn btn-primary me-1 mw-120 py-2 px-4 rounded-pill text-capitalize me-1"> <i
+                class="bi bi-plus-circle me-2"></i> Add New Pharmacist</a>
+            <button class="btn btn-danger rounded-pill px-4 me-1" id="grid">
+              <i class="bi bi-grid-1x2-fill px-2"></i>
+            </button>
+            <button class="btn btn-success me-1 rounded-pill px-4" id="list">
+              <i class="fa-solid fa-list-ul fs-18"></i>
+            </button>
+          </div>
+        </div>
+
+        <!-- List view with pagination -->
+        <div class="list-show d-none bg-white rounded-10 my-3 p-4">
+          <div class="d-flex justify-content-between align-items-center mb-3">
+            <div class="dataTables_length" id="doctorlist_length">
+              <label>Show 
+                <select name="doctorlist_length" aria-controls="doctorlist" class="form-select form-select-sm" id="pageSize">
+                  <option value="5">5</option>
+                  <option value="10" selected>10</option>
+                  <option value="15">15</option>
+                </select> entries
+              </label>
+            </div>
+            <div id="pagination" class="d-flex align-items-center gap-2">
+              <button class="btn btn-secondary btn-sm" id="prevPage">Previous</button>
+              <span id="pageInfo">Page <span id="currentPage">1</span> of <span id="totalPages">1</span></span>
+              <button class="btn btn-secondary btn-sm" id="nextPage">Next</button>
+            </div>
+          </div>
+          <table class="table custom-data-table" id="doctorlist">
+            <thead>
+              <tr>
+                <td class="no-sort">
+                  <input type="checkbox" class="">
+                </td>
+                <td class="">
+                  Name
+                </td>
+                <td class="">
+                  Departments
+                </td>
+                <td class="">
+                  Specialization
+                </td>
+                <td class="">
+                  Degree
+                </td>
+                <td class="">
+                  Address
+                </td>
+                <td class="">
+                  Join Date
+                </td>
+                <td class="no-sort">Action</td>
+              </tr>
+            </thead>
+            <tbody id="doctorlist-body">
+              <!-- Dynamically populated via JavaScript -->
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Grid view with carousel -->
+        <div class="list-hide doctor-list my-3 py-4">
+          <div id="doctorCarousel" class="owl-carousel owl-theme">
+            <!-- Dynamically populated via JavaScript -->
+          </div>
+        </div>
+      </div>
+      <div
+        class="shadow-sm py-4 px-4 bg-white footer d-flex flex-wrap justify-content-between align-items-center fs-14">
+        <div>
+          <span id="currentYear"></span> © All Rights Reserved By Health Care ERP
+        </div>
+        <div>
+          <a href="javascript:void(0)" class="text-primary text-decoration-underline fw-600">Privacy Policy</a> | <a
+            href="javascript:void(0)" class="text-primary text-decoration-underline fw-600">Terms & Conditions</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="assets/js/jquery-3.7.0.js"></script>
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/popper.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/jquery.dataTables.min.js"></script>
+  <script src="assets/js/dataTables.bootstrap5.min.js"></script>
+  <script src="assets/js/dataTables.responsive.min.js"></script>
+  <script src="assets/js/apexcharts.js"></script>
+  <script src="assets/js/jquery.validate.js"></script>
+  <script src="assets/js/bootstrap-datepicker.min.js"></script>
+  <script src="assets/js/jquery.slimscroll.min.js"></script>
+  <script src="assets/js/togglepassword.js"></script>
+  <script src="assets/js/all.min.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
+
+  <script>
+    $(document).ready(function () {
+      let currentPage = 0;
+      let pageSize = 10;
+
+      // Fetch doctors via AJAX
+      function fetchDoctors(page, size) {
+        $.ajax({
+          url: `https://med-205j.onrender.com/api/v1/users/all?role=ROLE_PHARMACIST&page=${page}&size=${size}`,
+          type: 'GET',
+          success: function (response) {
+            if (response && response.data && response.data.data.length > 0) {
+              const doctors = response.data.data;
+              const totalPages = response.data.totalPages;
+              $('#totalPages').text(totalPages);
+              $('#currentPage').text(page + 1);
+              populateDoctorList(doctors);
+              populateDoctorCarousel(doctors);
+              $('#prevPage').prop('disabled', page === 0);
+              $('#nextPage').prop('disabled', page >= totalPages - 1);
+            } else {
+              $('#doctorlist-body').html('<tr><td colspan="8" class="text-center">No doctors found.</td></tr>');
+              $('#doctorCarousel').html('<div class="col-12 text-center">No doctors found.</div>');
+            }
+          },
+          error: function (xhr) {
+            let message = 'Failed to load doctors.';
+            if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            $('#doctorlist-body').html(`<tr><td colspan="8" class="text-center">${message}</td></tr>`);
+            $('#doctorCarousel').html(`<div class="col-12 text-center">${message}</div>`);
+          }
+        });
+      }
+
+      // Initial fetch
+      fetchDoctors(currentPage, pageSize);
+
+      // Populate list view (table)
+      function populateDoctorList(doctors) {
+        const tbody = $('#doctorlist-body');
+        tbody.empty();
+        doctors.forEach(doctor => {
+          const fullName = `${doctor.firstName || ''} ${doctor.lastName || ''}`.trim();
+          const address = `${doctor.address.city || ''}, ${doctor.address.state || ''}, ${doctor.address.country || ''}`.trim();
+          const profilePicture = doctor.profilePicture || 'includes/images/05.jpg'; // Default image
+          const joinDate = doctor.createdAt ? new Date(doctor.createdAt).toLocaleDateString() : 'N/A';
+          const row = `
+            <tr>
+              <td><input type="checkbox"></td>
+              <td>
+                <div class="d-flex">
+                  <img src="${profilePicture}" alt="" width="25" height="25" class="rounded-circle">
+                  <div class="ms-2 text-dark">${fullName || 'N/A'}</div>
+                </div>
+              </td>
+              <td class="text-dark">${doctor.department || 'N/A'}</td>
+              <td class="text-dark">${doctor.designation || 'N/A'}</td>
+              <td class="text-dark">${doctor.education || 'N/A'}</td>
+              <td class="text-dark">${address || 'N/A'}</td>
+              <td class="text-dark">${joinDate}</td>
+              <td>
+                <div class="dropdown">
+                  <button class="btn rounded-10" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <div class="dropdown-menu dropdown-menu-end p-0 border-0 rounded-10 bg-transparent">
+                    <div class="animate slideIn card bg-white rounded-2">
+                      <ul class="list-unstyled mb-0">
+                        <li>
+                          <a class="dropdown-item border-b-dashed text-dark-primary py-2 fw-500 fs-14"
+                            href="doctorprofile.html?id=${doctor.id}">
+                            <i class="bi bi-eye-fill me-2 fs-12"></i>View</a>
+                        </li>
+                        <li>
+                          <a class="dropdown-item text-dark-primary py-2 fw-500 fs-14" href="editdoctor.html?id=${doctor.id}">
+                            <i class="bi bi-pen-fill me-2 fs-12"></i>Edit</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </td>
+            </tr>`;
+          tbody.append(row);
+        });
+
+        $('#doctorlist').DataTable({
+          "paging": false, // Disable DataTable pagination to use custom
+          "ordering": true,
+          "info": false,
+          "searching": true,
+          "columnDefs": [
+            { "orderable": false, "targets": "no-sort" }
+          ]
+        });
+      }
+
+      // Populate grid view (carousel)
+      function populateDoctorCarousel(doctors) {
+        const carousel = $('#doctorCarousel');
+        carousel.empty().trigger('destroy.owl.carousel');
+        doctors.forEach(doctor => {
+          const fullName = `Dr. ${doctor.firstName || ''} ${doctor.lastName || ''}`.trim();
+          const profilePicture = doctor.profilePicture || 'includes/images/doctor-2337835_1280.jpg';
+          const about = doctor.about || 'No description available.';
+          const joinDate = doctor.createdAt ? new Date(doctor.createdAt).toLocaleDateString() : 'N/A';
+          const item = `
+            <div class="item">
+              <div class="bg-white overflow-hidden shadow-sm doctor-card-main rounded-10">
+                <div class="d-flex justify-content-center mb-5 doctor-card-bg h-100 doctor-card-bg1 py-5 position-relative">
+                  <div class="card-img doctor-list-img rounded-circle position-absolute bg-white d-flex justify-content-center align-items-center shadow-sm">
+                    <div class="doctor-img-outer d-flex align-items-center justify-content-center overflow-hidden">
+                      <img src="${profilePicture}" alt="" class="w-100 object-fit-cover">
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body p-3">
+                  <h5 class="doctor-name fs-5 fw-bold text-capitalize">${fullName || 'N/A'}</h5>
+                  <p class="fs-12 text-dark fw-500 text-capitalize text-light">${doctor.designation || 'N/A'}</p>
+                  <div class="doctor-about mb-5">
+                    <p class="text-dark fs-14 fw-normal mb-0">${about}</p>
+                  </div>
+                  <div class="d-flex justify-content-between align-items-center">
+                    <div class="doctor-profile d-flex justify-content-start align-items-center gap-3">
+                      <a href="javascript:void(0)" class="bg-light-primary px-3 py-2 rounded-10">
+                        <i class="fa-brands fa-facebook-f text-primary fs-5"></i>
+                      </a>
+                      <a href="javascript:void(0)" class="bg-light-primary px-3 py-2 rounded-10">
+                        <i class="fa-brands fa-x-twitter text-primary fs-5"></i>
+                      </a>
+                      <a href="javascript:void(0)" class="bg-light-primary px-3 py-2 rounded-10">
+                        <i class="fa-brands fa-linkedin-in text-primary fs-5"></i>
+                      </a>
+                    </div>
+                    <div class="text-center doctor-card-btn">
+                      <a href="doctorprofile.html?id=${doctor.id}"
+                        class="text-primary fs-14 fw-500 text-primary text-decoration-underline">View Profile</a>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>`;
+          carousel.append(item);
+        });
+        carousel.owlCarousel({
+          loop: false,
+          margin: 10,
+          nav: true,
+          responsive: {
+            0: { items: 1 },
+            600: { items: 2 },
+            1000: { items: 3 }
+          }
+        });
+      }
+
+      // Pagination controls
+      $('#pageSize').on('change', function () {
+        pageSize = parseInt($(this).val());
+        currentPage = 0;
+        fetchDoctors(currentPage, pageSize);
+      });
+
+      $('#prevPage').click(function () {
+        if (currentPage > 0) {
+          currentPage--;
+          fetchDoctors(currentPage, pageSize);
+        }
+      });
+
+      $('#nextPage').click(function () {
+        currentPage++;
+        fetchDoctors(currentPage, pageSize);
+      });
+
+      // Toggle between list and grid views
+      $('#grid').click(function () {
+        $('.list-show').addClass('d-none');
+        $('.list-hide').removeClass('d-none');
+      });
+
+      $('#list').click(function () {
+        $('.list-hide').addClass('d-none');
+        $('.list-show').removeClass('d-none');
+      });
+    });
+  </script>
+</body>
+
+</html>

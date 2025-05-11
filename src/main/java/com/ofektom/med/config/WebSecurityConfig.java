@@ -22,15 +22,12 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
 
-
 @Configuration
 @EnableWebSecurity
 public class WebSecurityConfig {
 
-
-    private UserServiceImpl userService;
-    private JwtAuthenticationFilter authentication;
-
+    private final UserServiceImpl userService;
+    private final JwtAuthenticationFilter authentication;
 
     @Autowired
     public WebSecurityConfig(@Lazy UserServiceImpl userService, JwtAuthenticationFilter authentication) {
@@ -38,45 +35,25 @@ public class WebSecurityConfig {
         this.authentication = authentication;
     }
 
-//    @Bean
-//    CorsConfigurationSource corsConfigurationSource() {
-//        CorsConfiguration configuration = new CorsConfiguration();
-//        configuration.setAllowedOrigins(Arrays.asList("*"));
-//        configuration.setAllowedMethods(Arrays.asList("*"));
-//        configuration.setAllowedHeaders(Arrays.asList("*"));
-//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-//        source.registerCorsConfiguration("/**", configuration);
-//        return source;
-//    }
-
     @Bean
     CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList(
-                "http://localhost:5173",
-                "http://127.0.0.1:5502", // add this if you're testing from VSCode Live Server
-                "https://airway-ng.netlify.app"
-        ));
+        configuration.setAllowedOrigins(Arrays.asList("*")); // For local testing
         configuration.setAllowCredentials(true);
         configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS"));
         configuration.setAllowedHeaders(Arrays.asList("Authorization", "Cache-Control", "Content-Type"));
-        configuration.setExposedHeaders(Arrays.asList("Authorization")); // if needed
+        configuration.setExposedHeaders(Arrays.asList("Authorization"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
         return source;
     }
 
-
-
-    @Bean//bcryptPasswordEncoder is enabled for spring security hashing/salting of user's password information
+    @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
 
-
-    //AuthenticationProvider(DAOAuthenticationProvider) is enabled to function as the "bouncer" in our application. Checking
-    //password and User information credibility.
     @Bean
     public AuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();
@@ -85,19 +62,28 @@ public class WebSecurityConfig {
         return daoAuthenticationProvider;
     }
 
-
     @Bean
     public SecurityFilterChain httpSecurity(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // enable CORS
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**", "/api/v1/medication/**").permitAll()
+                        .requestMatchers(
+                                "/",
+                                "/*.html",           // Allow all HTML files in the root of static/
+                                "/assets/**",        // Allow all files in assets/
+                                "/includes/**"       // Allow all files in includes/
+                        ).permitAll()
+                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/users/**", "/api/v1/medication/**").authenticated()
                         .requestMatchers("/api/v1/auth/logout").authenticated()
+                        .anyRequest().authenticated()
                 )
                 .logout(logout -> logout
                         .deleteCookies("remove")
                         .invalidateHttpSession(true)
+                        .logoutUrl("/api/v1/auth/logout")
+                        .logoutSuccessUrl("/index.html")
                 )
                 .sessionManagement(sessionManagement ->
                         sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
@@ -106,5 +92,3 @@ public class WebSecurityConfig {
                 .build();
     }
 }
-
-

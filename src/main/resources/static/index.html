@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>HC-ERP-Login</title>
+    <link rel="icon" type="image/x-icon" href="includes/images/favicon.ico">
+    <link rel="stylesheet" href="assets/css/bootstrap-icons.css">
+    <link rel="stylesheet" href="assets/css/responsive.bootstrap5.min.css">
+    <link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap-datepicker.min.css">
+    <link rel="stylesheet" href="../../../../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+    <div id="preloader"></div>
+
+    <div>
+        <div class="row align-items-center mx-0">
+            <div class="col-lg-6 bg-dark-primary min-vh-100 d-flex align-items-center justify-content-center auth-logo-main">
+                <div class="auth-logo d-flex flex-column align-items-center">
+                    <img src="includes/images/mainlogo.png" alt="" class="mb-4 auth-logo-img w-100 ">
+                    <img src="includes/images/login-main.svg" alt="" class="w-100  auth-logo-doctor">
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="row align-items-center h-100 justify-content-center py-3 py-lg-0">
+                    <div class="bg-white p-4 shadow  rounded-10 col-sm-10 col-xxl-8 auth-form ">
+                        <h4 class="text-dark fw-600 mb-4">Login To Your Account</h4>
+                        <span class="text-gray">The one-stop platform for seamless medical record management.</span>
+                        <div class="text-center py-3">
+                            <button class="btn btn-outline-dark w-100 p-1 d-flex align-items-center justify-content-center">
+                                <img src="includes/images/googlelogo.svg" alt=""> Continue with Google
+                            </button>
+                        </div>
+
+                        <form class="loginvalidate">
+                            <div class="mb-3">
+                                <label for="login" class="text-dark mb-2">Email or Phone Number<sup><span class="required">*</span></sup></label>
+                                <input type="text" id="login" name="emailOrPhone" class="form-control" placeholder="Enter your email or phone number" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="password" class="text-dark mb-2">Password<sup><span class="required">*</span></sup></label>
+                                <input type="password" id="password" name="password" class="form-control" placeholder="Enter your password" required>
+                            </div>
+                            <div id="error-message" class="text-danger text-center mb-3" style="display:none;"></div>
+                            <div class="text-center mb-3">
+                                <button type="submit" class="btn btn-primary w-75 mw-120 rounded-pill py-2">Login</button>
+                            </div>
+                        </form>
+                        <div class="text-center fs-14 mb-2">
+                            Forgot Username or Password <a href="resetpass.html" class="text-primary text-decoration-underline fw-600 ps-2">Reset</a>
+                        </div>
+                        <div class="mb-3 text-center">
+                            Getting a new application? <a href="register.html"
+                                class="text-primary text-decoration-underline fw-600">Register</a>
+                            to get started
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="assets/js/jquery-3.7.0.js"></script>
+    <script src="assets/js/jquery.min.js"></script>
+    <script src="assets/js/popper.min.js"></script>
+    <script src="assets/js/bootstrap.min.js"></script>
+    <script src="assets/js/jquery.dataTables.min.js"></script>
+    <script src="assets/js/dataTables.bootstrap5.min.js"></script>
+    <script src="assets/js/dataTables.responsive.min.js"></script>
+    <script src="assets/js/apexcharts.js"></script>
+    <script src="assets/js/jquery.validate.js"></script>
+    <script src="assets/js/bootstrap-datepicker.min.js"></script>
+    <script src="assets/js/jquery.slimscroll.min.js"></script>
+    <script src="assets/js/togglepassword.js"></script>
+    <script src="assets/js/all.min.js"></script>
+    <script src="assets/js/script.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            console.log("Document ready, setting up form submission handler");
+
+            $('form.loginvalidate').submit(function (e) {
+                e.preventDefault(); // Prevent default form submission
+                console.log("Form submission prevented, preparing login data");
+
+                const emailOrPhone = $('#login').val().trim();
+                const password = $('#password').val().trim();
+
+                const loginData = {
+                    emailOrPhone: emailOrPhone,
+                    password: password
+                };
+
+                console.log("Sending login request with data:", loginData);
+
+                $.ajax({
+                    url: '/api/v1/auth/login',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify(loginData),
+                    dataType: 'json', // Explicitly expect JSON response
+                    success: function (response) {
+                        console.log("Login Success Response:", response);
+
+                        if (response && response.access_token) {
+                            // Store access token and user info
+                            localStorage.setItem('access_token', response.access_token);
+                            localStorage.setItem('user', JSON.stringify(response.data.user));
+                            console.log("Stored user data in localStorage:", response.data.user);
+
+                            // Determine redirect based on role from response
+                            const userRole = response.data.user.userRole; // Using userRole from response
+                            console.log("Detected user role:", userRole);
+
+                            let redirectUrl = 'index.html'; // Fallback
+                            switch (userRole) {
+                                case 'ROLE_SUPER_ADMIN':
+                                    redirectUrl = '/dashboard.html';
+                                    break;
+                                case 'ROLE_ADMIN':
+                                    redirectUrl = '/admindashboard.html';
+                                    break;
+                                case 'ROLE_DOCTOR':
+                                    redirectUrl = '/doctordashboard.html';
+                                    break;
+                                case 'ROLE_NURSE':
+                                    redirectUrl = '/nursedashboard.html';
+                                    break;
+                                case 'ROLE_FRONT_DESK':
+                                    redirectUrl = '/frontdeskdashboard.html';
+                                    break;
+                                case 'ROLE_STAFF':
+                                    redirectUrl = '/staffdashboard.html';
+                                    break;
+                                case 'ROLE_ACCOUNTANT':
+                                    redirectUrl = '/accountantdashboard.html';
+                                    break;
+                                case 'ROLE_PHARMACIST':
+                                    redirectUrl = '/pharmacistdashboard.html';
+                                    break;
+                                case 'ROLE_LAB_SCIENTIST':
+                                    redirectUrl = '/labscientsdashboard.html';
+                                    break;
+                                case 'ROLE_RADIOGRAPHER':
+                                    redirectUrl = '/radiographerdashboard.html';
+                                    break;
+                                case 'ROLE_PATIENT':
+                                    redirectUrl = '/patientdashboard.html';
+                                    break;
+                                default:
+                                    console.log("Unknown role, using fallback redirect:", redirectUrl);
+                            }
+
+                            console.log("Redirecting to:", redirectUrl);
+                            // Redirect to the appropriate page
+                            window.location.href = redirectUrl;
+
+                            // Additional check for redirect
+                            setTimeout(() => {
+                                if (window.location.href !== redirectUrl) {
+                                    console.error("Redirect failed. Current URL:", window.location.href);
+                                    $('#error-message').text('Redirect failed. Please navigate to ' + redirectUrl + ' manually.').show();
+                                }
+                            }, 1000);
+                        } else {
+                            console.log("Unexpected response format:", response);
+                            $('#error-message').text('Unexpected response format. Login failed.').show();
+                        }
+                    },
+                    error: function (xhr, status, error) {
+                        console.log("Login Error:", {
+                            status: status,
+                            error: error,
+                            statusCode: xhr.status,
+                            statusText: xhr.statusText,
+                            responseText: xhr.responseText,
+                            responseJSON: xhr.responseJSON
+                        });
+                        let message = 'Login failed. Please check your credentials.';
+                        if (xhr.responseJSON && xhr.responseJSON.message) {
+                            message = xhr.responseJSON.message;
+                        }
+                        $('#error-message').text(message).show();
+                    },
+                    complete: function (xhr, status) {
+                        console.log("AJAX request completed with status:", status);
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-# Build stage with a known, existing Maven OpenJDK image
+# Build stage with Maven and OpenJDK 17
 FROM maven:3.8.5-openjdk-17-slim AS builder
 
 WORKDIR /app
@@ -7,10 +7,10 @@ WORKDIR /app
 COPY pom.xml .
 COPY src/ src/
 
-# Build the project
+# Build the project with Java 17
 RUN mvn clean package -DskipTests
 
-# Final stage
+# Final stage with OpenJDK 21 for runtime
 FROM openjdk:21-jdk-slim
 
 WORKDIR /app

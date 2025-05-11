@@ -11,6 +11,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
+import java.util.List;
+
 public interface UserService {
     ResponseEntity<?> registerUser(SignupDto signupDto);
 
@@ -18,7 +20,9 @@ public interface UserService {
 
     ResponseEntity<?> getUserById(Long userId);
 
-    Page<UserResponse> getAllUsersByRole(String role, Pageable pageable);
+    List<UserResponse> getAllUsersByRoleAsList(String role); // fetch all as list
+
+    Page<UserResponse> getAllUsersByRoleAsPage(String role, Pageable pageable);
 //    void createPasswordResetTokenForUser(User user, String token);
 //    void forgotPassword(EmailSenderDto passwordDto, HttpServletRequest request);
 //    ResponseEntity<String> resetPassword(String token, ResetPasswordDto passwordDto);

@@ -19,6 +19,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,9 +30,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Random;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -139,8 +143,9 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new BadRequestException("Phone number is already taken");
         }
 
-        if (!signupDto.getUserRole().equals("ROLE_STAFF") || !signupDto.getUserRole().equals("ROLE_PATIENT") || !signupDto.getUserRole().equals(" ROLE_NURSE")) {
-                throw new BadRequestException("You cannot add this user.");
+        Set<String> allowedRoles = Set.of("ROLE_STAFF", "ROLE_PATIENT", "ROLE_NURSE");
+        if (!allowedRoles.contains(signupDto.getUserRole())) {
+            throw new BadRequestException("You cannot add this user.");
         }
 
         User user = new User();
@@ -209,9 +214,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public Page<UserResponse> getAllUsersByRole(String role, Pageable pageable) {
-        Page<User> usersPage;
+    public List<UserResponse> getAllUsersByRoleAsList(String role) {
+        List<User> users;
+        if (role == null || role.trim().isEmpty()) {
+            users = userRepository.findAll();
+        } else {
+            users = userRepository.findByUserRole(Role.valueOf(role.toUpperCase()));
+        }
+        return users.stream().map(this::getUserResponse).collect(Collectors.toList());
+    }
 
+    @Override
+    public Page<UserResponse> getAllUsersByRoleAsPage(String role, Pageable pageable) {
+        Page<User> usersPage;
         if (role == null || role.trim().isEmpty()) {
             usersPage = userRepository.findAll(pageable);
         } else {

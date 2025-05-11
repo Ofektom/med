@@ -15,5 +15,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
     boolean existsByPhoneNumber(String phoneNumber);
     Optional<User> findByPhoneNumber(String userInput);
     Page<User> findByUserRole(Role role, Pageable pageable);
+    List<User> findByUserRole(Role role);
     boolean existsByUserRole(Role role);
 }

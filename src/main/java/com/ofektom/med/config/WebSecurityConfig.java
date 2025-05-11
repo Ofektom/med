@@ -92,7 +92,7 @@ public class WebSecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsConfigurationSource())) // enable CORS
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**").permitAll()
+                        .requestMatchers("/api/v1/auth/**", "/api/v1/users/**", "/api/v1/medication/**").permitAll()
                         .requestMatchers("/api/v1/auth/logout").authenticated()
                 )
                 .logout(logout -> logout

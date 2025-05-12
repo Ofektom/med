@@ -807,16 +807,15 @@
             'Authorization': 'Bearer ' + token
           },
           success: function (response) {
-            if (response && response.data && Array.isArray(response.data) && response.data.length > 0) {
-              const doctors = response.data;
-              // Since the API doesn't return totalPages, we'll assume 1 page for now
-              const totalPages = 1; // Adjust if API provides pagination info
+            if (response && response.data && Array.isArray(response.data.data)) {
+              const doctors = response.data.data;
+              const totalPages = response.data.totalPages;
               $('#totalPages').text(totalPages);
-              $('#currentPage').text(page + 1);
+              $('#currentPage').text(response.data.currentPage + 1);
               populateDoctorList(doctors);
               populateDoctorCarousel(doctors);
-              $('#prevPage').prop('disabled', page === 0);
-              $('#nextPage').prop('disabled', page >= totalPages - 1);
+              $('#prevPage').prop('disabled', response.data.currentPage === 0);
+              $('#nextPage').prop('disabled', response.data.currentPage >= totalPages - 1);
             } else {
               $('#doctorlist-body').html('<tr><td colspan="8" class="text-center">No doctors found.</td></tr>');
               $('#doctorCarousel').html('<div class="col-12 text-center">No doctors found.</div>');

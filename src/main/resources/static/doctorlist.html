@@ -6,14 +6,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>HC-ERP-Doctor List</title>
-  <link rel="icon" type="image/x-icon" href="includes/images/favicon.ico">
-  <link rel="stylesheet" href="assets/css/bootstrap-icons.css">
-  <link rel="stylesheet" href="assets/css/responsive.bootstrap5.min.css">
-  <link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
-  <link rel="stylesheet" href="assets/css/bootstrap-datepicker.min.css">
+  <link rel="icon" type="image/x-icon" href="/includes/images/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/bootstrap-icons.css">
+  <link rel="stylesheet" href="/assets/css/responsive.bootstrap5.min.css">
+  <link rel="stylesheet" href="/assets/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap-datepicker.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/bootstrap.css">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.theme.default.min.css">
 </head>
@@ -22,7 +22,6 @@
   <div id="preloader"></div>
 
   <div class="d-flex body-main body-color" id="wrapper">
-    <!-- Sidebar and header remain unchanged, omitted for brevity -->
     <div class="sidebar-backdrop"></div>
     <div class="sidebar-main">
       <div class="sidebar h-100 bg-dark-primary close" id="sidebar-wrapper">
@@ -391,6 +390,7 @@
             </div>
           </div>
         </div>
+      </div>
     </div>
     <div id="page-content-wrapper" class="position-relative">
       <div class="bg-white shadow-sm px-3 py-2 mb-4 header m-auto position-fixed">
@@ -679,12 +679,12 @@
         <h3 class="fw-600 text-dark-primary text-capitalize">Doctor's List</h3>
         <div class="d-flex flex-wrap justify-content-between align-items-center my-3">
           <div class="d-flex flex-wrap text-capitalize align-items-center">
-            <p class="mb-0 pb-0 fw-bold text-dark-primary"><a href="index.html">Home</a></p>
+            <p class="mb-0 pb-0 fw-bold text-dark-primary"><a href="/index.html">Home</a></p>
             <i class="bi bi-chevron-right pagination-arrow text-dark-primary"></i>
             <p class="mb-0 pb-0 text-dark">Doctor's List </p>
           </div>
           <div class="d-flex justify-content-start gap-1 flex-wrap">
-            <a href="adddoctor.html" class="btn btn-primary me-1 mw-120 py-2 px-4 rounded-pill text-capitalize me-1"> <i
+            <a href="/adddoctor.html" class="btn btn-primary me-1 mw-120 py-2 px-4 rounded-pill text-capitalize me-1"> <i
                 class="bi bi-plus-circle me-2"></i> Add New doctor</a>
             <button class="btn btn-danger rounded-pill px-4 me-1" id="grid">
               <i class="bi bi-grid-1x2-fill px-2"></i>
@@ -765,20 +765,20 @@
       </div>
     </div>
   </div>
-  <script src="assets/js/jquery-3.7.0.js"></script>
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/popper.min.js"></script>
-  <script src="assets/js/bootstrap.min.js"></script>
-  <script src="assets/js/jquery.dataTables.min.js"></script>
-  <script src="assets/js/dataTables.bootstrap5.min.js"></script>
-  <script src="assets/js/dataTables.responsive.min.js"></script>
-  <script src="assets/js/apexcharts.js"></script>
-  <script src="assets/js/jquery.validate.js"></script>
-  <script src="assets/js/bootstrap-datepicker.min.js"></script>
-  <script src="assets/js/jquery.slimscroll.min.js"></script>
-  <script src="assets/js/togglepassword.js"></script>
-  <script src="assets/js/all.min.js"></script>
-  <script src="assets/js/script.js"></script>
+  <script src="/assets/js/jquery-3.7.0.js"></script>
+  <script src="/assets/js/jquery.min.js"></script>
+  <script src="/assets/js/popper.min.js"></script>
+  <script src="/assets/js/bootstrap.min.js"></script>
+  <script src="/assets/js/jquery.dataTables.min.js"></script>
+  <script src="/assets/js/dataTables.bootstrap5.min.js"></script>
+  <script src="/assets/js/dataTables.responsive.min.js"></script>
+  <script src="/assets/js/apexcharts.js"></script>
+  <script src="/assets/js/jquery.validate.js"></script>
+  <script src="/assets/js/bootstrap-datepicker.min.js"></script>
+  <script src="/assets/js/jquery.slimscroll.min.js"></script>
+  <script src="/assets/js/togglepassword.js"></script>
+  <script src="/assets/js/all.min.js"></script>
+  <script src="/assets/js/script.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js"></script>
 
   <script>
@@ -787,12 +787,12 @@
       let pageSize = 10;
 
       // Check if the user is authenticated (token exists)
-      const token = localStorage.getItem('access_token');
-      if (!token) {
-        alert('You are not logged in. Redirecting to login page...');
-        window.location.href = '/index.html';
-        return;
-      }
+      // const token = localStorage.getItem('access_token');
+      // if (!token) {
+      //   alert('You are not logged in. Redirecting to login page...');
+      //   window.location.href = '/index.html';
+      //   return;
+      // }
 
       // Retrieve user data from localStorage
       const userData = JSON.parse(localStorage.getItem('user'));
@@ -814,34 +814,14 @@
       // Display current year in footer
       $('#currentYear').text(new Date().getFullYear());
 
-      // Logout function
-      $('.logout-btn').on('click', function (e) {
-        e.preventDefault();
-        $.ajax({
-          url: '/api/v1/auth/logout',
-          type: 'POST',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          },
-          success: function (response) {
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('user');
-            window.location.href = '/index.html';
-          },
-          error: function (xhr) {
-            alert('Logout failed: ' + xhr.responseText);
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('user');
-            window.location.href = '/index.html';
-          }
-        });
-      });
-
       // Fetch doctors via AJAX
       function fetchDoctors(page, size) {
         $.ajax({
-          url: `/api/v1/users/all?role=ROLE_DOCTOR&page=${page}&size=${size}`,
+          url: '/api/v1/users/all?role=ROLE_DOCTOR&page=' + page + '&size=' + size,
           type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
           success: function (response) {
             if (response && response.data && response.data.data.length > 0) {
               const doctors = response.data.data;
@@ -864,6 +844,12 @@
             }
             $('#doctorlist-body').html(`<tr><td colspan="8" class="text-center">${message}</td></tr>`);
             $('#doctorCarousel').html(`<div class="col-12 text-center">${message}</div>`);
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
           }
         });
       }
@@ -878,7 +864,7 @@
         doctors.forEach(doctor => {
           const fullName = `${doctor.firstName || ''} ${doctor.lastName || ''}`.trim();
           const address = `${doctor.address.city || ''}, ${doctor.address.state || ''}, ${doctor.address.country || ''}`.trim();
-          const profilePicture = doctor.profilePicture || 'includes/images/05.jpg'; // Default image
+          const profilePicture = doctor.profilePicture || '/includes/images/05.jpg'; // Default image
           const joinDate = doctor.createdAt ? new Date(doctor.createdAt).toLocaleDateString() : 'N/A';
           const row = `
             <tr>
@@ -904,11 +890,11 @@
                       <ul class="list-unstyled mb-0">
                         <li>
                           <a class="dropdown-item border-b-dashed text-dark-primary py-2 fw-500 fs-14"
-                            href="doctorprofile.html?id=${doctor.id}">
+                            href="/doctorprofile.html?id=${doctor.id}">
                             <i class="bi bi-eye-fill me-2 fs-12"></i>View</a>
                         </li>
                         <li>
-                          <a class="dropdown-item text-dark-primary py-2 fw-500 fs-14" href="editdoctor.html?id=${doctor.id}">
+                          <a class="dropdown-item text-dark-primary py-2 fw-500 fs-14" href="/editdoctor.html?id=${doctor.id}">
                             <i class="bi bi-pen-fill me-2 fs-12"></i>Edit</a>
                         </li>
                       </ul>
@@ -937,7 +923,7 @@
         carousel.empty().trigger('destroy.owl.carousel');
         doctors.forEach(doctor => {
           const fullName = `Dr. ${doctor.firstName || ''} ${doctor.lastName || ''}`.trim();
-          const profilePicture = doctor.profilePicture || 'includes/images/doctor-2337835_1280.jpg';
+          const profilePicture = doctor.profilePicture || '/includes/images/doctor-2337835_1280.jpg';
           const about = doctor.about || 'No description available.';
           const joinDate = doctor.createdAt ? new Date(doctor.createdAt).toLocaleDateString() : 'N/A';
           const item = `
@@ -969,7 +955,7 @@
                       </a>
                     </div>
                     <div class="text-center doctor-card-btn">
-                      <a href="doctorprofile.html?id=${doctor.id}"
+                      <a href="/doctorprofile.html?id=${doctor.id}"
                         class="text-primary fs-14 fw-500 text-primary text-decoration-underline">View Profile</a>
                     </div>
                   </div>
@@ -1018,6 +1004,29 @@
       $('#list').click(function () {
         $('.list-hide').addClass('d-none');
         $('.list-show').removeClass('d-none');
+      });
+
+      // Logout function
+      $('.logout-btn').on('click', function (e) {
+        e.preventDefault();
+        $.ajax({
+          url: '/api/v1/auth/logout',
+          type: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          },
+          error: function (xhr) {
+            alert('Logout failed: ' + xhr.responseText);
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          }
+        });
       });
     });
   </script>

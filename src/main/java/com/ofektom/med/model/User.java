@@ -46,8 +46,6 @@ public class User implements UserDetails {
     @JsonIgnore
     private Boolean isEnabled = true;
 
-    private String education;
-
     private String designation;
 
     private String department;
@@ -99,6 +97,9 @@ public class User implements UserDetails {
     @OneToMany(mappedBy = "generatedBy", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Report> reportsGenerated;
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private ProfessionalDetails professionalDetails;
+
     private LocalDateTime lastLogin;
 
     private String loginDuration;
@@ -135,7 +136,7 @@ public class User implements UserDetails {
 
     public User(
             String firstName, String lastName, String email, String phoneNumber,
-            String password, Role userRole, Boolean isEnabled, String education,
+            String password, Role userRole, Boolean isEnabled, ProfessionalDetails professionalDetails,
             String designation, String department, String postalCode, String about,
             String status, Integer age, String maritalStatus, String profilePicture,
             String bloodGroup, String bloodPressure, String sugar, String injuryCondition,
@@ -150,10 +151,10 @@ public class User implements UserDetails {
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+        this.professionalDetails = professionalDetails;
         this.password = password;
         this.userRole = userRole;
         this.isEnabled = isEnabled;
-        this.education = education;
         this.designation = designation;
         this.department = department;
         this.postalCode = postalCode;
@@ -283,14 +284,6 @@ public class User implements UserDetails {
 
     public void setEnabled(Boolean enabled) {
         isEnabled = enabled;
-    }
-
-    public String getEducation() {
-        return education;
-    }
-
-    public void setEducation(String education) {
-        this.education = education;
     }
 
     public String getDesignation() {
@@ -499,6 +492,14 @@ public class User implements UserDetails {
 
     public void setMembershipNo(String membershipNo) {
         this.membershipNo = membershipNo;
+    }
+
+    public ProfessionalDetails getProfessionalDetails() {
+        return professionalDetails;
+    }
+
+    public void setProfessionalDetails(ProfessionalDetails professionalDetails) {
+        this.professionalDetails = professionalDetails;
     }
 
     public LocalDateTime getCreatedAt() {

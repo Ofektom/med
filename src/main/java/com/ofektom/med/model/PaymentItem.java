@@ -30,8 +30,6 @@ public class PaymentItem {
     @NotNull
     private Double charges;
 
-    private Double discount;
-
     @NotNull
     private Double total;
 
@@ -45,96 +43,35 @@ public class PaymentItem {
 
     public PaymentItem(){}
 
-    public PaymentItem(Long id, Payments payment, String itemName, Integer quantity, Double unitCost, Double charges, Double discount, Double total, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public PaymentItem(Long id, Payments payment, String itemName, Integer quantity, Double unitCost, Double charges,
+                       Double total, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.payment = payment;
         this.itemName = itemName;
         this.quantity = quantity;
         this.unitCost = unitCost;
         this.charges = charges;
-        this.discount = discount;
         this.total = total;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public @NotNull Payments getPayment() {
-        return payment;
-    }
-
-    public void setPayment(@NotNull Payments payment) {
-        this.payment = payment;
-    }
-
-    public @NotBlank String getItemName() {
-        return itemName;
-    }
-
-    public void setItemName(@NotBlank String itemName) {
-        this.itemName = itemName;
-    }
-
-    public Integer getQuantity() {
-        return quantity;
-    }
-
-    public void setQuantity(Integer quantity) {
-        this.quantity = quantity;
-    }
-
-    public Double getUnitCost() {
-        return unitCost;
-    }
-
-    public void setUnitCost(Double unitCost) {
-        this.unitCost = unitCost;
-    }
-
-    public @NotNull Double getCharges() {
-        return charges;
-    }
-
-    public void setCharges(@NotNull Double charges) {
-        this.charges = charges;
-    }
-
-    public Double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(Double discount) {
-        this.discount = discount;
-    }
-
-    public @NotNull Double getTotal() {
-        return total;
-    }
-
-    public void setTotal(@NotNull Double total) {
-        this.total = total;
-    }
-
-    public LocalDateTime getCreatedAt() {
-        return createdAt;
-    }
-
-    public void setCreatedAt(LocalDateTime createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public LocalDateTime getUpdatedAt() {
-        return updatedAt;
-    }
-
-    public void setUpdatedAt(LocalDateTime updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
+    public Payments getPayment() { return payment; }
+    public void setPayment(Payments payment) { this.payment = payment; }
+    public String getItemName() { return itemName; }
+    public void setItemName(String itemName) { this.itemName = itemName; }
+    public Integer getQuantity() { return quantity; }
+    public void setQuantity(Integer quantity) { this.quantity = quantity; }
+    public Double getUnitCost() { return unitCost; }
+    public void setUnitCost(Double unitCost) { this.unitCost = unitCost; }
+    public Double getCharges() { return charges; }
+    public void setCharges(Double charges) { this.charges = charges; }
+    public Double getTotal() { return total; }
+    public void setTotal(Double total) { this.total = total; }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

@@ -15,4 +15,8 @@ public enum Role {
 
     Role() {
     }
+
+    public boolean equalsIgnoreCase(String role) {
+        return true;
+    }
 }

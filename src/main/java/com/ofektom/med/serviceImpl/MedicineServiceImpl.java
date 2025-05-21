@@ -3,11 +3,8 @@ package com.ofektom.med.serviceImpl;
 import com.ofektom.med.dto.request.MedicineDto;
 import com.ofektom.med.dto.response.ApiResponse;
 import com.ofektom.med.dto.response.MedicineResponse;
-import com.ofektom.med.dto.response.UserResponse;
-import com.ofektom.med.enums.Role;
 import com.ofektom.med.exception.NotFoundException;
 import com.ofektom.med.model.Medicine;
-import com.ofektom.med.model.User;
 import com.ofektom.med.repositroy.MedicineRepository;
 import com.ofektom.med.service.MedicineService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -85,7 +79,8 @@ public class MedicineServiceImpl implements MedicineService {
                 medicine.getPrice(),
                 medicine.getExpiryDate(),
                 medicine.getStatus(),
-                medicine.getCreatedAt()
+                medicine.getCreatedAt(),
+                medicine.getUpdatedAt()
         );
     }
 }

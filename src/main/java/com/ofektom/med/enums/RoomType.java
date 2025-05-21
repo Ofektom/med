@@ -1,5 +1,9 @@
 package com.ofektom.med.enums;
 
 public enum RoomType {
-    DELUXE, SUPER_DELUXE, ICU
+    PRIVATE,
+    SEMI_PRIVATE,
+    GENERAL_WARD,
+    ICU,
+    EMERGENCY
 }

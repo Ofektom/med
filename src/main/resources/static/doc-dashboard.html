@@ -1,0 +1,984 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EMR Dashboard</title>
+  <link rel="icon" type="image/x-icon" href="/includes/images/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/bootstrap-icons.css">
+  <link rel="stylesheet" href="/assets/css/responsive.bootstrap5.min.css">
+  <link rel="stylesheet" href="/assets/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap-datepicker.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
+</head>
+<body>
+  <div id="preloader"></div>
+  <div class="d-flex body-main body-color" id="wrapper">
+    <div class="sidebar-backdrop"></div>
+    <div class="sidebar-main">
+      <div class="sidebar h-100 bg-dark-primary close" id="sidebar-wrapper">
+        <div class="sidebar-box text-center position-fixed slim-outer bg-dark-primary">
+          <div class="sidebar-heading bg-dark d-flex align-items-center justify-content-between p-3 border-dark border-bottom">
+            <a href="/index.html">
+              <img src="/includes/images/healthcare-logo.png" width="200" alt="">
+            </a>
+            <button class="btn btn-primary rounded closesidebar d-lg-none btn-sm">
+              <i class="fa-solid fa-xmark text-white"></i>
+            </button>
+          </div>
+          <div class="sidebar-box-data text-start px-3" id="sidebar-data">
+            <div class="list-group list-group-flush mt-3">
+              <div class="accordion" id="accordionExampleOne"> 
+                <div class="accordion-item mb-4">
+                  <a href="/doc-dashboard.html" class="active no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                   <i class="bi bi-grid-1x2-fill px-2"></i><span>Doctor Dashboard</span></a>
+                </div>
+                
+                <div class="accordion-item mb-4">
+                    <a href="/doc-patientlist.html"
+                      class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center"><i class="fa-regular fa-address-book px-2"></i>Patient List</a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <a href="/doc-reports.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                    <i class="bi bi-file-earmark-pdf-fill px-2"></i> <span>Reports</span></a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <div class="accordion-header" id="headingPrescription">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center"
+                      type="button" data-bs-toggle="collapse" data-bs-target="#collapsePrescription" aria-expanded="true"
+                      aria-controls="collapsePrescription">
+                      <i class="fa-solid fa-calendar-days px-2"></i>
+                      Prescription
+                    </button>
+                  </div>
+                  <div id="collapsePrescription" class="accordion-collapse collapse" aria-labelledby="headingPrescription"
+                    data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <ul class="navbar-nav d-block">
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="/doc-prescriptionlist.html">
+                            Prescription list</a>
+                        </li>
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="/doc-addprescription.html">
+                            Add Prescription</a>
+                        </li>
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="/doc-editprescription.html">
+                            Edit Prescription</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4">
+                  <div class="accordion-header" id="headingAppointments">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center"
+                      type="button" data-bs-toggle="collapse" data-bs-target="#collapseAppointments" aria-expanded="true"
+                      aria-controls="collapseAppointments">
+                      <i class="fa-solid fa-calendar-days px-2"></i>
+                      Appointments
+                    </button>
+                  </div>
+                  <div id="collapseAppointments" class="accordion-collapse collapse" aria-labelledby="headingAppointments"
+                    data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <ul class="navbar-nav d-block">
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="/doc-appointmentlist.html">
+                            appointment list</a>
+                        </li>
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="/doc-bookappointment.html">
+                            Book Appointment</a>
+                        </li>
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="/doc-editappointment.html">
+                            Edit Appointment</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4 d-block d-sm-none">
+                  <div class="accordion-header" id="headingSeven">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                      <i class="bi bi-bell-fill text-white px-2"></i><span class="fw-600">Notification</span>
+                    </button>
+                  </div>
+                  <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <div class="slim-outer">
+                        <div class="card border-0 shadow bg-white rounded-2 overflow-hidden" id="mobile-notifications">
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu"></ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4 d-block d-sm-none">
+                  <div class="accordion-header" id="headingEight">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
+                      <i class="bi bi-envelope-fill text-white px-2"></i><span class="fw-600">Messages</span>
+                    </button>
+                  </div>
+                  <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <div class="slim-outer">
+                        <div class="card border-0 shadow bg-white rounded-2 overflow-hidden" id="mobile-messages">
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu"></ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4">
+                  <div class="accordion-header" id="headingSeven">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                      <i class="fa-solid fa-user-shield px-2"></i>Setting
+                    </button>
+                  </div>
+                  <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <ul class="navbar-nav d-block">
+                        <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-profile.html">Profile</a></li>
+                        <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/resetpass.html">Reset Password</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="page-content-wrapper" class="position-relative">
+      <div class="bg-white shadow-sm px-3 py-2 mb-4 header m-auto position-fixed">
+        <div class="row align-items-center">
+          <div class="row flex-row-reverse justify-content-between align-items-center">
+            <div class="col-lg-6">
+              <div class="d-flex justify-content-lg-end justify-content-between align-items-center gap-2">
+                <div class="d-block d-lg-none">
+                  <button class="btn shadow-0 focus-0 sidebar-btn rounded border-0 sidebarToggle">
+                    <img src="/includes/images/menu-icons.svg" alt="">
+                  </button>
+                  <a href="/doc-dashboard.html">
+                    <img src="/includes/images/ERP-Logo(1).png" width="180" alt="">
+                  </a>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="maximize d-none d-lg-block">
+                    <a class="badge-purple d-flex align-items-center text-primary" href="javascript:void(0)" id="fullscreen">
+                    </a>
+                  </div>
+                  <div class="position-relative rounded d-lg-none">
+                    <a class="text-primary py-2 px-3 btn btn-transparent outline-0 focus-0 rounded btn-cust-sm"
+                      data-bs-toggle="collapse" href="#searchcollapse" role="button" aria-expanded="false"
+                      aria-controls="searchcollapse">
+                      <i class="bi bi-search"></i>
+                    </a>
+                    <div class="collapse position-absolute top-100 mt-2 end-0 z-3 mw-250 mw-100" id="searchcollapse">
+                      <div class="card card-body">
+                        <form>
+                          <div class="border bg-light position-relative h-100 d-flex align-items-center header-search mw-100">
+                            <button class="btn btn-transparent border-0 position-absolute ms-1">
+                              <img src="/includes/images/search2.svg" alt="">
+                            </button>
+                            <input type="search" class="form-control border-0 bg-transparent shadow-none ps-5 py-2"
+                              placeholder="Search here..">
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown d-none d-sm-block">
+                    <button type="button" class="btn rounded position-relative" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      <i class="fa-solid fa-envelope fs-5 text-success pb-0 mb-0"></i>
+                      <span class="msg-lite">
+                        <span class="circles cust_circle">
+                          <span class="circle1"></span>
+                          <span class="circle2"></span>
+                          <span class="circle3"></span>
+                        </span>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-notification dropdown-menu-end dropdown-mega p-0 border-0 rounded-10 bg-transparent">
+                      <div class="animate slideIn">
+                        <div class="card border-0 shadow bg-white rounded-10 overflow-hidden slim-outer">
+                          <div class="bg-light p-3">
+                            <h6 class="text-center mb-0">Messages</h6>
+                          </div>
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu px-2 py-3" id="message_box">
+                            <!-- Populated dynamically via JavaScript -->
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown d-none d-sm-block">
+                    <button type="button" class="btn rounded position-relative" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      <i class="fa-solid fa-bell fs-5 text-orange pb-0 mb-0"></i>
+                      <span class="notification-lite">
+                        <span class="circles cust_circle">
+                          <span class="circle1"></span>
+                          <span class="circle2"></span>
+                          <span class="circle3"></span>
+                        </span>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-notification dropdown-menu-end dropdown-mega p-0 border-0 rounded-10 bg-transparent">
+                      <div class="animate slideIn">
+                        <div class="card border-0 shadow bg-white rounded-10 overflow-hidden slim-outer slim-outer">
+                          <div class="bg-light p-3">
+                            <h6 class="text-center mb-0">Notifications</h6>
+                          </div>
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu px-2 py-3" id="notification_box">
+                            <!-- Populated dynamically via JavaScript -->
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown user">
+                    <button type="button" class="pill-badge btn md-mw-150 me-xl-3 d-flex align-items-center text-start rounded px-0"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                      <img src="/includes/images/01_2.png" alt="" class="border rounded">
+                      <span class="justify-content-between align-items-center gap-4 px-2 w-100 d-none d-xl-flex">
+                        <span class="my-0 py-0 lh-1">
+                          <span class="pill-badge-msg lh-sm text-capitalize pb-0 mb-0 d-block user-firstname"></span>
+                          <span class="fs-12 p-0 d-block user-role"></span>
+                        </span>
+                        <span class="my-0 py-0">
+                          <i class="bi bi-chevron-down"></i>
+                        </span>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-mega p-0 border-0 rounded-3 bg-transparent">
+                      <div class="animate slideIn">
+                        <div class="card bg-white rounded-10 shadow-sm overflow-hidden">
+                          <div class="bg-light p-3">
+                            <h6 class="mb-0 fs-14 fw-500 mb-1 dropdown-user-greeting"></h6>
+                            <p class="mb-0 fs-12 fw-500 user-status"></p>
+                          </div>
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu p-3">
+                            <li class="py-3 px-2 rounded-end-3">
+                              <a href="/doc-profile.html">
+                                <div class="d-flex align-items-center">
+                                  <div class="rounded bg-light reward-circle d-flex align-items-center justify-content-center me-3 text-center">
+                                    <i class="fa fa-user fs-5 text-primary"></i>
+                                  </div>
+                                  <div>
+                                    <h6 class="text-dark fs-14 mb-0">My Profile</h6>
+                                    <p class="text-light fs-12 mb-0">View Profile Details</p>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                          <div class="mb-2 text-center">
+                            <a class="btn btn-primary btn-15 rounded-pill mw-120 logout-btn">Logout <i class="fa fa-sign-out"></i></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 d-none d-lg-block">
+              <div class="d-lg-flex align-items-center">
+                <button class="btn shadow-0 focus-0 d-none d-lg-block sidebar-btn rounded border-0 sidebarToggle">
+                  <img src="/includes/images/menu-icons.svg" alt="">
+                </button>
+                <form id="desktop-search-form" class="d-none d-lg-block mw-200 position-relative">
+                  <div class="bg-light-blue position-relative h-100 d-flex align-items-center header-search rounded-10">
+                    <button class="btn btn-transparent border-0 position-absolute top-0">
+                      <img src="/includes/images/search2.svg" alt="">
+                    </button>
+                    <input type="search" class="form-control border-0 bg-transparent shadow-none ps-5 py-2 desktop-search-input" placeholder="Search rooms..">
+                  </div>
+                  <div id="desktop-search-results" class="position-absolute top-100 mt-2 start-0 end-0 z-3 bg-white shadow rounded-3" style="display: none;">
+                    <ul class="list-unstyled text-dark-primary mb-0 click-menu"></ul>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 mb-4 min-vh-100 outer-main">
+        <h4 class="mb-2 fw-600 text-dark-primary mt-2">Doctor Dashboard</h4>
+        <p id="welcomeMessage" class="mb-4 text-dark-primary"></p>
+        <div class="row mb-3 total-count-cards">
+          <div class="col-sm-6 col-xxl-3 px-4 py-2">
+            <div class="row align-items-center flex-row-reverse bg-white shadow-sm p-3 h-100 rounded-10">
+              <div class="col-5 text-end">
+                <img src="/includes/images/taimg.svg" alt="">
+              </div>
+              <div class="col-7">
+                <h6 class="text-slate my-2 mt-xl-0 mb-xl-3 fs-6 fw-medium">
+                  Total Appointments
+                </h6>
+                <h3 class="text-primary mb-2 fw-bold lh-sm" id="totalAppointments">2500</h3>
+                <div class="text-nowrap">
+                  <span class="fs-12 text-success fw-500"><i class="bi bi-arrow-up-right-circle-fill"></i>
+                    +20%</span>
+                  <span class="px-1 fs-12 fw-medium text-slate">Increased</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-xxl-3 px-4 py-2">
+            <div class="row align-items-center flex-row-reverse bg-white shadow-sm p-3 h-100 rounded-10">
+              <div class="col-5 text-end">
+                <img src="/includes/images/tp.svg" alt="">
+              </div>
+              <div class="col-7">
+                <h6 class="text-slate my-2 mt-xl-0 mb-xl-3 fs-6 fw-medium">
+                  Patients
+                </h6>
+                <h3 class="text-primary mb-2 fw-bold lh-sm" id="totalPatients">3145</h3>
+                <div class="text-nowrap">
+                  <span class="fs-12 text-danger fw-500"><i class="bi bi-arrow-down-right-circle-fill"></i>
+                    -15%</span>
+                  <span class="px-1 fs-12 fw-medium text-slate">Decreased</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-xxl-3 px-4 py-2">
+            <div class="row align-items-center flex-row-reverse bg-white shadow-sm p-3 h-100 rounded-10">
+              <div class="col-5 text-end">
+                <img src="/includes/images/tsimg.svg" alt="">
+              </div>
+              <div class="col-7">
+                <h6 class="text-slate my-2 mt-xl-0 mb-xl-3 fs-6 fw-medium">
+                  Total Staffs
+                </h6>
+                <h3 class="text-primary mb-2 fw-bold lh-sm" id="totalStaffs">350</h3>
+                <div class="text-nowrap">
+                  <span class="fs-12 text-success fw-500"><i class="bi bi-arrow-up-right-circle-fill"></i>
+                    +10%</span>
+                  <span class="px-1 fs-12 fw-medium text-slate">Increased</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-6 col-xxl-3 px-4 py-2">
+            <div class="row align-items-center flex-row-reverse bg-white shadow-sm p-3 h-100 rounded-10">
+              <div class="col-5 text-end">
+                <img src="/includes/images/tbimg.svg" alt="">
+              </div>
+              <div class="col-7">
+                <h6 class="text-slate my-2 mt-xl-0 mb-xl-3 fs-6 fw-medium">
+                  Total Beds
+                </h6>
+                <h3 class="text-primary mb-2 fw-bold lh-sm" id="totalBeds">345</h3>
+                <div class="text-nowrap">
+                  <span class="fs-12 text-danger fw-500"><i class="bi bi-arrow-down-right-circle-fill"></i>
+                    -30%</span>
+                  <span class="px-1 fs-12 fw-medium text-slate">Decreased</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2 mb-lg-4">
+          <div class="mb-4 mb-xl-0 col-xl-7 col-xxl-8">
+            <div class="bg-white h-100 shadow-sm rounded-10 mb-4">
+              <h5 class="text-dark-primary fw-600 px-4 py-3 py-md-4 mb-0">
+                Patient By Department
+              </h5>
+              <div id="patbydepartment"></div>
+            </div>
+          </div>
+          <div class="mb-4 mb-xl-0 col-xl-5 col-xxl-4">
+            <div class="rounded-10 h-100 shadow-sm bg-white rounded-10">
+              <h5 class="text-dark-primary fw-600 mb-0 px-4 ps-3 pb-1 pt-3 py-md-4">
+                Overall Progress
+              </h5>
+              <div class="card-body px-3">
+                <div class="rounded" id="overallprogress"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2 mb-lg-4">
+          <div class="mb-4 mb-xxl-0 col-xl-5 col-xxl-4">
+            <div class="border-0 h-100 shadow-sm mb-4 bg-white rounded-10 top-department slim-outer">
+              <div class="d-flex justify-content-between p-3 py-md-4">
+                <h5 class="text-dark-primary fw-600 mb-0">
+                  Top Departments
+                </h5>
+                <a href="/doc-departmentlist.html" class="text-primary fw-600">View All</a>
+              </div>
+              <div class="card-body px-3" id="top_department">
+                <!-- Populated dynamically via JavaScript -->
+              </div>
+            </div>
+          </div>
+          <div class="mb-4 mb-xxl-0 col-xl-7 col-xxl-8">
+            <div class="bg-white h-100 shadow-sm rounded-10 mb-4">
+              <div class="d-flex justify-content-between p-3 py-md-4">
+                <h5 class="text-dark-primary fw-600 mb-0">
+                  Operations
+                </h5>
+                <a href="javascript:void(0)" class="text-primary fw-600">View All</a>
+              </div>
+              <div class="table-responsive px-2 pt-1">
+                <table class="table custom-data-table" id="operationtd">
+                  <thead>
+                    <tr>
+                      <td class="text-dark-primary py-2 px-3">
+                        Patient Name
+                      </td>
+                      <td class="text-dark-primary py-2 px-3">
+                        Doctor Team
+                      </td>
+                      <td class="text-dark-primary py-2 px-3">
+                        Date of Operation
+                      </td>
+                      <td class="text-dark-primary py-2 px-3">
+                        Report
+                      </td>
+                      <td class="text-dark-primary py-2 px-3">
+                        Diseases
+                      </td>
+                    </tr>
+                  </thead>
+                  <tbody id="operations-body">
+                    <!-- Populated dynamically via JavaScript -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2 mb-lg-4">
+          <div class="mb-4 mb-xxl-0 col-xl-6">
+            <div class="h-100 shadow-sm bg-white rounded-10 align-items-center">
+              <h5 class="text-dark-primary fw-600 mb-0 px-4 ps-3 pb-1 pt-3 py-md-4">
+                Total Death Reports
+                <span class="text-primary fw-bold ms-2" id="totalDeaths">15k</span>
+              </h5>
+              <div class="rounded h-100" id="totaldeath"></div>
+            </div>
+          </div>
+          <div class="mb-4 mb-xxl-0 col-xl-6">
+            <div class="rounded-10 h-100 shadow-sm bg-white rounded-10">
+              <div class="p-4 ps-3">
+                <h5 class="text-dark-primary fw-600 mb-0">
+                  Total Accident Reports
+                  <span class="text-primary fw-bold ms-2" id="totalAccidents">10k</span>
+                </h5>
+              </div>
+              <div class="rounded" id="totalaccident"></div>
+            </div>
+          </div>
+        </div>
+        <div class="row mb-2 flex-row-reverse mb-lg-4 notification-bottom-card">
+          <div class="mb-4 mb-xxl-0 col-xl-6 col-xxl-4">
+            <div class="border-0 h-100 shadow-sm mb-4 bg-white rounded-10 slim-outer">
+              <div class="d-flex justify-content-between p-3 py-md-4">
+                <h5 class="text-dark-primary fw-600 mb-0">
+                  Recent Activity
+                </h5>
+                <a href="javascript:void(0)" class="text-primary fw-600">View All</a>
+              </div>
+              <div class="card-body px-4" id="recent_activity">
+                <div id="content">
+                  <ul class="timeline-1 text-black" id="recent-activity-body">
+                    <!-- Populated dynamically via JavaScript -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mb-4 mb-xxl-0 col-xl-6 col-xxl-5">
+            <div class="border-0 h-100 shadow-sm mb-4 bg-white rounded-10 slim-outer">
+              <div class="d-flex justify-content-between p-3 py-md-4">
+                <h5 class="text-dark-primary fw-600 mb-0">
+                  Notification
+                </h5>
+                <a href="javascript:void(0)" class="text-primary fw-600">View All</a>
+              </div>
+              <div class="card-body px-3" id="notification">
+                <ul class="list-unstyled text-dark-primary mb-0 click-menu" id="notification-body">
+                  <!-- Populated dynamically via JavaScript -->
+                </ul>
+              </div>
+            </div>
+          </div>
+          <div class="mb-4 mb-xxl-0 col-xxl-3">
+            <div class="border-0 h-100 shadow-sm mb-4 bg-white rounded-10">
+              <div class="p-0 bg-transparent">
+                <h5 class="text-dark-primary fw-600 mb-0 px-4 ps-3 pb-1 pt-3 py-md-4">Earnings
+                  <span class="text-primary fs-10 ms-2">in thousand</span>
+                </h5>
+              </div>
+              <div class="card-body px-3">
+                <div id="earningchart"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="shadow-sm py-4 px-4 bg-white footer d-flex flex-wrap justify-content-between align-items-center fs-14">
+        <div>
+          <span id="currentYear"></span> © All Rights Reserved By Health Care ERP
+        </div>
+        <div>
+          <a href="javascript:void(0)" class="text-primary text-decoration-underline fw-600">Privacy Policy</a> |
+          <a href="javascript:void(0)" class="text-primary text-decoration-underline fw-600">Terms & Conditions</a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="/assets/js/jquery-3.7.0.js"></script>
+  <script src="/assets/js/jquery.min.js"></script>
+  <script src="/assets/js/popper.min.js"></script>
+  <script src="/assets/js/bootstrap.min.js"></script>
+  <script src="/assets/js/jquery.dataTables.min.js"></script>
+  <script src="/assets/js/dataTables.bootstrap5.min.js"></script>
+  <script src="/assets/js/dataTables.responsive.min.js"></script>
+  <script src="/assets/js/apexcharts.js"></script>
+  <script src="/assets/js/jquery.validate.js"></script>
+  <script src="/assets/js/bootstrap-datepicker.min.js"></script>
+  <script src="/assets/js/jquery.slimscroll.min.js"></script>
+  <script src="/assets/js/togglepassword.js"></script>
+  <script src="/assets/js/all.min.js"></script>
+  <script src="/assets/js/script.js"></script>
+  <script>
+    $(document).ready(function () {
+      // Check if the user is authenticated (token exists)
+      const token = localStorage.getItem('access_token');
+      const userStatusElement = $('.user-status');
+
+      let lastActivityTime = Date.now();
+      const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+      // Update last activity time on user interaction
+      $(document).on('mousemove keydown click', function () {
+        lastActivityTime = Date.now();
+      });
+
+      function checkInactivity() {
+        const currentTime = Date.now();
+        if (currentTime - lastActivityTime > INACTIVITY_TIMEOUT) {
+          // User has been inactive for too long, log them out
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('user');
+          userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+          alert('You have been inactive for too long. Please log in.');
+          window.location.href = '/index.html';
+        }
+      }
+
+      // Check inactivity every minute
+      setInterval(checkInactivity, 60 * 1000); // 60 seconds
+
+      function updateUserStatus() {
+        if (!token) {
+          userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+          setTimeout(() => {
+            alert('No session found. Please log in.');
+            window.location.href = '/index.html';
+          }, 1000);
+          return;
+        }
+
+        $.ajax({
+          url: '/api/v1/auth/validate-token',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data && response.data.status) {
+              const status = response.data.status;
+              if (status === 'Available') {
+                userStatusElement.text(status).removeClass('text-danger text-warning').addClass('text-success');
+              } else if (status === 'Offline') {
+                userStatusElement.text(status).removeClass('text-success text-warning').addClass('text-danger');
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user');
+                setTimeout(() => {
+                  alert('Session invalid. Please log in again.');
+                  window.location.href = '/index.html';
+                }, 1000);
+              } else if (status === 'Away') {
+                userStatusElement.text(status).removeClass('text-success text-danger').addClass('text-warning');
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user');
+                setTimeout(() => {
+                  alert('Session expired. Please log in again.');
+                  window.location.href = '/index.html';
+                }, 1000);
+              }
+            } else {
+              userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              setTimeout(() => {
+                alert('Session invalid. Please log in again.');
+                window.location.href = '/index.html';
+              }, 1000);
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              userStatusElement.text('Away').removeClass('text-success text-danger').addClass('text-warning');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              setTimeout(() => {
+                alert('Session expired. Please log in again.');
+                window.location.href = '/index.html';
+              }, 1000);
+            } else {
+              userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              setTimeout(() => {
+                alert('Session invalid. Please log in again.');
+                window.location.href = '/index.html';
+              }, 1000);
+            }
+          }
+        });
+      }
+
+      // Initial status check
+      updateUserStatus();
+
+      // Periodically check status (every 5 minutes)
+      setInterval(updateUserStatus, 300000); // 300000 ms = 5 minutes
+
+      // Retrieve user data from localStorage
+      const userData = JSON.parse(localStorage.getItem('user'));
+      if (userData) {
+        const userFirstName = userData.firstName || 'User';
+        let userRole = userData.userRole || 'Unknown';
+        userRole = userRole.replace('ROLE_', '').replace('_', ' ').toLowerCase();
+        userRole = userRole.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        $('.user-firstname').text(userFirstName);
+        $('.user-role').text(userRole);
+        $('.dropdown-user-greeting').text(`Hello ${userFirstName}`);
+        $('#welcomeMessage').text(`Welcome, ${userFirstName}!`);
+      } else {
+        console.warn('User data not found in localStorage. Redirecting to login.');
+        setTimeout(() => {
+          window.location.href = '/index.html';
+        }, 1000);
+      }
+
+      // Display current year in footer
+      $('#currentYear').text(new Date().getFullYear());
+
+      // Fetch dashboard statistics
+      function fetchDashboardStats() {
+        $.ajax({
+          url: '/api/v1/dashboard/stats',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data) {
+              $('#totalAppointments').text(response.data.totalAppointments || 2500);
+              $('#totalPatients').text(response.data.totalPatients || 3145);
+              $('#totalStaffs').text(response.data.totalStaffs || 350);
+              $('#totalBeds').text(response.data.totalBeds || 345);
+              $('#totalDeaths').text(response.data.totalDeaths || '15k');
+              $('#totalAccidents').text(response.data.totalAccidents || '10k');
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+      }
+
+      // Fetch top departments
+      function fetchTopDepartments() {
+        $.ajax({
+          url: '/api/v1/departments/top',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const departments = response.data;
+              const container = $('#top_department');
+              container.empty();
+              departments.forEach(dept => {
+                const trendIcon = dept.percentageChange >= 0
+                  ? '<i class="fa-solid fa-arrow-trend-up text-success fs-14 ms-2"></i>'
+                  : '<i class="fa-solid fa-arrow-trend-down text-danger fs-14 ms-2"></i>';
+                const badgeClass = dept.badgeClass || 'badge-primary';
+                const row = `
+                  <div class="d-flex align-items-center border-bottom pb-4 mb-4 justify-content-between">
+                    <div class="d-flex align-items-center w-100 gap-2">
+                      <div class="top-department-icon">
+                        <div class="rounded-circle ${badgeClass} reward-circle d-flex align-items-center justify-content-center">
+                          <img src="${dept.icon || '/includes/images/gp.svg'}" alt="" width="24" height="24">
+                        </div>
+                      </div>
+                      <div class="top-department-name">
+                        <h6 class="text-dark mb-1">${dept.name || 'N/A'}</h6>
+                        <p class="text-slate mb-0 pb-0">${dept.description || 'Lorem ipsum dolor sit amet.'}</p>
+                      </div>
+                    </div>
+                    <div class="ratings d-flex justify-content-end">
+                      <span class="text-gray fs-14 fw-medium">${Math.abs(dept.percentageChange) || 0}%
+                        ${trendIcon}
+                      </span>
+                    </div>
+                  </div>`;
+                container.append(row);
+              });
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+      }
+
+      // Fetch operations
+      function fetchOperations() {
+        $.ajax({
+          url: '/api/v1/operations',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const operations = response.data;
+              const tbody = $('#operations-body');
+              tbody.empty();
+              operations.forEach(op => {
+                const row = `
+                  <tr>
+                    <td class="d-flex">
+                      <div>
+                        <img src="${op.patientImage || '/includes/images/05.jpg'}" alt="" width="25" height="25" class="rounded-circle me-2">
+                      </div>
+                      <div class="ms-2 text-dark">${op.patientName || 'N/A'}</div>
+                    </td>
+                    <td class="position-relative">
+                      <div class="h-100 d-flex">
+                        <img src="${op.teamImages[0] || '/includes/images/01.jpg'}" alt="" width="25" height="25"
+                          class="rounded-circle operation-team-img border border-white img-1">
+                        <img src="${op.teamImages[1] || '/includes/images/02.jpg'}" alt="" width="25" height="25"
+                          class="rounded-circle operation-team-img border border-white img-2">
+                        <img src="${op.teamImages[2] || '/includes/images/03.jpg'}" alt="" width="25" height="25"
+                          class="rounded-circle operation-team-img border border-white img-3">
+                        <div class="ms-2 text-dark-primary fw-600 text-capitalize">
+                          <a href="javascript:void(0)">${op.doctorName || 'Dr. N/A'}</a>
+                        </div>
+                      </div>
+                    </td>
+                    <td class="text-dark">${op.date || 'N/A'}</td>
+                    <td class="text-dark">
+                      <a href="${op.reportLink || 'javascript:void(0)'}"><i class="bi bi-file-pdf text-danger"></i></a>
+                    </td>
+                    <td class="text-dark">${op.disease || 'N/A'}</td>
+                  </tr>`;
+                tbody.append(row);
+              });
+
+              $('#operationtd').DataTable({
+                "paging": true,
+                "ordering": true,
+                "info": true,
+                "searching": true
+              });
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+      }
+
+      // Fetch recent activities
+      function fetchRecentActivities() {
+        $.ajax({
+          url: '/api/v1/activities/recent',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const activities = response.data;
+              const container = $('#recent-activity-body');
+              container.empty();
+              activities.forEach(activity => {
+                const row = `
+                  <li class="event mb-3">
+                    <div class="d-flex align-items-center flex-wrap justify-content-between">
+                      <div>
+                        <h6 class="text-dark-primary mb-0">${activity.title || 'N/A'}</h6>
+                        <span class="text-slate fw-medium fs-12">${activity.description || 'Lorem ipsum dolor sit amet adipiscing elit'}</span>
+                      </div>
+                      <div class="text-slate fs-14">${activity.time || 'N/A'}</div>
+                    </div>
+                  </li>`;
+                container.append(row);
+              });
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+      }
+
+      // Fetch notifications and messages
+      function fetchNotifications() {
+        $.ajax({
+          url: '/api/v1/notifications',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const items = response.data;
+
+              // Separate messages and notifications (assuming a 'type' field or fallback to index-based logic)
+              const messages = items.filter(item => item.type === 'message' || (item.message && !item.notification));
+              const notifications = items.filter(item => item.type === 'notification' || (item.notification && !item.message));
+
+              // Render messages
+              const headerMsgContainer = $('#message_box');
+              const mobileMsgContainer = $('#mobile-messages ul');
+              headerMsgContainer.empty();
+              mobileMsgContainer.empty();
+              messages.forEach(msg => {
+                const row = `
+                  <li class="p-2 rounded-end-3">
+                    <a href="javascript:void(0)">
+                      <div class="d-flex align-items-center notification-row">
+                        <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                          <img src="${msg.image || '/includes/images/01.jpg'}" width="48" height="48" alt="">
+                        </div>
+                        <div class="notification-content">
+                          <div class="text-dark mb-0 fw-500 notification-msg">
+                            <span class="text-dark fw-bold mb-0">${msg.name || 'Dr. N/A'}</span>
+                            <span class="fw-light fs-14">${msg.message || 'N/A'}</span>
+                          </div>
+                          <p class="text-dark text-end mb-0 fs-12 fw-500">${msg.time || 'N/A'}</p>
+                        </div>
+                      </div>
+                    </a>
+                  </li>`;
+                headerMsgContainer.append(row);
+                mobileMsgContainer.append(row);
+              });
+
+              // Render notifications
+              const headerNotifContainer = $('#notification_box');
+              const mobileNotifContainer = $('#mobile-notifications ul');
+              const bottomContainer = $('#notification-body');
+              headerNotifContainer.empty();
+              mobileNotifContainer.empty();
+              bottomContainer.empty();
+              notifications.forEach(notif => {
+                const row = `
+                  <li class="p-2 rounded-end-3">
+                    <a href="javascript:void(0)">
+                      <div class="d-flex align-items-center notification-row">
+                        <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                          <img src="${notif.image || '/includes/images/01.jpg'}" width="48" height="48" alt="">
+                        </div>
+                        <div class="notification-content">
+                          <div class="text-dark mb-0 fw-500 notification-msg">
+                            <span class="text-dark fw-bold mb-0">${notif.name || 'Dr. N/A'}</span>
+                            <span class="fw-light fs-14">${notif.notification || 'N/A'}</span>
+                          </div>
+                          <p class="text-dark text-end mb-0 fs-12 fw-500">${notif.time || 'N/A'}</p>
+                        </div>
+                      </div>
+                    </a>
+                  </li>`;
+                headerNotifContainer.append(row);
+                mobileNotifContainer.append(row);
+                bottomContainer.append(row);
+              });
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+      }
+
+      // Initialize data fetching
+      fetchDashboardStats();
+      fetchTopDepartments();
+      fetchOperations();
+      fetchRecentActivities();
+      fetchNotifications();
+
+      // Logout function
+      $('.logout-btn').on('click', function (e) {
+        e.preventDefault();
+        $.ajax({
+          url: '/api/v1/auth/logout',
+          type: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            updateUserStatus(); // Update to Offline after logout
+            window.location.href = '/index.html';
+          },
+          error: function (xhr) {
+            alert('Logout failed: ' + (xhr.responseText || 'Unknown error'));
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            updateUserStatus(); // Update to Offline on failure
+            window.location.href = '/index.html';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

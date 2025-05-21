@@ -36,4 +36,6 @@ public interface UserService {
     String logoutUser(HttpServletRequest request);
 
     ResponseEntity<?> addStaffAndPatient(AddPatientAndStaffDto addPatientAndStaffDto);
+
+    ResponseEntity<?> validateToken(HttpServletRequest request);
 }

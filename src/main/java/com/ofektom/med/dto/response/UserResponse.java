@@ -14,7 +14,6 @@ public class UserResponse {
     private String gender;
     private String status;
     private String profilePicture;
-    private String education;
     private String designation;
     private String department;
     private String maritalStatus;
@@ -33,7 +32,7 @@ public class UserResponse {
 
     public UserResponse(){}
 
-    public UserResponse(Long id, String firstName, String lastName, String membershipNo, String email, String phoneNumber, String gender, String status, String profilePicture, String education, String designation, String department, String maritalStatus, String bloodGroup, String bloodPressure, String sugar, String injuryCondition, List<String> allergies, AddressResponse address, String userRole, String lastLogin, String loginDuration, String speciality, String about, LocalDateTime createdAt) {
+    public UserResponse(Long id, String firstName, String lastName, String membershipNo, String email, String phoneNumber, String gender, String status, String profilePicture, String designation, String department, String maritalStatus, String bloodGroup, String bloodPressure, String sugar, String injuryCondition, List<String> allergies, AddressResponse address, String userRole, String lastLogin, String loginDuration, String speciality, String about, LocalDateTime createdAt) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
@@ -43,7 +42,6 @@ public class UserResponse {
         this.gender = gender;
         this.status = status;
         this.profilePicture = profilePicture;
-        this.education = education;
         this.designation = designation;
         this.department = department;
         this.maritalStatus = maritalStatus;
@@ -131,14 +129,6 @@ public class UserResponse {
 
     public void setProfilePicture(String profilePicture) {
         this.profilePicture = profilePicture;
-    }
-
-    public String getEducation() {
-        return education;
-    }
-
-    public void setEducation(String education) {
-        this.education = education;
     }
 
     public String getDesignation() {

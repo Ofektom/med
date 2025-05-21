@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EMR Admin Profile</title>
+  <link rel="icon" type="image/x-icon" href="includes/images/favicon.ico">
+  <link rel="stylesheet" href="assets/css/bootstrap-icons.css">
+  <link rel="stylesheet" href="assets/css/responsive.bootstrap5.min.css">
+  <link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet"
+    href="assets/css/bootstrap-datepicker.min.css">
+  <link rel="stylesheet" href="../../../../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/bootstrap.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+  <div id="preloader"></div>
+
+  <div class="d-flex body-main body-color" id="wrapper">
+    <!-- backdrop -->
+    <div class="sidebar-backdrop"></div>
+    <div class="sidebar-main">
+      <div class="sidebar h-100 bg-dark-primary close" id="sidebar-wrapper">
+        <div class="sidebar-box text-center position-fixed slim-outer bg-dark-primary">
+          <div class="sidebar-heading bg-dark d-flex align-items-center justify-content-between p-3 border-dark border-bottom">
+            <a href="index.html">
+              <img src="includes/images/healthcare-logo.png" width="200" alt="">
+            </a>
+            <button class="btn btn-primary rounded   closesidebar d-lg-none btn-sm"> <i class="fa-solid fa-xmark text-white"></i></button> 
+          </div>
+          <div class="sidebar-box-data text-start px-3" id="sidebar-data">
+            <div class="list-group list-group-flush mt-3">
+              <div class="accordion" id="accordionExampleOne">
+                <div class="accordion-item mb-4">
+                  <a href="/acc-dashboard.html" class="active no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                    <i class="bi bi-grid-1x2-fill px-2"></i><span>ACCOUNTS Dashboard</span>
+                  </a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <a href="/acc-patientlist.html"" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                    <i class="fa-solid fa-users px-2"></i>Patients
+                  </a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <a href="/acc-stafflist.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                    <i class="fa-regular fa-address-book px-2"></i>Staff
+                  </a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <a href="/acc-reports.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                    <i class="bi bi-file-earmark-pdf-fill px-2"></i><span>Reports</span>
+                  </a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <div class="accordion-header" id="headingEleven">
+                    <button class="accordion-button p-2 text-white mb-0 d-flex align-items-center collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven" aria-expanded="true" aria-controls="collapseEleven">
+                      <i class="bi bi-boxes px-2"></i>Assets
+                    </button>
+                  </div>
+                  <div id="collapseEleven" class="accordion-collapse collapse show" aria-labelledby="headingEleven" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <ul class="navbar-nav d-block">
+                        <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/acc-addassets.html">add asset</a></li>
+                        <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/acc-assetslist.html">view assets list</a></li>
+                        <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white active" href="/acc-allassets.html">all asset</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4">
+                  <a href="/acc-departmentlist.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                    <i class="fa-solid fa-timeline px-2"></i>Department
+                  </a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <a href="/acc-allotedrooms.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                    <i class="fa-solid fa-bed px-2"></i>Wards
+                  </a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <div class="accordion-header" id="headingFive">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
+                      <i class="fa-solid fa-file-invoice-dollar px-2"></i>Payments
+                    </button>
+                  </div>
+                  <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <ul class="navbar-nav d-block">
+                        <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/acc-paymentlist.html">payment list</a></li>
+                        <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/acc-paymentinvoice.html">payment invoice</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4 d-block d-sm-none">
+                  <div class="accordion-header" id="headingSeven">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                      <i class="bi bi-bell-fill text-white px-2"></i><span class="fw-600">Notification</span>
+                    </button>
+                  </div>
+                  <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <div class="slim-outer">
+                        <div class="card border-0 shadow bg-white rounded-2 overflow-hidden" id="mobile-notifications">
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu"></ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4 d-block d-sm-none">
+                  <div class="accordion-header" id="headingEight">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
+                      <i class="bi bi-envelope-fill text-white px-2"></i><span class="fw-600">Messages</span>
+                    </button>
+                  </div>
+                  <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <div class="slim-outer">
+                        <div class="card border-0 shadow bg-white rounded-2 overflow-hidden" id="mobile-messages">
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu"></ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4">
+                  <div class="accordion-header" id="headingSeven">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                      <i class="fa-solid fa-user-shield px-2"></i>Setting
+                    </button>
+                  </div>
+                  <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <ul class="navbar-nav d-block">
+                        <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/acc-profile.html">Profile</a></li>
+                        <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/acc-resetpass.html">Reset Password</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="page-content-wrapper" class="position-relative">
+      <div class="bg-white shadow-sm px-3 py-2 mb-4 header m-auto position-fixed">
+        <div class="row align-items-center">
+          <div class="row flex-row-reverse justify-content-between align-items-center">
+            <div class="col-lg-6">
+              <div class="d-flex justify-content-lg-end justify-content-between align-items-center gap-2">
+                <div class="d-block d-lg-none">
+                  <button class="btn shadow-0 focus-0 sidebar-btn rounded border-0 sidebarToggle">
+                    <img src="/includes/images/menu-icons.svg" alt="">
+                  </button>
+                  <a href="/index.html">
+                    <img src="/includes/images/ERP-Logo(1).png" width="180" alt="">
+                  </a>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="maximize d-none d-lg-block">
+                    <a class="badge-purple d-flex align-items-center text-primary" href="javascript:void(0)" id="fullscreen">
+                    </a>
+                  </div>
+                  <div class="position-relative rounded d-lg-none">
+                    <a class="text-primary py-2 px-3 btn btn-transparent outline-0 focus-0 rounded btn-cust-sm"
+                      data-bs-toggle="collapse" href="#searchcollapse" role="button" aria-expanded="false"
+                      aria-controls="searchcollapse">
+                      <i class="bi bi-search"></i>
+                    </a>
+                    <div class="collapse position-absolute top-100 mt-2 end-0 z-3 mw-250 mw-100" id="searchcollapse">
+                      <div class="card card-body">
+                        <form>
+                          <div class="border bg-light position-relative h-100 d-flex align-items-center header-search mw-100">
+                            <button class="btn btn-transparent border-0 position-absolute ms-1">
+                              <img src="/includes/images/search2.svg" alt="">
+                            </button>
+                            <input type="search" class="form-control border-0 bg-transparent shadow-none ps-5 py-2"
+                              placeholder="Search here..">
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown d-none d-sm-block">
+                    <button type="button" class="btn rounded position-relative" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      <i class="fa-solid fa-envelope fs-5 text-success pb-0 mb-0"></i>
+                      <span class="msg-lite">
+                        <span class="circles cust_circle">
+                          <span class="circle1"></span>
+                          <span class="circle2"></span>
+                          <span class="circle3"></span>
+                        </span>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-notification dropdown-menu-end dropdown-mega p-0 border-0 rounded-10 bg-transparent">
+                      <div class="animate slideIn">
+                        <div class="card border-0 shadow bg-white rounded-10 overflow-hidden slim-outer">
+                          <div class="bg-light p-3">
+                            <h6 class="text-center mb-0">Messages</h6>
+                          </div>
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu px-2 py-3" id="message_box">
+                            <!-- Populated dynamically via JavaScript -->
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown d-none d-sm-block">
+                    <button type="button" class="btn rounded position-relative" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      <i class="fa-solid fa-bell fs-5 text-orange pb-0 mb-0"></i>
+                      <span class="notification-lite">
+                        <span class="circles cust_circle">
+                          <span class="circle1"></span>
+                          <span class="circle2"></span>
+                          <span class="circle3"></span>
+                        </span>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-notification dropdown-menu-end dropdown-mega p-0 border-0 rounded-10 bg-transparent">
+                      <div class="animate slideIn">
+                        <div class="card border-0 shadow bg-white rounded-10 overflow-hidden slim-outer slim-outer">
+                          <div class="bg-light p-3">
+                            <h6 class="text-center mb-0">Notifications</h6>
+                          </div>
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu px-2 py-3" id="notification_box">
+                            <!-- Populated dynamically via JavaScript -->
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown user">
+                    <button type="button" class="pill-badge btn md-mw-150 me-xl-3 d-flex align-items-center text-start rounded px-0"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                      <img src="/includes/images/01_2.png" alt="" class="border rounded">
+                      <span class="justify-content-between align-items-center gap-4 px-2 w-100 d-none d-xl-flex">
+                        <span class="my-0 py-0 lh-1">
+                          <span class="pill-badge-msg lh-sm text-capitalize pb-0 mb-0 d-block user-firstname"></span>
+                          <span class="fs-12 p-0 d-block user-role"></span>
+                        </span>
+                        <span class="my-0 py-0">
+                          <i class="bi bi-chevron-down"></i>
+                        </span>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-mega p-0 border-0 rounded-3 bg-transparent">
+                      <div class="animate slideIn">
+                        <div class="card bg-white rounded-10 shadow-sm overflow-hidden">
+                          <div class="bg-light p-3">
+                            <h6 class="mb-0 fs-14 fw-500 mb-1 dropdown-user-greeting"></h6>
+                            <p class="mb-0 fs-12 fw-500 user-status"></p>
+                          </div>
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu p-3">
+                            <li class="py-3 px-2 rounded-end-3">
+                              <a href="/acc-profile.html">
+                                <div class="d-flex align-items-center">
+                                  <div class="rounded bg-light reward-circle d-flex align-items-center justify-content-center me-3 text-center">
+                                    <i class="fa fa-user fs-5 text-primary"></i>
+                                  </div>
+                                  <div>
+                                    <h6 class="text-dark fs-14 mb-0">My Profile</h6>
+                                    <p class="text-light fs-12 mb-0">View Profile Details</p>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                          <div class="mb-2 text-center">
+                            <a class="btn btn-primary btn-15 rounded-pill mw-120 logout-btn">Logout <i class="fa fa-sign-out"></i></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 d-none d-lg-block">
+              <div class="d-lg-flex align-items-center">
+                <button class="btn shadow-0 focus-0 d-none d-lg-block sidebar-btn rounded border-0 sidebarToggle">
+                  <img src="/includes/images/menu-icons.svg" alt="">
+                </button>
+                <form id="desktop-search-form" class="d-none d-lg-block mw-200 position-relative">
+                  <div class="bg-light-blue position-relative h-100 d-flex align-items-center header-search rounded-10">
+                    <button class="btn btn-transparent border-0 position-absolute top-0">
+                      <img src="/includes/images/search2.svg" alt="">
+                    </button>
+                    <input type="search" class="form-control border-0 bg-transparent shadow-none ps-5 py-2 desktop-search-input" placeholder="Search rooms..">
+                  </div>
+                  <div id="desktop-search-results" class="position-absolute top-100 mt-2 start-0 end-0 z-3 bg-white shadow rounded-3" style="display: none;">
+                    <ul class="list-unstyled text-dark-primary mb-0 click-menu"></ul>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 mb-4 min-vh-100 outer-main">
+        <h3 class="fw-600 text-dark-primary text-capitalize">Accountant profile</h3>
+        <div class="d-flex flex-wrap justify-content-between align-items-center my-3">
+          <div class="d-flex flex-wrap text-capitalize align-items-center">
+            <p class="mb-0 pb-0 fw-600 text-dark-primary"><a href="/acc-dashboard.html">Home</a></p>
+            <i class="bi bi-chevron-right pagination-arrow text-dark-primary"></i>
+            <p class="mb-0 pb-0 text-dark">Accountant Profile</p>
+          </div>
+          <a href="acc-profile.html"
+            class="btn btn-primary rounded-4 fw-500 py-2 rounded-pill mw-120 px-4 text-capitalize">Dashboard <i
+              class="fa-solid fa-right-to-bracket ms-2"></i> </a>
+        </div>
+        <div class="bg-white rounded-10 mb-4 overflow-hidden">
+          <div class="doct-profile-banner"></div>
+          <div class="row align-items-center py-3">
+            <div class="col-lg-4 mb-4 mb-lg-0">
+              <div class="d-flex flex-wrap px-4">
+                <div class="doct-profile-img me-3">
+                  <img src="includes/images/01_2.png" alt="" width="100" height="100" class="rounded-circle" id="profilePicture">
+                </div>
+                <div class="doctor-name d-flex flex-column justify-content-center m-1">
+                  <h5 class="text-primary mb-1" id="doctorFullName"></h5>
+                  <span class="fs-14 text-light" id="doctorDesignation"></span>
+                </div>
+              </div>
+            </div>
+            <div class="col-lg-8 px-4 px-lg-0">
+              <div class="row align-items-center justify-content-end px-4" id="doctorStats">
+                <!-- Stats will be populated dynamically -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-6 col-lg-4">
+            <div class="border-0 shadow-sm py-3 mb-4 bg-white rounded-10 slim-outer px-3">
+              <div class="card-header bg-transparent mb-3">
+                <h5 class="text-dark text-capitalize text-gray">Speciality</h5>
+              </div>
+              <div class="card-body" id="speciality_box">
+                <!-- Specialities will be populated dynamically -->
+              </div>
+            </div>
+            <div class="border-0 shadow-sm py-3 mb-4 bg-white rounded-10 slim-outer px-3">
+              <div class="card-header bg-transparent mb-3">
+                <h5 class="text-dark text-capitalize text-gray">Activities</h5>
+              </div>
+              <div class="card-body px-2" id="activity_box">
+                <div id="content">
+                  <ul class="timeline-1 text-black" id="activity_list">
+                    <!-- Activities will be populated dynamically -->
+                  </ul>
+                </div>
+              </div>
+            </div>
+            <div class="border-0 shadow-sm py-3 mb-4 bg-white rounded-10 slim-outer px-3">
+              <div class="card-header bg-transparent mb-3">
+                <h5 class="text-dark text-capitalize text-gray">Patient Notes</h5>
+              </div>
+              <div class="card-body" id="pat_notes">
+                <ul class="list-unstyled click-menu">
+                  <!-- Patient notes will be populated dynamically -->
+                </ul>
+              </div>
+            </div>
+            <div class="border-0 shadow-sm py-3 mb-4 bg-white rounded-10 slim-outer px-3">
+              <div class="card-header bg-transparent mb-3">
+                <h5 class="text-dark text-capitalize text-gray">Schedule</h5>
+              </div>
+              <div class="card-body" id="schedule-box">
+                <!-- Schedules will be populated dynamically -->
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6 col-lg-8">
+            <div class="bg-white shadow-sm rounded-10 h-100 py-4">
+              <nav>
+                <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                  <button class="nav-link active" id="personal-tab" data-bs-toggle="tab" data-bs-target="#nav-personal"
+                    type="button" role="tab" aria-controls="nav-personal" aria-selected="true">Personal
+                    Information</button>
+                  <button class="nav-link" id="password-tab" data-bs-toggle="tab" data-bs-target="#nav-password"
+                    type="button" role="tab" aria-controls="nav-password" aria-selected="false">Account
+                    Settings</button>
+                </div>
+              </nav>
+              <div class="tab-content" id="nav-tabContent">
+                <div class="tab-pane fade show active" id="nav-personal" role="tabpanel" aria-labelledby="personal-tab">
+                  <div class="p-4">
+                    <form id="edit_personal_info">
+                      <div class="row">
+                        <div class="col-sm-6 mb-3 col-xxl-3">
+                          <h6 class="text-dark mb-2">Full Name</h6>
+                          <span class="text-gray d-block" id="fullName"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3 col-xxl-3">
+                          <h6 class="text-dark mb-2">Mobile</h6>
+                          <input type="text" class="form-control rounded" name="phoneNumber" id="phoneNumberInput">
+                        </div>
+                        <div class="col-sm-6 mb-3 col-xxl-3">
+                          <h6 class="text-dark mb-2">Email</h6>
+                          <span class="text-gray d-block" id="email"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3 col-xxl-3">
+                          <h6 class="text-dark mb-2">Membership No</h6>
+                          <span class="text-gray d-block" id="membershipNo"></span>
+                        </div>
+                        <div class="col-sm-6 mb-3 col-xxl-3">
+                          <h6 class="text-dark mb-2">Location</h6>
+                          <textarea class="form-control rounded" name="location" id="locationInput"></textarea>
+                        </div>
+                        <div class="col-sm-6 mb-3 col-xxl-3">
+                          <h6 class="text-dark mb-2">About</h6>
+                          <textarea class="form-control rounded" name="about" id="aboutInput"></textarea>
+                        </div>
+                      </div>
+                      <h5 class="border-bottom p-3">Education</h5>
+                      <div id="education_fields">
+                        <!-- Education entries will be populated dynamically -->
+                      </div>
+                      <button type="button" class="btn btn-primary mt-2 mb-4" id="addEducation">Add Education</button>
+                      <h5 class="border-bottom p-3">Experience</h5>
+                      <div id="experience_fields">
+                        <!-- Experience entries will be populated dynamically -->
+                      </div>
+                      <button type="button" class="btn btn-primary mt-2 mb-4" id="addExperience">Add Experience</button>
+                      <h5 class="border-bottom p-3">Conferences, Courses & Workshops</h5>
+                      <div id="conference_fields">
+                        <!-- Conference entries will be populated dynamically -->
+                      </div>
+                      <button type="button" class="btn btn-primary mt-2 mb-4" id="addConference">Add Conference</button>
+                      <div class="text-end">
+                        <button type="submit" class="btn btn-primary mw-120 rounded-pill">Save Changes</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+                <div class="tab-pane fade" id="nav-password" role="tabpanel" aria-labelledby="nav-password">
+                  <div class="p-4">
+                    <form id="edit_doctor_profile">
+                      <div class="mb-4">
+                        <label for="membershipNo" class="text-dark mb-2">Membership Number <sup><span class="required">*</span></sup></label>
+                        <input type="text" class="border form-control rounded" name="membershipNo" id="membershipNoInput">
+                      </div>
+                      <div class="mb-4">
+                        <label for="mobile" class="text-dark mb-2">Mobile<sup><span class="required">*</span></sup></label>
+                        <input type="text" class="border form-control rounded" name="mobile" id="mobileInput">
+                      </div>
+                      <div class="mb-4">
+                        <label for="email" class="text-dark mb-2">Email<sup><span class="required">*</span></sup></label>
+                        <input type="email" class="border form-control rounded" name="email" id="emailInput">
+                      </div>
+                      <div class="mb-4">
+                        <label for="address" class="text-dark mb-2">Address<sup><span class="required">*</span></sup></label>
+                        <textarea name="address" id="addressInput" rows="5" class="form-control rounded"></textarea>
+                      </div>
+                      <h4 class="text-dark fw-600 my-4">Security Setting</h4>
+                      <div class="mb-4 custom-err">
+                        <label for="pass" class="text-dark mb-2">Current Password<sup><span class="required">*</span></sup></label>
+                        <input type="password" name="pass" id="pass" class="border form-control rounded">
+                      </div>
+                      <div class="mb-4 custom-err">
+                        <label for="newpass" class="text-dark mb-2">New Password<sup><span class="required">*</span></sup></label>
+                        <input type="password" id="newpass" name="newpass" class="border form-control rounded">
+                      </div>
+                      <div class="mb-4">
+                        <label for="repeatpass" class="text-dark mb-2">Confirm Password<sup><span class="required">*</span></sup></label>
+                        <input type="text" id="repeatpass" name="repeatpass" class="border form-control rounded">
+                      </div>
+                      <div class="text-end">
+                        <button type="submit" class="btn btn-primary mw-120 rounded-pill">Change</button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- footer -->
+      <div
+        class="shadow-sm py-4 px-4 bg-white footer d-flex flex-wrap justify-content-between align-items-center  fs-14">
+        <div>
+          <span id="currentYear"></span> © All Rights Reserved By Health Care ERP
+        </div>
+        <div>
+          <a href="javascript:void(0)" class="text-primary text-decoration-underline fw-600">Privacy Policy</a> | <a
+            href="javascript:void(0)" class="text-primary text-decoration-underline fw-600">Terms & Conditions</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+  <script src="assets/js/jquery-3.7.0.js"></script>
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/popper.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/jquery.dataTables.min.js"></script>
+  <script src="assets/js/dataTables.bootstrap5.min.js"></script>
+  <script src="assets/js/dataTables.responsive.min.js"></script>
+  <script src="assets/js/apexcharts.js"></script>
+  <script src="assets/js/jquery.validate.js"></script>
+  <script src="assets/js/bootstrap-datepicker.min.js"></script>
+  <script src="assets/js/jquery.slimscroll.min.js"></script>
+  <script src="assets/js/togglepassword.js"></script>
+  <script src="assets/js/all.min.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script>
+    $(document).ready(function() {
+      let currentPage = 0;
+      const token = localStorage.getItem('access_token');
+      const userStatusElement = $('.user-status');
+      let lastActivityTime = Date.now();
+      const INACTIVITY_TIMEOUT = 30 * 60 * 1000;
+
+      $(document).on('mousemove keydown click', function () {
+        lastActivityTime = Date.now();
+      });
+
+      function checkInactivity() {
+        const currentTime = Date.now();
+        if (currentTime - lastActivityTime > INACTIVITY_TIMEOUT) {
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('user');
+          userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+          alert('You have been inactive for too long. Please log in.');
+          window.location.href = '/index.html';
+        }
+      }
+
+      setInterval(checkInactivity, 60 * 1000);
+
+      function updateUserStatus() {
+        if (!token) {
+          userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+          setTimeout(() => {
+            alert('No session found. Please log in.');
+            window.location.href = '/index.html';
+          }, 1000);
+          return;
+        }
+
+        $.ajax({
+          url: '/api/v1/auth/validate-token',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data && response.data.status) {
+              const status = response.data.status;
+              if (status === 'Available') {
+                userStatusElement.text(status).removeClass('text-danger text-warning').addClass('text-success');
+              } else if (status === 'Offline') {
+                userStatusElement.text(status).removeClass('text-success text-warning').addClass('text-danger');
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user');
+                setTimeout(() => {
+                  alert('Session invalid. Please log in again.');
+                  window.location.href = '/index.html';
+                }, 1000);
+              } else if (status === 'Away') {
+                userStatusElement.text(status).removeClass('text-success text-danger').addClass('text-warning');
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user');
+                setTimeout(() => {
+                  alert('Session expired. Please log in again.');
+                  window.location.href = '/index.html';
+                }, 1000);
+              }
+            } else {
+              userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              setTimeout(() => {
+                alert('Session invalid. Please log in again.');
+                window.location.href = '/index.html';
+              }, 1000);
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              userStatusElement.text('Away').removeClass('text-success text-danger').addClass('text-warning');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              setTimeout(() => {
+                alert('Session expired. Please log in again.');
+                window.location.href = '/index.html';
+              }, 1000);
+            } else {
+              userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              setTimeout(() => {
+                alert('Session invalid. Please log in again.');
+                window.location.href = '/index.html';
+              }, 1000);
+            }
+          }
+        });
+      }
+
+      updateUserStatus();
+      setInterval(updateUserStatus, 300000);
+
+      const userData = JSON.parse(localStorage.getItem('user'));
+      if (userData) {
+        const userFirstName = userData.firstName || 'User';
+        let userRole = userData.userRole || 'Unknown';
+        userRole = userRole.replace('ROLE_', '').replace('_', ' ').toLowerCase();
+        userRole = userRole.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        $('.user-firstname').text(userFirstName);
+        $('.user-role').text(userRole);
+        $('.dropdown-user-greeting').text(`Hello ${userFirstName}`);
+        $('#userProfilePicture').attr('src', userData.profilePicture || 'includes/images/01_2.png');
+      } else {
+        console.warn('User data not found in localStorage. Redirecting to login page.');
+        window.location.href = '/index.html';
+        return;
+      }
+
+      $('#currentYear').text(new Date().getFullYear());
+
+      function performSearch(query, targetResults) {
+        if (query.length < 3) {
+          targetResults.hide();
+          return;
+        }
+
+        $.ajax({
+          url: `/api/v1/search/users?query=${encodeURIComponent(query)}&page=1&size=10`,
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            const resultsList = targetResults.find('ul');
+            resultsList.empty();
+
+            if (response.data && response.data.content && response.data.content.length > 0) {
+              response.data.content.forEach(user => {
+                resultsList.append(`
+                  <li class="p-2 rounded-end-3">
+                    <a href="/fd-allassets.html?assetId=${user.id}">
+                      <div class="d-flex align-items-center notification-row">
+                        <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                          <img src="${user.image || '/includes/images/01.jpg'}" width="48" height="48" alt="">
+                        </div>
+                        <div class="notification-content">
+                          <div class="text-dark mb-0 fw-500 notification-msg">
+                            <span class="text-dark fw-bold mb-0">${user.firstName || ''} ${user.lastName || ''}</span>
+                          </div>
+                          <div class="d-flex justify-content-between">
+                            <div class="w-100 text-truncate fs-12 fw-500">${user.membershipNo}</div>
+                            <p class="text-dark text-end mb-0 fs-12 fw-500">${user.email} units</p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                `);
+              });
+              targetResults.show();
+            } else {
+              resultsList.append(`
+                <li class="p-2 rounded-end-3">
+                  <div class="text-dark fs-12">No assets found.</div>
+                </li>
+              `);
+              targetResults.show();
+            }
+          },
+          error: function (xhr) {
+            const resultsList = targetResults.find('ul');
+            resultsList.empty();
+            let message = 'Search failed.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            resultsList.append(`
+              <li class="p-2 rounded-end-3">
+                <div class="text-dark fs-12">${message}</div>
+              </li>
+            `);
+            targetResults.show();
+          }
+        });
+      }
+
+      $('.desktop-search-input').on('input', function () {
+        const query = $(this).val().trim();
+        performSearch(query, $('#desktop-search-results'));
+      });
+
+      $('.mobile-search-input').on('input', function () {
+        const query = $(this).val().trim();
+        performSearch(query, $('#mobile-search-results'));
+      });
+
+      $(document).on('click', function (e) {
+        if (!$(e.target).closest('#desktop-search-form').length && !$(e.target).closest('#mobile-search-form').length) {
+          $('#desktop-search-results').hide();
+          $('#mobile-search-results').hide();
+        }
+      });
+
+      $('#desktop-search-form, #mobile-search-form').on('submit', function (e) {
+        e.preventDefault();
+      });
+
+      function fetchNotifications() {
+        $.ajax({
+          url: '/api/v1/notifications',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const notifications = response.data;
+              const notificationBox = $('#notification_box');
+              const mobileNotifications = $('#mobile-notifications');
+              notificationBox.empty();
+              mobileNotifications.empty();
+              notifications.forEach(notification => {
+                const timeAgo = new Date(notification.createdAt).toLocaleString();
+                const notificationItem = `
+                  <li class="p-2 rounded-end-3">
+                    <a href="javascript:void(0)">
+                      <div class="d-flex align-items-center notification-row">
+                        <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                          <img src="${notification.senderProfilePicture || '/includes/images/01.jpg'}" width="48" height="48" alt="">
+                        </div>
+                        <div class="notification-content">
+                          <div class="text-dark mb-0 fw-500 notification-msg">
+                            <span class="text-dark fw-bold mb-0">${notification.senderName || 'Unknown'}</span>
+                            <span class="fw-light fs-14">${notification.message || 'No message'}</span>
+                          </div>
+                          <p class="text-dark text-end mb-0 fs-12 fw-500">${timeAgo}</p>
+                        </div>
+                      </div>
+                    </a>
+                  </li>`;
+                notificationBox.append(notificationItem);
+                mobileNotifications.append(notificationItem);
+              });
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+      }
+
+      function fetchMessages() {
+        $.ajax({
+          url: '/api/v1/messages',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const messages = response.data;
+              const messageBox = $('#message_box');
+              const mobileMessages = $('#mobile-messages');
+              messageBox.empty();
+              mobileMessages.empty();
+              messages.forEach(message => {
+                const timeAgo = new Date(message.createdAt).toLocaleString();
+                const messageItem = `
+                  <li class="p-2 rounded-end-3">
+                    <a href="javascript:void(0)">
+                      <div class="d-flex align-items-center notification-row">
+                        <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                          <img src="${message.senderProfilePicture || '/includes/images/01.jpg'}" width="48" height="48" alt="">
+                        </div>
+                        <div class="notification-content">
+                          <div class="text-dark mb-0 fw-500 notification-msg">
+                            <span class="text-dark fw-bold mb-0">${message.senderName || 'Unknown'}</span>
+                          </div>
+                          <div class="d-flex justify-content-between">
+                            <div class="w-100 text-truncate fs-12 fw-500">${message.content || 'No content'}</div>
+                            <p class="text-dark text-end mb-0 fs-12 fw-500 msg-time">${timeAgo}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>`;
+                messageBox.append(messageItem);
+                mobileMessages.append(messageItem);
+              });
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+      }
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const userId = urlParams.get('id');
+
+      if (userId) {
+        // Fetch doctor details
+        $.ajax({
+            url: `/api/v1/users/${userId}`,
+            type: 'GET',
+            headers: {
+              'Authorization': 'Bearer ' + token
+            },
+            success: function(response) {
+              if (response && response.data && response.data.user) {
+                const user = response.data.user;
+                const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+                const location = `${user.address?.city || ''}, ${user.address?.state || ''}, ${user.address?.country || ''}`.trim() || 'N/A';
+                const profilePicture = user.profilePicture || 'includes/images/01_2.png';
+                const designation = user.designation || 'N/A';
+
+                $('#profilePicture').attr('src', profilePicture);
+                $('#doctorFullName').text(fullName);
+                $('#doctorDesignation').text(designation);
+                $('#fullName').html(`<i class="bi bi-person-fill"></i>${fullName}`);
+                $('#phoneNumberInput').val(user.phoneNumber || '');
+                $('#email').html(`<i class="bi bi-envelope-fill"></i> ${user.email || 'N/A'}`);
+                $('#membershipNo').html(`<i class="bi bi-id-card-fill"></i> ${user.membershipNo || 'N/A'}`);
+                $('#locationInput').val(location);
+                $('#aboutInput').val(user.about || '');
+                
+                // Populate account settings form
+                $('#membershipNoInput').val(user.membershipNo || '');
+                $('#mobileInput').val(user.phoneNumber || '');
+                $('#emailInput').val(user.email || '');
+                $('#addressInput').val(user.address?.fullAddress || '');
+              } else {
+                alert('No user data found.');
+              }
+            },
+            error: function(xhr) {
+              let message = 'Failed to load user details.';
+              if (xhr.status === 401) {
+                message = 'Unauthorized: Please log in again.';
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user');
+                window.location.href = '/index.html';
+              } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                message = xhr.responseJSON.message;
+              }
+              alert(message);
+            }
+          });
+
+          // Fetch professional details (education, experience, conferences)
+          $.ajax({
+            url: `/api/v1/users/${userId}/professional-details`,
+            type: 'GET',
+            headers: {
+              'Authorization': 'Bearer ' + token
+            },
+            success: function(response) {
+              if (response && response.data) {
+                const professionalDetails = response.data;
+                educations = professionalDetails.educations || [];
+                experiences = professionalDetails.experiences || [];
+                conferences = professionalDetails.conferences || [];
+
+                // Populate education fields
+                $('#education_fields').empty();
+                educations.forEach((edu, index) => {
+                  $('#education_fields').append(`
+                    <div class="row mb-3 education-entry" data-index="${index}">
+                      <div class="col-sm-3">
+                        <input type="text" class="form-control rounded" name="education_year_${index}" placeholder="Year" value="${edu.year || ''}">
+                      </div>
+                      <div class="col-sm-3">
+                        <input type="text" class="form-control rounded" name="education_degree_${index}" placeholder="Degree" value="${edu.degree || ''}">
+                      </div>
+                      <div class="col-sm-3">
+                        <input type="text" class="form-control rounded" name="education_institute_${index}" placeholder="Institute" value="${edu.institute || ''}">
+                      </div>
+                      <div class="col-sm-2">
+                        <input type="text" class="form-control rounded" name="education_result_${index}" placeholder="Result" value="${edu.result || ''}">
+                      </div>
+                      <div class="col-sm-1">
+                        <button type="button" class="btn btn-danger remove-education" data-index="${index}">Remove</button>
+                      </div>
+                    </div>
+                  `);
+                });
+
+                // Populate experience fields
+                $('#experience_fields').empty();
+                experiences.forEach((exp, index) => {
+                  $('#experience_fields').append(`
+                    <div class="row mb-3 experience-entry" data-index="${index}">
+                      <div class="col-sm-2">
+                        <input type="text" class="form-control rounded" name="experience_year_${index}" placeholder="Year" value="${exp.year || ''}">
+                      </div>
+                      <div class="col-sm-2">
+                        <input type="text" class="form-control rounded" name="experience_department_${index}" placeholder="Department" value="${exp.department || ''}">
+                      </div>
+                      <div class="col-sm-2">
+                        <input type="text" class="form-control rounded" name="experience_position_${index}" placeholder="Position" value="${exp.position || ''}">
+                      </div>
+                      <div class="col-sm-2">
+                        <input type="text" class="form-control rounded" name="experience_hospital_${index}" placeholder="Hospital" value="${exp.hospital || ''}">
+                      </div>
+                      <div class="col-sm-2">
+                        <input type="text" class="form-control rounded" name="experience_feedback_${index}" placeholder="Feedback" value="${exp.feedback || ''}">
+                      </div>
+                      <div class="col-sm-1">
+                        <button type="button" class="btn btn-danger remove-experience" data-index="${index}">Remove</button>
+                      </div>
+                    </div>
+                  `);
+                });
+
+                // Populate conference fields
+                $('#conference_fields').empty();
+                conferences.forEach((conf, index) => {
+                  $('#conference_fields').append(`
+                    <div class="row mb-3 conference-entry" data-index="${index}">
+                      <div class="col-sm-10">
+                        <input type="text" class="form-control rounded" name="conference_${index}" placeholder="Conference Description" value="${conf || ''}">
+                      </div>
+                      <div class="col-sm-2">
+                        <button type="button" class="btn btn-danger remove-conference" data-index="${index}">Remove</button>
+                      </div>
+                    </div>
+                  `);
+                });
+              }
+            },
+            error: function(xhr) {
+              let message = 'Failed to load professional details.';
+              if (xhr.status === 401) {
+                message = 'Unauthorized: Please log in again.';
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user');
+                window.location.href = '/index.html';
+              } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                message = xhr.responseJSON.message;
+              }
+              alert(message);
+            }
+          });
+
+          // ... (rest of the JavaScript for adding/removing entries and saving remains unchanged, just update the URL in the save function) ...
+
+          // Save personal info
+          $('#edit_personal_info').on('submit', function(e) {
+            e.preventDefault();
+
+            const professionalDetailsData = {
+              educations: [],
+              experiences: [],
+              conferences: []
+            };
+
+            // Collect education data
+            $('#education_fields .education-entry').each(function() {
+              const index = $(this).data('index');
+              professionalDetailsData.educations.push({
+                year: $(`input[name="education_year_${index}"]`).val(),
+                degree: $(`input[name="education_degree_${index}"]`).val(),
+                institute: $(`input[name="education_institute_${index}"]`).val(),
+                result: $(`input[name="education_result_${index}"]`).val()
+              });
+            });
+
+            // Collect experience data
+            $('#experience_fields .experience-entry').each(function() {
+              const index = $(this).data('index');
+              professionalDetailsData.experiences.push({
+                year: $(`input[name="experience_year_${index}"]`).val(),
+                department: $(`input[name="experience_department_${index}"]`).val(),
+                position: $(`input[name="experience_position_${index}"]`).val(),
+                hospital: $(`input[name="experience_hospital_${index}"]`).val(),
+                feedback: $(`input[name="experience_feedback_${index}"]`).val()
+              });
+            });
+
+            // Collect conference data
+            $('#conference_fields .conference-entry').each(function() {
+              const index = $(this).data('index');
+              professionalDetailsData.conferences.push($(`input[name="conference_${index}"]`).val());
+            });
+
+            $.ajax({
+              url: `/api/v1/users/${userId}/professional-details`,
+              type: 'PUT',
+              headers: {
+                'Authorization': 'Bearer ' + token,
+                'Content-Type': 'application/json'
+              },
+              data: JSON.stringify(professionalDetailsData),
+              success: function(response) {
+                alert('Professional details updated successfully.');
+              },
+              error: function(xhr) {
+                let message = 'Failed to update professional details.';
+                if (xhr.status === 401) {
+                  message = 'Unauthorized: Please log in again.';
+                  localStorage.removeItem('access_token');
+                  localStorage.removeItem('user');
+                  window.location.href = '/index.html';
+                } else if (xhr.responseJSON && xhr.responseJSON.message) {
+                  message = xhr.responseJSON.message;
+                }
+                alert(message);
+              }
+            });
+          });
+
+        // Fetch user stats
+        $.ajax({
+          url: `/api/v1/users/${userId}/stats`,
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            if (response && response.data) {
+              const stats = response.data;
+              $('#doctorStats').html(`
+                <div class="col-4 mb-4 mb-md-0 col-md-2">
+                  <div>
+                    <span class="text-gray pb-3">Operations</span>
+                    <h4 class="text-primary mb-0">${stats.operations || 0}</h4>
+                  </div>
+                </div>
+                <div class="col-4 mb-4 mb-md-0 col-md-2">
+                  <div>
+                    <span class="text-gray pb-3">Hospitals</span>
+                    <h4 class="text-primary mb-0">${stats.hospitals || 0}</h4>
+                  </div>
+                </div>
+                <div class="col-4 mb-4 mb-md-0 col-md-2">
+                  <div>
+                    <span class="text-gray pb-3">Patients</span>
+                    <h4 class="text-primary mb-0">${stats.patients || 0}</h4>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="justify-content-md-end d-flex flex-wrap gap-2">
+                    <a href="#" class="btn btn-primary rounded-4 fw-500 py-2 rounded-pill mw-120 px-4 text-capitalize me-2">
+                      <i class="fa fa-user-edit me-2"></i> Edit Profile
+                    </a>
+                    <button class="btn btn-secondary rounded-4 fw-500 py-2 rounded-pill px-4 text-capitalize me-2">
+                      <i class="fa fa-share-alt me-2"></i> Share Profile
+                    </button>
+                  </div>
+                </div>
+              `);
+            }
+          },
+          error: function(xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+
+        // Fetch specialties
+        $.ajax({
+          url: `/api/v1/users/${userId}/specialties`,
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const specialties = response.data;
+              const specialityBox = $('#speciality_box');
+              specialityBox.empty();
+              specialties.forEach(specialty => {
+                const badgeClass = specialty.level === 'Professional' ? 'badge-success text-success' : 
+                                 specialty.level === 'Certified' ? 'badge-orange text-orange' : 'badge-secondary text-info';
+                specialityBox.append(`
+                  <div class="d-flex flex-wrap align-items-center py-2 mb-2 border-b-dashed">
+                    <div class="rounded-circle ${badgeClass} reward-circle d-flex align-items-center justify-content-center me-3">
+                      <i class="bi bi-trophy-fill"></i>
+                    </div>
+                    <div>
+                      <h6 class="text-dark-primary mb-1">${specialty.level || 'N/A'}</h6>
+                      <span class="text-gray">${specialty.description || 'N/A'}</span>
+                    </div>
+                  </div>
+                `);
+              });
+            }
+          },
+          error: function(xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+
+        // Fetch activities
+        $.ajax({
+          url: `/api/v1/users/${userId}/activities`,
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const activities = response.data;
+              const activityList = $('#activity_list');
+              activityList.empty();
+              activities.forEach(activity => {
+                activityList.append(`
+                  <li class="event mb-3">
+                    <h6 class="text-dark-primary mb-1">${activity.title || 'N/A'}</h6>
+                    <span class="text-gray">${activity.description || 'N/A'}</span>
+                  </li>
+                `);
+              });
+            }
+          },
+          error: function(xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+
+        // Fetch patient notes
+        $.ajax({
+          url: `/api/v1/users/${userId}/patient-notes`,
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const notes = response.data;
+              const patNotes = $('#pat_notes ul');
+              patNotes.empty();
+              notes.forEach(note => {
+                const badgeClass = note.status === 'Open' ? 'badge-success text-success' : 'badge-orange text-orange';
+                patNotes.append(`
+                  <li class="py-2 px-3">
+                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#patnotes" data-name="${note.patientName}" data-note="${note.content}">
+                      <div class="d-flex align-items-center justify-content-between">
+                        <div class="text-dark poppins w-75">
+                          <span class="d-block text-capitalize text-dark fw-600 px-0 fs-14 mb-2">${note.patientName || 'N/A'}</span>
+                          <div class="w-100 text-truncate overflow-hidden fs-14">${note.content || 'N/A'}</div>
+                        </div>
+                        <div class="w-25 text-end">
+                          <div class="badge ${badgeClass} rounded-pill px-3">${note.status || 'N/A'}</div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                `);
+              });
+
+              // Handle modal data
+              $('#patnotes').on('show.bs.modal', function (event) {
+                const button = $(event.relatedTarget);
+                const name = button.data('name');
+                const note = button.data('note');
+                $('#modalPatientName').text(name);
+                $('#modalPatientNote').text(note);
+              });
+            }
+          },
+          error: function(xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+
+        // Fetch schedules
+        $.ajax({
+          url: `/api/v1/users/${userId}/schedules`,
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const schedules = response.data;
+              const scheduleBox = $('#schedule-box');
+              scheduleBox.empty();
+              schedules.forEach(schedule => {
+                const badgeClass = schedule.patientType === 'New Patient' ? 'bg-primary' : 'bg-orange';
+                scheduleBox.append(`
+                  <div class="py-2 mb-2 border-b-dashed">
+                    <div class="fs-12 text-gray">${new Date(schedule.time).toLocaleString()}</div>
+                    <div class="d-flex align-items-center justify-content-between">
+                      <h6 class="text-dark-primary mb-1 fw-normal">${schedule.patientName || 'N/A'}</h6>
+                      <div>
+                        <span class="custom-badge badge ${badgeClass} text-white align-items-center rounded-pill text-capitalize me-2">${schedule.patientType || 'N/A'}</span>
+                      </div>
+                    </div>
+                  </div>
+                `);
+              });
+            }
+          },
+          error: function(xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+
+        // Fetch education
+        $.ajax({
+          url: `/api/v1/users/${userId}/education`,
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const education = response.data;
+              const educationTable = $('#education_table');
+              educationTable.empty();
+              education.forEach(edu => {
+                educationTable.append(`
+                  <tr>
+                    <td>${edu.year || 'N/A'}</td>
+                    <td>${edu.degree || 'N/A'}</td>
+                    <td>${edu.institute || 'N/A'}</td>
+                    <td>
+                      <span class="custom-badge badge bg-secondary text-white align-items-center rounded-pill text-capitalize me-2">${edu.result || 'N/A'}</span>
+                    </td>
+                  </tr>
+                `);
+              });
+            }
+          },
+          error: function(xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+
+        // Fetch experience
+        $.ajax({
+          url: `/api/v1/users/${userId}/experience`,
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const experiences = response.data;
+              const experienceTable = $('#experience_table');
+              experienceTable.empty();
+              experiences.forEach(exp => {
+                const badgeClass = exp.feedback === 'Excellent' || exp.feedback === 'Good' ? 'bg-success' : 'bg-warning';
+                experienceTable.append(`
+                  <tr>
+                    <td>${exp.year || 'N/A'}</td>
+                    <td>${exp.department || 'N/A'}</td>
+                    <td>${exp.position || 'N/A'}</td>
+                    <td>${exp.hospital || 'N/A'}</td>
+                    <td>
+                      <span class="custom-badge badge ${badgeClass} text-white align-items-center rounded-pill text-capitalize me-2">${exp.feedback || 'N/A'}</span>
+                    </td>
+                  </tr>
+                `);
+              });
+            }
+          },
+          error: function(xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+
+        // Fetch conferences
+        $.ajax({
+          url: `/api/v1/users/${userId}/conferences`,
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const conferences = response.data;
+              const conferencesDiv = $('#conferences');
+              conferencesDiv.empty();
+              conferences.forEach(conf => {
+                conferencesDiv.append(`<p class="text-gray">${conf.description || 'N/A'}</p>`);
+              });
+            }
+          },
+          error: function(xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+      } else {
+        alert('No user ID provided.');
+      }
+
+      fetchNotifications();
+      fetchMessages();
+      setInterval(() => {
+        fetchNotifications();
+        fetchMessages();
+      }, 30000);
+
+      $('.logout-btn').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+          url: '/api/v1/auth/logout',
+          type: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            updateUserStatus();
+            window.location.href = '/index.html';
+          },
+          error: function(xhr) {
+            alert('Logout failed: ' + (xhr.responseText || 'Unknown error'));
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            updateUserStatus();
+            window.location.href = '/index.html';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+
+</html>

@@ -30,9 +30,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Random;
-import java.util.Set;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -101,7 +99,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         user.setUserRole(userRole);
 
         // Set optional fields
-        user.setEducation(signupDto.getEducation());
         user.setDesignation(signupDto.getDesignation());
         user.setDepartment(signupDto.getDepartment());
         user.setPostalCode(signupDto.getPostalCode());
@@ -199,6 +196,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         if (!isValidPassword) {
             throw new BadRequestException("Invalid login details");
         }
+        user.setStatus("Available");
         String token = jwtUtils.createJwt.apply(userDetails);
         UserResponse userResponse = getUserResponse(user);
         ResponseData data = new ResponseData(userResponse);
@@ -254,7 +252,6 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 user.getGender(),
                 user.getStatus(),
                 user.getProfilePicture(),
-                user.getEducation(),
                 user.getDesignation(),
                 user.getDepartment(),
                 user.getMaritalStatus(),
@@ -302,6 +299,56 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     public boolean checkIfValidOldPassword(User user, String oldPassword) {
         return validatePassword(oldPassword) && passwordEncoder.matches(oldPassword, user.getPassword());
+    }
+
+    @Override
+    public ResponseEntity<?> validateToken(HttpServletRequest request) {
+        String token = getTokenFromRequest(request);
+        if (token == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse<>(401, "No token provided", null, null));
+        }
+
+        try {
+            // Check if the token is not expired
+            boolean isNotExpired = jwtUtils.isTokenExpired.apply(token);
+            String username = jwtUtils.extractUsername.apply(token);
+
+            if (isNotExpired) {
+                // Validate the token against the username
+                boolean isValid = jwtUtils.isTokenValid.apply(token, username);
+                if (isValid) {
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("status", "Available");
+                    data.put("username", username);
+                    return ResponseEntity.ok(new ApiResponse<>(200, "Token is valid", token, data));
+                } else {
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("status", "Offline");
+                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                            .body(new ApiResponse<>(401, "Invalid token", null, data));
+                }
+            } else {
+                // Token is expired
+                Map<String, Object> data = new HashMap<>();
+                data.put("status", "Away");
+                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                        .body(new ApiResponse<>(401, "Token has expired", null, data));
+            }
+        } catch (Exception e) {
+            Map<String, Object> data = new HashMap<>();
+            data.put("status", "Offline");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(new ApiResponse<>(401, "Invalid token: " + e.getMessage(), null, data));
+        }
+    }
+
+    private String getTokenFromRequest(HttpServletRequest request) {
+        String bearerToken = request.getHeader("Authorization");
+        if (bearerToken != null && bearerToken.startsWith("Bearer ")) {
+            return bearerToken.substring(7);
+        }
+        return null;
     }
 
 //    public void changePassword(User user, String newPassword) {

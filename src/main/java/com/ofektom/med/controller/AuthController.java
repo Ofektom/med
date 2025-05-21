@@ -43,6 +43,11 @@ public class AuthController {
         return userService.loginUser(loginDto);
     }
 
+    @GetMapping("/validate-token")
+    public ResponseEntity<?> validateToken(HttpServletRequest request) {
+        return userService.validateToken(request);
+    }
+
 
 
 //    @GetMapping("/verifyRegistration")

@@ -1,0 +1,806 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<!-- Added by HTTrack --><meta http-equiv="content-type" content="text/html;charset=UTF-8" /><!-- /Added by HTTrack -->
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>EMR Booking List</title>
+  <link rel="icon" type="image/x-icon" href="includes/images/favicon.ico">
+  <link rel="stylesheet" href="assets/css/bootstrap-icons.css">
+  <link rel="stylesheet" href="assets/css/responsive.bootstrap5.min.css">
+  <link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="assets/css/bootstrap-datepicker.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+  <link rel="stylesheet" href="assets/css/bootstrap.css">
+  <link rel="stylesheet" href="assets/css/style.css">
+</head>
+
+<body>
+  <div id="preloader"></div>
+  <!-- body -->
+  <div class="d-flex body-main body-color" id="wrapper">
+    <!-- backdrop -->
+    <div class="sidebar-backdrop"></div>
+    <div class="sidebar-main">
+      <div class="sidebar h-100 bg-dark-primary close" id="sidebar-wrapper">
+        <div class="sidebar-box text-center position-fixed slim-outer bg-dark-primary">
+          <div class="sidebar-heading bg-dark d-flex align-items-center justify-content-between p-3 border-dark border-bottom">
+            <a href="index.html">
+              <img src="includes/images/healthcare-logo.png" width="200" alt="">
+            </a>
+            <button class="btn btn-primary rounded closesidebar d-lg-none btn-sm"> <i class="fa-solid fa-xmark text-white"></i></button> 
+          </div>
+          <div class="sidebar-box-data text-start px-3" id="sidebar-data">
+            <div class="list-group list-group-flush mt-3">
+              <div class="accordion" id="accordionExampleOne"> 
+                <div class="accordion-item mb-4">
+                  <a href="/doc-dashboard.html" class="active no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                   <i class="bi bi-grid-1x2-fill px-2"></i><span>Doctor Dashboard</span></a>
+                </div>
+                
+                <div class="accordion-item mb-4">
+                    <a href="/doc-patientlist.html"
+                      class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center"><i class="fa-regular fa-address-book px-2"></i>Patient List</a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <a href="/doc-reports.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                    <i class="bi bi-file-earmark-pdf-fill px-2"></i> <span>Reports</span></a>
+                </div>
+                <div class="accordion-item mb-4">
+                  <div class="accordion-header" id="headingPrescription">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center"
+                      type="button" data-bs-toggle="collapse" data-bs-target="#collapsePrescription" aria-expanded="true"
+                      aria-controls="collapsePrescription">
+                      <i class="fa-solid fa-calendar-days px-2"></i>
+                      Prescription
+                    </button>
+                  </div>
+                  <div id="collapsePrescription" class="accordion-collapse collapse" aria-labelledby="headingPrescription"
+                    data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <ul class="navbar-nav d-block">
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="/doc-prescriptionlist.html">
+                            Prescription list</a>
+                        </li>
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="/doc-addprescription.html">
+                            Add Prescription</a>
+                        </li>
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="/doc-editprescription.html">
+                            Edit Prescription</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4">
+                  <div class="accordion-header" id="headingAppointments">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center"
+                      type="button" data-bs-toggle="collapse" data-bs-target="#collapseAppointments" aria-expanded="true"
+                      aria-controls="collapseAppointments">
+                      <i class="fa-solid fa-calendar-days px-2"></i>
+                      Appointments
+                    </button>
+                  </div>
+                  <div id="collapseAppointments" class="accordion-collapse collapse" aria-labelledby="headingAppointments"
+                    data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <ul class="navbar-nav d-block">
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="/doc-appointmentlist.html">
+                            appointment list</a>
+                        </li>
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="/doc-bookappointment.html">
+                            Book Appointment</a>
+                        </li>
+                        <li class="nav-item mb-2 rounded-3 px-3">
+                          <a class="nav-link fs-14 text-white" href="/doc-editappointment.html">
+                            Edit Appointment</a>
+                        </li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4 d-block d-sm-none">
+                  <div class="accordion-header" id="headingSeven">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                      <i class="bi bi-bell-fill text-white px-2"></i><span class="fw-600">Notification</span>
+                    </button>
+                  </div>
+                  <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <div class="slim-outer">
+                        <div class="card border-0 shadow bg-white rounded-2 overflow-hidden" id="mobile-notifications">
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu"></ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4 d-block d-sm-none">
+                  <div class="accordion-header" id="headingEight">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
+                      <i class="bi bi-envelope-fill text-white px-2"></i><span class="fw-600">Messages</span>
+                    </button>
+                  </div>
+                  <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <div class="slim-outer">
+                        <div class="card border-0 shadow bg-white rounded-2 overflow-hidden" id="mobile-messages">
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu"></ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="accordion-item mb-4">
+                  <div class="accordion-header" id="headingSeven">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                      <i class="fa-solid fa-user-shield px-2"></i>Setting
+                    </button>
+                  </div>
+                  <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExampleOne">
+                    <div class="accordion-body">
+                      <ul class="navbar-nav d-block">
+                        <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-profile.html">Profile</a></li>
+                        <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/resetpass.html">Reset Password</a></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="page-content-wrapper" class="position-relative">
+      <div class="bg-white shadow-sm px-3 py-2 mb-4 header m-auto position-fixed">
+        <div class="row align-items-center">
+          <div class="row flex-row-reverse justify-content-between align-items-center">
+            <div class="col-lg-6">
+              <div class="d-flex justify-content-lg-end justify-content-between align-items-center gap-2">
+                <div class="d-block d-lg-none">
+                  <button class="btn shadow-0 focus-0 sidebar-btn rounded border-0 sidebarToggle">
+                    <img src="/includes/images/menu-icons.svg" alt="">
+                  </button>
+                  <a href="/doc-dashboard.html">
+                    <img src="/includes/images/ERP-Logo(1).png" width="180" alt="">
+                  </a>
+                </div>
+                <div class="d-flex align-items-center">
+                  <div class="maximize d-none d-lg-block">
+                    <a class="badge-purple d-flex align-items-center text-primary" href="javascript:void(0)" id="fullscreen">
+                    </a>
+                  </div>
+                  <div class="position-relative rounded d-lg-none">
+                    <a class="text-primary py-2 px-3 btn btn-transparent outline-0 focus-0 rounded btn-cust-sm"
+                      data-bs-toggle="collapse" href="#searchcollapse" role="button" aria-expanded="false"
+                      aria-controls="searchcollapse">
+                      <i class="bi bi-search"></i>
+                    </a>
+                    <div class="collapse position-absolute top-100 mt-2 end-0 z-3 mw-250 mw-100" id="searchcollapse">
+                      <div class="card card-body">
+                        <form>
+                          <div class="border bg-light position-relative h-100 d-flex align-items-center header-search mw-100">
+                            <button class="btn btn-transparent border-0 position-absolute ms-1">
+                              <img src="/includes/images/search2.svg" alt="">
+                            </button>
+                            <input type="search" class="form-control border-0 bg-transparent shadow-none ps-5 py-2"
+                              placeholder="Search here..">
+                          </div>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown d-none d-sm-block">
+                    <button type="button" class="btn rounded position-relative" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      <i class="fa-solid fa-envelope fs-5 text-success pb-0 mb-0"></i>
+                      <span class="msg-lite">
+                        <span class="circles cust_circle">
+                          <span class="circle1"></span>
+                          <span class="circle2"></span>
+                          <span class="circle3"></span>
+                        </span>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-notification dropdown-menu-end dropdown-mega p-0 border-0 rounded-10 bg-transparent">
+                      <div class="animate slideIn">
+                        <div class="card border-0 shadow bg-white rounded-10 overflow-hidden slim-outer">
+                          <div class="bg-light p-3">
+                            <h6 class="text-center mb-0">Messages</h6>
+                          </div>
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu px-2 py-3" id="message_box">
+                            <!-- Populated dynamically via JavaScript -->
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown d-none d-sm-block">
+                    <button type="button" class="btn rounded position-relative" data-bs-toggle="dropdown"
+                      aria-expanded="false">
+                      <i class="fa-solid fa-bell fs-5 text-orange pb-0 mb-0"></i>
+                      <span class="notification-lite">
+                        <span class="circles cust_circle">
+                          <span class="circle1"></span>
+                          <span class="circle2"></span>
+                          <span class="circle3"></span>
+                        </span>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-notification dropdown-menu-end dropdown-mega p-0 border-0 rounded-10 bg-transparent">
+                      <div class="animate slideIn">
+                        <div class="card border-0 shadow bg-white rounded-10 overflow-hidden slim-outer slim-outer">
+                          <div class="bg-light p-3">
+                            <h6 class="text-center mb-0">Notifications</h6>
+                          </div>
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu px-2 py-3" id="notification_box">
+                            <!-- Populated dynamically via JavaScript -->
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="dropdown user">
+                    <button type="button" class="pill-badge btn md-mw-150 me-xl-3 d-flex align-items-center text-start rounded px-0"
+                      data-bs-toggle="dropdown" aria-expanded="false">
+                      <img src="/includes/images/01_2.png" alt="" class="border rounded">
+                      <span class="justify-content-between align-items-center gap-4 px-2 w-100 d-none d-xl-flex">
+                        <span class="my-0 py-0 lh-1">
+                          <span class="pill-badge-msg lh-sm text-capitalize pb-0 mb-0 d-block user-firstname"></span>
+                          <span class="fs-12 p-0 d-block user-role"></span>
+                        </span>
+                        <span class="my-0 py-0">
+                          <i class="bi bi-chevron-down"></i>
+                        </span>
+                      </span>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end dropdown-mega p-0 border-0 rounded-3 bg-transparent">
+                      <div class="animate slideIn">
+                        <div class="card bg-white rounded-10 shadow-sm overflow-hidden">
+                          <div class="bg-light p-3">
+                            <h6 class="mb-0 fs-14 fw-500 mb-1 dropdown-user-greeting"></h6>
+                            <p class="mb-0 fs-12 fw-500 user-status"></p>
+                          </div>
+                          <ul class="list-unstyled text-dark-primary mb-0 click-menu p-3">
+                            <li class="py-3 px-2 rounded-end-3">
+                              <a href="/doc-profile.html">
+                                <div class="d-flex align-items-center">
+                                  <div class="rounded bg-light reward-circle d-flex align-items-center justify-content-center me-3 text-center">
+                                    <i class="fa fa-user fs-5 text-primary"></i>
+                                  </div>
+                                  <div>
+                                    <h6 class="text-dark fs-14 mb-0">My Profile</h6>
+                                    <p class="text-light fs-12 mb-0">View Profile Details</p>
+                                  </div>
+                                </div>
+                              </a>
+                            </li>
+                          </ul>
+                          <div class="mb-2 text-center">
+                            <a class="btn btn-primary btn-15 rounded-pill mw-120 logout-btn">Logout <i class="fa fa-sign-out"></i></a>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-6 d-none d-lg-block">
+              <div class="d-lg-flex align-items-center">
+                <button class="btn shadow-0 focus-0 d-none d-lg-block sidebar-btn rounded border-0 sidebarToggle">
+                  <img src="/includes/images/menu-icons.svg" alt="">
+                </button>
+                <form id="desktop-search-form" class="d-none d-lg-block mw-200 position-relative">
+                  <div class="bg-light-blue position-relative h-100 d-flex align-items-center header-search rounded-10">
+                    <button class="btn btn-transparent border-0 position-absolute top-0">
+                      <img src="/includes/images/search2.svg" alt="">
+                    </button>
+                    <input type="search" class="form-control border-0 bg-transparent shadow-none ps-5 py-2 desktop-search-input" placeholder="Search rooms..">
+                  </div>
+                  <div id="desktop-search-results" class="position-absolute top-100 mt-2 start-0 end-0 z-3 bg-white shadow rounded-3" style="display: none;">
+                    <ul class="list-unstyled text-dark-primary mb-0 click-menu"></ul>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="px-4 mb-4 min-vh-100 outer-main">
+        <h3 class="fw-600 text-dark-primary text-capitalize">Appointment List</h3>
+        <div class="d-flex flex-wrap justify-content-between align-items-center my-3">
+          <div class="d-flex flex-wrap text-capitalize align-items-center">
+            <p class="mb-0 pb-0 fw-bold text-dark-primary"><a href="index.html">Home</a></p>
+            <i class="bi bi-chevron-right pagination-arrow text-dark-primary"></i>
+            <p class="mb-0 pb-0 text-dark">Appointment List</p>
+          </div>
+          <a href="bookappointment.html"
+            class="btn btn-primary rounded-4 fw-500 py-2 rounded-pill mw-120 px-4 text-capitalize"><i
+              class="bi bi-plus-circle me-2"></i> Book Appointment</a>
+        </div>
+        <div class="bg-white rounded-10 my-3">
+          <div class="p-4">
+            <table class="table custom-data-table" id="appointmentlist">
+              <thead>
+                <tr>
+                  <td class="text-capitalize text-dark no-sort">
+                    <input type="checkbox" class="" name="check" value="check">
+                  </td>
+                  <td class="text-capitalize text-dark">
+                    Name
+                  </td>
+                  <td class="text-capitalize text-dark">
+                    Consulting Doctor
+                  </td>
+                  <td class="text-capitalize text-dark">
+                    Treatment
+                  </td>
+                  <td class="text-capitalize text-dark">
+                    Mobile
+                  </td>
+                  <td class="text-capitalize text-dark">
+                    Email
+                  </td>
+                  <td class="text-capitalize text-dark">
+                    Date
+                  </td>
+                  <td class="text-capitalize text-dark">
+                    Time
+                  </td>
+                  <td class="text-capitalize text-dark no-sort">Action</td>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <!-- footer -->
+      <div
+        class="shadow-sm py-4 px-4 bg-white footer d-flex flex-wrap justify-content-between align-items-center fs-14">
+        <div>
+          <span id="currentYear"></span> © All Rights Reserved By Health Care ERP
+        </div>
+        <div>
+          <a href="javascript:void(0)" class="text-primary text-decoration-underline fw-600">Privacy Policy</a> | <a
+            href="javascript:void(0)" class="text-primary text-decoration-underline fw-600">Terms & Conditions</a>
+        </div>
+      </div>
+    </div>
+    <!-- pagecontent -->
+  </div>
+  <!-- modal -->
+  <div class="modal fade" id="deleteconf" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0">
+        <div class="modal-body">
+          <div class="px-4 text-center">
+            <i class="bi bi-exclamation-triangle-fill text-danger fs-1"></i>
+            <h6 class="text-dark mb-3">Are you sure you want to delete this ?</h6>
+            <button class="btn btn-outline-danger me-3 rounded-pill" data-bs-dismiss="modal"
+              aria-label="Close">Cancel</button>
+            <button class="btn btn-danger rounded-pill">Delete</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="assets/js/jquery-3.7.0.js"></script>
+  <script src="assets/js/jquery.min.js"></script>
+  <script src="assets/js/popper.min.js"></script>
+  <script src="assets/js/bootstrap.min.js"></script>
+  <script src="assets/js/jquery.dataTables.min.js"></script>
+  <script src="assets/js/dataTables.bootstrap5.min.js"></script>
+  <script src="assets/js/dataTables.responsive.min.js"></script>
+  <script src="assets/js/apexcharts.js"></script>
+  <script src="assets/js/jquery.validate.js"></script>
+  <script src="assets/js/bootstrap-datepicker.min.js"></script>
+  <script src="assets/js/jquery.slimscroll.min.js"></script>
+  <script src="assets/js/togglepassword.js"></script>
+  <script src="assets/js/all.min.js"></script>
+  <script src="assets/js/script.js"></script>
+  <script>
+    $(document).ready(function() {
+      let currentPage = 0;
+
+      // Check if the user is authenticated (token exists)
+      const token = localStorage.getItem('access_token');
+      const userStatusElement = $('.user-status');
+
+      let lastActivityTime = Date.now();
+      const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+      // Update last activity time on user interaction
+      $(document).on('mousemove keydown click', function () {
+        lastActivityTime = Date.now();
+      });
+
+      function checkInactivity() {
+        const currentTime = Date.now();
+        if (currentTime - lastActivityTime > INACTIVITY_TIMEOUT) {
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('user');
+          userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+          alert('You have been inactive for too long. Please log in.');
+          window.location.href = '/index.html';
+        }
+      }
+
+      // Check inactivity every minute
+      setInterval(checkInactivity, 60 * 1000);
+
+      function updateUserStatus() {
+        if (!token) {
+          userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+          setTimeout(() => {
+            alert('No session found. Please log in.');
+            window.location.href = '/index.html';
+          }, 1000);
+          return;
+        }
+
+        $.ajax({
+          url: '/api/v1/auth/validate-token',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data && response.data.status) {
+              const status = response.data.status;
+              if (status === 'Available') {
+                userStatusElement.text(status).removeClass('text-danger text-warning').addClass('text-success');
+              } else if (status === 'Offline') {
+                userStatusElement.text(status).removeClass('text-success text-warning').addClass('text-danger');
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user');
+                setTimeout(() => {
+                  alert('Session invalid. Please log in again.');
+                  window.location.href = '/index.html';
+                }, 1000);
+              } else if (status === 'Away') {
+                userStatusElement.text(status).removeClass('text-success text-danger').addClass('text-warning');
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user');
+                setTimeout(() => {
+                  alert('Session expired. Please log in again.');
+                  window.location.href = '/index.html';
+                }, 1000);
+              }
+            } else {
+              userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              setTimeout(() => {
+                alert('Session invalid. Please log in again.');
+                window.location.href = '/index.html';
+              }, 1000);
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              userStatusElement.text('Away').removeClass('text-success text-danger').addClass('text-warning');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              setTimeout(() => {
+                alert('Session expired. Please log in again.');
+                window.location.href = '/index.html';
+              }, 1000);
+            } else {
+              userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              setTimeout(() => {
+                alert('Session invalid. Please log in again.');
+                window.location.href = '/index.html';
+              }, 1000);
+            }
+          }
+        });
+      }
+
+      // Initial status check and periodic updates
+      updateUserStatus();
+      setInterval(updateUserStatus, 300000); // 5 minutes
+
+      const userData = JSON.parse(localStorage.getItem('user'));
+      if (userData) {
+        const userFirstName = userData.firstName || 'User';
+        let userRole = userData.userRole || 'Unknown';
+        userRole = userRole.replace('ROLE_', '').replace('_', ' ').toLowerCase();
+        userRole = userRole.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        $('.user-firstname').text(userFirstName);
+        $('.user-role').text(userRole);
+        $('.dropdown-user-greeting').text(`Hello ${userFirstName}`);
+      }
+
+      function performSearch(query, targetResults) {
+        if (query.length < 3) {
+          targetResults.hide();
+          return;
+        }
+        $.ajax({
+          url: `/api/v1/search/rooms?query=${encodeURIComponent(query)}&page=1&size=10`,
+          type: 'GET',
+          headers: { 'Authorization': 'Bearer ' + token },
+          success: function(response) {
+            const resultsList = targetResults.find('ul');
+            resultsList.empty();
+            if (response.data && response.data.content && response.data.content.length > 0) {
+              response.data.content.forEach(room => {
+                resultsList.append(`
+                  <li class="p-2 rounded-end-3">
+                    <a href="/admin-allotedrooms.html?roomId=${room.id}">
+                      <div class="d-flex align-items-center notification-row">
+                        <div class="notification-content">
+                          <div class="text-dark mb-0 fw-500 notification-msg">
+                            <span class="text-dark fw-bold mb-0">Room ${room.roomNo}</span>
+                          </div>
+                          <div class="d-flex justify-content-between">
+                            <div class="w-100 text-truncate fs-12 fw-500">${room.roomType}</div>
+                            <p class="text-dark text-end mb-0 fs-12 fw-500">${room.patientName || 'Unalloted'}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                `);
+              });
+              targetResults.show();
+            } else {
+              resultsList.append('<li class="p-2 rounded-end-3"><div class="text-dark fs-12">No rooms found.</div></li>');
+              targetResults.show();
+            }
+          },
+          error: function(xhr) {
+            const resultsList = targetResults.find('ul');
+            resultsList.empty();
+            let message = 'Search failed.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/admin-index.html';
+            }
+            resultsList.append(`<li class="p-2 rounded-end-3"><div class="text-dark fs-12">${message}</div></li>`);
+            targetResults.show();
+          }
+        });
+      }
+
+      $('.desktop-search-input').on('input', function() {
+        const query = $(this).val().trim();
+        performSearch(query, $('#desktop-search-results'));
+      });
+
+      $('.mobile-search-input').on('input', function() {
+        const query = $(this).val().trim();
+        performSearch(query, $('#mobile-search-results'));
+      });
+
+      $(document).on('click', function(e) {
+        if (!$(e.target).closest('#desktop-search-form').length && !$(e.target).closest('#mobile-search-form').length) {
+          $('#desktop-search-results').hide();
+          $('#mobile-search-results').hide();
+        }
+      });
+
+      $('#desktop-search-form, #mobile-search-form').on('submit', function(e) {
+        e.preventDefault();
+      });
+
+      function fetchNotifications() {
+        $.ajax({
+          url: '/api/v1/notifications',
+          type: 'GET',
+          headers: { 'Authorization': 'Bearer ' + token },
+          success: function(response) {
+            const notificationBox = $('#notification_box');
+            const mobileNotificationBox = $('#mobile-notifications ul');
+            notificationBox.empty();
+            mobileNotificationBox.empty();
+            response.forEach(notification => {
+              const notificationHtml = `
+                <li class="p-2 rounded-end-3">
+                  <a href="javascript:void(0)">
+                    <div class="d-flex align-items-center notification-row">
+                      <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                        <img src="/includes/images/01.jpg" width="48" height="48" alt="">
+                      </div>
+                      <div class="notification-content">
+                        <div class="text-dark mb-0 fw-500 notification-msg">
+                          <span class="text-dark fw-bold mb-0">${notification.sender}</span>
+                          <span class="fw-light fs-14">${notification.message}</span>
+                        </div>
+                        <p class="text-dark text-end mb-0 fs-12 fw-500">${notification.time}</p>
+                      </div>
+                    </div>
+                  </a>
+                </li>`;
+              const mobileNotificationHtml = `
+                <li class="rounded-end-3">
+                  <a href="javascript:void(0)">
+                    <div class="d-flex align-items-center notification-row py-2 px-1">
+                      <div class="text-center notification-user-img">
+                        <img src="/includes/images/01.jpg" width="30" height="30" alt="">
+                      </div>
+                      <div class="notification-content px-1">
+                        <div class="text-dark mb-0 fw-500 notification-msg">
+                          <span class="text-dark fw-bold mb-0 fs-12">${notification.sender}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <div class="fw-500 fs-10">${notification.message}</div>
+                          <p class="text-dark text-end mb-0 fs-10 fw-500">${notification.time}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>`;
+              notificationBox.append(notificationHtml);
+              mobileNotificationBox.append(mobileNotificationHtml);
+            });
+          },
+          error: function(xhr) {
+            console.error('Failed to fetch notifications:', xhr.responseText);
+          }
+        });
+      }
+
+      function fetchMessages() {
+        $.ajax({
+          url: '/api/v1/messages',
+          type: 'GET',
+          headers: { 'Authorization': 'Bearer ' + token },
+          success: function(response) {
+            const messageBox = $('#message_box');
+            const mobileMessageBox = $('#mobile-messages ul');
+            messageBox.empty();
+            mobileMessageBox.empty();
+            response.forEach(message => {
+              const messageHtml = `
+                <li class="p-2 rounded-end-3">
+                  <a href="javascript:void(0)">
+                    <div class="d-flex align-items-center notification-row">
+                      <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                        <img src="/includes/images/01.jpg" width="48" height="48" alt="">
+                      </div>
+                      <div class="notification-content">
+                        <div class="text-dark mb-0 fw-500 notification-msg">
+                          <span class="text-dark fw-bold mb-0">${message.sender}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <div class="w-100 text-truncate fs-12 fw-500">${message.content}</div>
+                          <p class="text-dark text-end mb-0 fs-12 fw-500 msg-time">${message.time}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>`;
+              const mobileMessageHtml = `
+                <li class="rounded-end-3">
+                  <a href="javascript:void(0)">
+                    <div class="d-flex align-items-center notification-row py-2 px-1">
+                      <div class="text-center notification-user-img">
+                        <img src="/includes/images/01.jpg" width="30" height="30" alt="">
+                      </div>
+                      <div class="notification-content px-1">
+                        <div class="text-dark mb-0 fw-500 notification-msg">
+                          <span class="text-dark fw-bold mb-0 fs-12">${message.sender}</span>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                          <div class="fw-500 fs-10">${message.content}</div>
+                          <p class="text-dark text-end mb-0 fs-10 fw-500">${message.time}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </li>`;
+              messageBox.append(messageHtml);
+              mobileMessageBox.append(mobileMessageHtml);
+            });
+          },
+          error: function(xhr) {
+            console.error('Failed to fetch messages:', xhr.responseText);
+          }
+        });
+      }
+
+      fetchNotifications();
+      fetchMessages();
+      setInterval(() => {
+        fetchNotifications();
+        fetchMessages();
+      }, 30000);
+
+      $('#appointmentlist').DataTable({
+        processing: true,
+        serverSide: true,
+        ajax: {
+          url: '/api/v1/appointments',
+          type: 'GET',
+          dataSrc: function(json) {
+            return json.data.map(item => [
+              `<input type="checkbox" class="checkbox-select" data-id="${item.id}">`,
+              `<div class="d-flex"><img src="includes/images/05.jpg" alt="" width="25" height="25" class="rounded-circle"><div class="ms-2 text-dark">${item.patientName}</div></div>`,
+              item.consultingDoctor,
+              item.treatment,
+              item.mobile,
+              item.email,
+              item.date,
+              item.time,
+              `<a href="/admin-editappointment.html?id=${item.id}" class="btn"><i class="bi bi-pencil-square"></i></a>
+               <a href="javascript:void(0)" class="btn delete-btn" data-id="${item.id}" data-bs-toggle="modal" data-bs-target="#deleteconf"><i class="bi bi-trash"></i></a>`
+            ]);
+          }
+        },
+        columns: [
+          { orderable: false, searchable: false },
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          null,
+          { orderable: false, searchable: false }
+        ],
+        pageLength: 10,
+        responsive: true,
+        language: {
+          emptyTable: "No appointments found"
+        }
+      });
+
+      // Delete confirmation
+      $('.modal').on('click', '.btn-danger', function() {
+        const id = $('#deleteconf').data('id');
+        if (id) {
+          $.ajax({
+            url: `/api/v1/appointments/${id}`,
+            type: 'DELETE',
+            success: function() {
+              $('#appointmentlist').DataTable().ajax.reload();
+              $('#deleteconf').modal('hide');
+            },
+            error: function() {
+              alert('Error deleting appointment');
+              $('#deleteconf').modal('hide');
+            }
+          });
+        }
+      });
+
+      // Set delete modal data
+      $(document).on('click', '.delete-btn', function() {
+        const id = $(this).data('id');
+        $('#deleteconf').data('id', id);
+      });
+
+      $('.logout-btn').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+          url: '/api/v1/auth/logout',
+          method: 'POST',
+          success: function() {
+            window.location.href = '/admin-index.html';
+          },
+          error: function() {
+            console.error('Logout failed');
+          }
+        });
+      });
+
+      // Update current year
+      $('#currentYear').text(new Date().getFullYear());
+    });
+  </script>
+</body>
+</html>

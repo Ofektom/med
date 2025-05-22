@@ -627,11 +627,11 @@
       const userStatusElement = $('.user-status');
       let lastActivityTime = Date.now();
       const INACTIVITY_TIMEOUT = 30 * 60 * 1000;
-
+  
       $(document).on('mousemove keydown click', function () {
         lastActivityTime = Date.now();
       });
-
+  
       function checkInactivity() {
         const currentTime = Date.now();
         if (currentTime - lastActivityTime > INACTIVITY_TIMEOUT) {
@@ -642,9 +642,9 @@
           window.location.href = '/index.html';
         }
       }
-
+  
       setInterval(checkInactivity, 60 * 1000);
-
+  
       function updateUserStatus() {
         if (!token) {
           userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
@@ -654,7 +654,7 @@
           }, 1000);
           return;
         }
-
+  
         $.ajax({
           url: '/api/v1/auth/validate-token',
           type: 'GET',
@@ -714,10 +714,10 @@
           }
         });
       }
-
+  
       updateUserStatus();
       setInterval(updateUserStatus, 300000);
-
+  
       const userData = JSON.parse(localStorage.getItem('user'));
       if (userData) {
         const userFirstName = userData.firstName || 'User';
@@ -733,15 +733,651 @@
         window.location.href = '/index.html';
         return;
       }
-
+  
       $('#currentYear').text(new Date().getFullYear());
-
+  
+      // Determine userId from URL or localStorage
+      const urlParams = new URLSearchParams(window.location.search);
+      let userId = urlParams.get('id');
+      if (!userId && userData && userData.id) {
+        userId = userData.id; // Fallback to localStorage id
+      }
+  
+      if (!userId) {
+        alert('No user ID provided.');
+        return;
+      }
+  
+      // Fetch user details
+      $.ajax({
+        url: `/api/v1/users/${userId}`,
+        type: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+          if (response && response.data && response.data.user) {
+            const user = response.data.user;
+            const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
+            const location = `${user.address?.city || ''}, ${user.address?.state || ''}, ${user.address?.country || ''}`.trim() || 'N/A';
+            const profilePicture = user.profilePicture || 'includes/images/01_2.png';
+            const designation = user.designation || 'N/A';
+  
+            $('#profilePicture').attr('src', profilePicture);
+            $('#doctorFullName').text(fullName);
+            $('#doctorDesignation').text(designation);
+            $('#fullName').html(`<i class="bi bi-person-fill"></i> ${fullName}`);
+            $('#phoneNumberInput').val(user.phoneNumber || '');
+            $('#email').html(`<i class="bi bi-envelope-fill"></i> ${user.email || 'N/A'}`);
+            $('#membershipNo').html(`<i class="bi bi-id-card-fill"></i> ${user.membershipNo || 'N/A'}`);
+            $('#locationInput').val(location);
+            $('#aboutInput').val(user.about || '');
+  
+            // Populate account settings form
+            $('#membershipNoInput').val(user.membershipNo || '');
+            $('#mobileInput').val(user.phoneNumber || '');
+            $('#emailInput').val(user.email || '');
+            $('#addressInput').val(user.address?.fullAddress || '');
+          } else {
+            alert('No user data found.');
+          }
+        },
+        error: function(xhr) {
+          let message = 'Failed to load user details.';
+          if (xhr.status === 401) {
+            message = 'Unauthorized: Please log in again.';
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          } else if (xhr.responseJSON && xhr.responseJSON.message) {
+            message = xhr.responseJSON.message;
+          }
+          alert(message);
+        }
+      });
+  
+      // Fetch professional details (education, experience, conferences)
+      $.ajax({
+        url: `/api/v1/users/${userId}/professional-details`,
+        type: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+          if (response && response.data) {
+            const professionalDetails = response.data;
+            const educations = professionalDetails.educations || [];
+            const experiences = professionalDetails.experiences || [];
+            const conferences = professionalDetails.conferences || [];
+  
+            // Populate education fields
+            $('#education_fields').empty();
+            educations.forEach((edu, index) => {
+              $('#education_fields').append(`
+                <div class="row mb-3 education-entry" data-index="${index}">
+                  <div class="col-sm-3">
+                    <input type="text" class="form-control rounded" name="education_year_${index}" placeholder="Year" value="${edu.year || ''}">
+                  </div>
+                  <div class="col-sm-3">
+                    <input type="text" class="form-control rounded" name="education_degree_${index}" placeholder="Degree" value="${edu.degree || ''}">
+                  </div>
+                  <div class="col-sm-3">
+                    <input type="text" class="form-control rounded" name="education_institute_${index}" placeholder="Institute" value="${edu.institute || ''}">
+                  </div>
+                  <div class="col-sm-2">
+                    <input type="text" class="form-control rounded" name="education_result_${index}" placeholder="Result" value="${edu.result || ''}">
+                  </div>
+                  <div class="col-sm-1">
+                    <button type="button" class="btn btn-danger remove-education" data-index="${index}">Remove</button>
+                  </div>
+                </div>
+              `);
+            });
+  
+            // Populate experience fields
+            $('#experience_fields').empty();
+            experiences.forEach((exp, index) => {
+              $('#experience_fields').append(`
+                <div class="row mb-3 experience-entry" data-index="${index}">
+                  <div class="col-sm-2">
+                    <input type="text" class="form-control rounded" name="experience_year_${index}" placeholder="Year" value="${exp.year || ''}">
+                  </div>
+                  <div class="col-sm-2">
+                    <input type="text" class="form-control rounded" name="experience_department_${index}" placeholder="Department" value="${exp.department || ''}">
+                  </div>
+                  <div class="col-sm-2">
+                    <input type="text" class="form-control rounded" name="experience_position_${index}" placeholder="Position" value="${exp.position || ''}">
+                  </div>
+                  <div class="col-sm-2">
+                    <input type="text" class="form-control rounded" name="experience_hospital_${index}" placeholder="Hospital" value="${exp.hospital || ''}">
+                  </div>
+                  <div class="col-sm-2">
+                    <input type="text" class="form-control rounded" name="experience_feedback_${index}" placeholder="Feedback" value="${exp.feedback || ''}">
+                  </div>
+                  <div class="col-sm-1">
+                    <button type="button" class="btn btn-danger remove-experience" data-index="${index}">Remove</button>
+                  </div>
+                </div>
+              `);
+            });
+  
+            // Populate conference fields
+            $('#conference_fields').empty();
+            conferences.forEach((conf, index) => {
+              $('#conference_fields').append(`
+                <div class="row mb-3 conference-entry" data-index="${index}">
+                  <div class="col-sm-10">
+                    <input type="text" class="form-control rounded" name="conference_${index}" placeholder="Conference Description" value="${conf || ''}">
+                  </div>
+                  <div class="col-sm-2">
+                    <button type="button" class="btn btn-danger remove-conference" data-index="${index}">Remove</button>
+                  </div>
+                </div>
+              `);
+            });
+          }
+        },
+        error: function(xhr) {
+          let message = 'Failed to load professional details.';
+          if (xhr.status === 401) {
+            message = 'Unauthorized: Please log in again.';
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          } else if (xhr.responseJSON && xhr.responseJSON.message) {
+            message = xhr.responseJSON.message;
+          }
+          alert(message);
+        }
+      });
+  
+      // Save personal info
+      $('#edit_personal_info').on('submit', function(e) {
+        e.preventDefault();
+  
+        const professionalDetailsData = {
+          educations: [],
+          experiences: [],
+          conferences: []
+        };
+  
+        // Collect education data
+        $('#education_fields .education-entry').each(function() {
+          const index = $(this).data('index');
+          professionalDetailsData.educations.push({
+            year: $(`input[name="education_year_${index}"]`).val(),
+            degree: $(`input[name="education_degree_${index}"]`).val(),
+            institute: $(`input[name="education_institute_${index}"]`).val(),
+            result: $(`input[name="education_result_${index}"]`).val()
+          });
+        });
+  
+        // Collect experience data
+        $('#experience_fields .experience-entry').each(function() {
+          const index = $(this).data('index');
+          professionalDetailsData.experiences.push({
+            year: $(`input[name="experience_year_${index}"]`).val(),
+            department: $(`input[name="experience_department_${index}"]`).val(),
+            position: $(`input[name="experience_position_${index}"]`).val(),
+            hospital: $(`input[name="experience_hospital_${index}"]`).val(),
+            feedback: $(`input[name="experience_feedback_${index}"]`).val()
+          });
+        });
+  
+        // Collect conference data
+        $('#conference_fields .conference-entry').each(function() {
+          const index = $(this).data('index');
+          professionalDetailsData.conferences.push($(`input[name="conference_${index}"]`).val());
+        });
+  
+        const personalData = {
+          phoneNumber: $('#phoneNumberInput').val(),
+          location: $('#locationInput').val(),
+          about: $('#aboutInput').val()
+        };
+  
+        $.ajax({
+          url: `/api/v1/users/${userId}`,
+          type: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          data: JSON.stringify(personalData),
+          success: function(response) {
+            alert('Personal details updated successfully.');
+            // Update localStorage with new data if needed
+            if (response.data && response.data.user) {
+              localStorage.setItem('user', JSON.stringify(response.data.user));
+            }
+          },
+          error: function(xhr) {
+            let message = 'Failed to update personal details.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            alert(message);
+          }
+        });
+  
+        $.ajax({
+          url: `/api/v1/users/${userId}/professional-details`,
+          type: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          data: JSON.stringify(professionalDetailsData),
+          success: function(response) {
+            alert('Professional details updated successfully.');
+          },
+          error: function(xhr) {
+            let message = 'Failed to update professional details.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            alert(message);
+          }
+        });
+      });
+  
+      // Add education, experience, and conference handlers (unchanged)
+      $('#addEducation').on('click', function() {
+        const index = $('#education_fields .education-entry').length;
+        $('#education_fields').append(`
+          <div class="row mb-3 education-entry" data-index="${index}">
+            <div class="col-sm-3">
+              <input type="text" class="form-control rounded" name="education_year_${index}" placeholder="Year">
+            </div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control rounded" name="education_degree_${index}" placeholder="Degree">
+            </div>
+            <div class="col-sm-3">
+              <input type="text" class="form-control rounded" name="education_institute_${index}" placeholder="Institute">
+            </div>
+            <div class="col-sm-2">
+              <input type="text" class="form-control rounded" name="education_result_${index}" placeholder="Result">
+            </div>
+            <div class="col-sm-1">
+              <button type="button" class="btn btn-danger remove-education" data-index="${index}">Remove</button>
+            </div>
+          </div>
+        `);
+      });
+  
+      $('#addExperience').on('click', function() {
+        const index = $('#experience_fields .experience-entry').length;
+        $('#experience_fields').append(`
+          <div class="row mb-3 experience-entry" data-index="${index}">
+            <div class="col-sm-2">
+              <input type="text" class="form-control rounded" name="experience_year_${index}" placeholder="Year">
+            </div>
+            <div class="col-sm-2">
+              <input type="text" class="form-control rounded" name="experience_department_${index}" placeholder="Department">
+            </div>
+            <div class="col-sm-2">
+              <input type="text" class="form-control rounded" name="experience_position_${index}" placeholder="Position">
+            </div>
+            <div class="col-sm-2">
+              <input type="text" class="form-control rounded" name="experience_hospital_${index}" placeholder="Hospital">
+            </div>
+            <div class="col-sm-2">
+              <input type="text" class="form-control rounded" name="experience_feedback_${index}" placeholder="Feedback">
+            </div>
+            <div class="col-sm-1">
+              <button type="button" class="btn btn-danger remove-experience" data-index="${index}">Remove</button>
+            </div>
+          </div>
+        `);
+      });
+  
+      $('#addConference').on('click', function() {
+        const index = $('#conference_fields .conference-entry').length;
+        $('#conference_fields').append(`
+          <div class="row mb-3 conference-entry" data-index="${index}">
+            <div class="col-sm-10">
+              <input type="text" class="form-control rounded" name="conference_${index}" placeholder="Conference Description">
+            </div>
+            <div class="col-sm-2">
+              <button type="button" class="btn btn-danger remove-conference" data-index="${index}">Remove</button>
+            </div>
+          </div>
+        `);
+      });
+  
+      $(document).on('click', '.remove-education', function() {
+        $(this).closest('.education-entry').remove();
+      });
+  
+      $(document).on('click', '.remove-experience', function() {
+        $(this).closest('.experience-entry').remove();
+      });
+  
+      $(document).on('click', '.remove-conference', function() {
+        $(this).closest('.conference-entry').remove();
+      });
+  
+      // Fetch additional data (stats, specialties, activities, etc.) - unchanged
+      $.ajax({
+        url: `/api/v1/users/${userId}/stats`,
+        type: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+          if (response && response.data) {
+            const stats = response.data;
+            $('#doctorStats').html(`
+              <div class="col-4 mb-4 mb-md-0 col-md-2">
+                <div>
+                  <span class="text-gray pb-3">Operations</span>
+                  <h4 class="text-primary mb-0">${stats.operations || 0}</h4>
+                </div>
+              </div>
+              <div class="col-4 mb-4 mb-md-0 col-md-2">
+                <div>
+                  <span class="text-gray pb-3">Hospitals</span>
+                  <h4 class="text-primary mb-0">${stats.hospitals || 0}</h4>
+                </div>
+              </div>
+              <div class="col-4 mb-4 mb-md-0 col-md-2">
+                <div>
+                  <span class="text-gray pb-3">Patients</span>
+                  <h4 class="text-primary mb-0">${stats.patients || 0}</h4>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="justify-content-md-end d-flex flex-wrap gap-2">
+                  <a href="#" class="btn btn-primary rounded-4 fw-500 py-2 rounded-pill mw-120 px-4 text-capitalize me-2">
+                    <i class="fa fa-user-edit me-2"></i> Edit Profile
+                  </a>
+                  <button class="btn btn-secondary rounded-4 fw-500 py-2 rounded-pill px-4 text-capitalize me-2">
+                    <i class="fa fa-share-alt me-2"></i> Share Profile
+                  </button>
+                </div>
+              </div>
+            `);
+          }
+        },
+        error: function(xhr) {
+          if (xhr.status === 401) {
+            alert('Session expired. Please log in again.');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          }
+        }
+      });
+  
+      $.ajax({
+        url: `/api/v1/users/${userId}/specialties`,
+        type: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+          if (response && response.data && Array.isArray(response.data)) {
+            const specialties = response.data;
+            const specialityBox = $('#speciality_box');
+            specialityBox.empty();
+            specialties.forEach(specialty => {
+              const badgeClass = specialty.level === 'Professional' ? 'badge-success text-success' : 
+                               specialty.level === 'Certified' ? 'badge-orange text-orange' : 'badge-secondary text-info';
+              specialityBox.append(`
+                <div class="d-flex flex-wrap align-items-center py-2 mb-2 border-b-dashed">
+                  <div class="rounded-circle ${badgeClass} reward-circle d-flex align-items-center justify-content-center me-3">
+                    <i class="bi bi-trophy-fill"></i>
+                  </div>
+                  <div>
+                    <h6 class="text-dark-primary mb-1">${specialty.level || 'N/A'}</h6>
+                    <span class="text-gray">${specialty.description || 'N/A'}</span>
+                  </div>
+                </div>
+              `);
+            });
+          }
+        },
+        error: function(xhr) {
+          if (xhr.status === 401) {
+            alert('Session expired. Please log in again.');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          }
+        }
+      });
+  
+      $.ajax({
+        url: `/api/v1/users/${userId}/activities`,
+        type: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+          if (response && response.data && Array.isArray(response.data)) {
+            const activities = response.data;
+            const activityList = $('#activity_list');
+            activityList.empty();
+            activities.forEach(activity => {
+              activityList.append(`
+                <li class="event mb-3">
+                  <h6 class="text-dark-primary mb-1">${activity.title || 'N/A'}</h6>
+                  <span class="text-gray">${activity.description || 'N/A'}</span>
+                </li>
+              `);
+            });
+          }
+        },
+        error: function(xhr) {
+          if (xhr.status === 401) {
+            alert('Session expired. Please log in again.');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          }
+        }
+      });
+  
+      $.ajax({
+        url: `/api/v1/users/${userId}/patient-notes`,
+        type: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+          if (response && response.data && Array.isArray(response.data)) {
+            const notes = response.data;
+            const patNotes = $('#pat_notes ul');
+            patNotes.empty();
+            notes.forEach(note => {
+              const badgeClass = note.status === 'Open' ? 'badge-success text-success' : 'badge-orange text-orange';
+              patNotes.append(`
+                <li class="py-2 px-3">
+                  <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#patnotes" data-name="${note.patientName}" data-note="${note.content}">
+                    <div class="d-flex align-items-center justify-content-between">
+                      <div class="text-dark poppins w-75">
+                        <span class="d-block text-capitalize text-dark fw-600 px-0 fs-14 mb-2">${note.patientName || 'N/A'}</span>
+                        <div class="w-100 text-truncate overflow-hidden fs-14">${note.content || 'N/A'}</div>
+                      </div>
+                      <div class="w-25 text-end">
+                        <div class="badge ${badgeClass} rounded-pill px-3">${note.status || 'N/A'}</div>
+                      </div>
+                    </div>
+                  </a>
+                </li>
+              `);
+            });
+  
+            $('#patnotes').on('show.bs.modal', function (event) {
+              const button = $(event.relatedTarget);
+              const name = button.data('name');
+              const note = button.data('note');
+              $('#modalPatientName').text(name);
+              $('#modalPatientNote').text(note);
+            });
+          }
+        },
+        error: function(xhr) {
+          if (xhr.status === 401) {
+            alert('Session expired. Please log in again.');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          }
+        }
+      });
+  
+      $.ajax({
+        url: `/api/v1/users/${userId}/schedules`,
+        type: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+          if (response && response.data && Array.isArray(response.data)) {
+            const schedules = response.data;
+            const scheduleBox = $('#schedule-box');
+            scheduleBox.empty();
+            schedules.forEach(schedule => {
+              const badgeClass = schedule.patientType === 'New Patient' ? 'bg-primary' : 'bg-orange';
+              scheduleBox.append(`
+                <div class="py-2 mb-2 border-b-dashed">
+                  <div class="fs-12 text-gray">${new Date(schedule.time).toLocaleString()}</div>
+                  <div class="d-flex align-items-center justify-content-between">
+                    <h6 class="text-dark-primary mb-1 fw-normal">${schedule.patientName || 'N/A'}</h6>
+                    <div>
+                      <span class="custom-badge badge ${badgeClass} text-white align-items-center rounded-pill text-capitalize me-2">${schedule.patientType || 'N/A'}</span>
+                    </div>
+                  </div>
+                </div>
+              `);
+            });
+          }
+        },
+        error: function(xhr) {
+          if (xhr.status === 401) {
+            alert('Session expired. Please log in again.');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          }
+        }
+      });
+  
+      $.ajax({
+        url: `/api/v1/users/${userId}/education`,
+        type: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+          if (response && response.data && Array.isArray(response.data)) {
+            const education = response.data;
+            const educationTable = $('#education_table');
+            educationTable.empty();
+            education.forEach(edu => {
+              educationTable.append(`
+                <tr>
+                  <td>${edu.year || 'N/A'}</td>
+                  <td>${edu.degree || 'N/A'}</td>
+                  <td>${edu.institute || 'N/A'}</td>
+                  <td>
+                    <span class="custom-badge badge bg-secondary text-white align-items-center rounded-pill text-capitalize me-2">${edu.result || 'N/A'}</span>
+                  </td>
+                </tr>
+              `);
+            });
+          }
+        },
+        error: function(xhr) {
+          if (xhr.status === 401) {
+            alert('Session expired. Please log in again.');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          }
+        }
+      });
+  
+      $.ajax({
+        url: `/api/v1/users/${userId}/experience`,
+        type: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+          if (response && response.data && Array.isArray(response.data)) {
+            const experiences = response.data;
+            const experienceTable = $('#experience_table');
+            experienceTable.empty();
+            experiences.forEach(exp => {
+              const badgeClass = exp.feedback === 'Excellent' || exp.feedback === 'Good' ? 'bg-success' : 'bg-warning';
+              experienceTable.append(`
+                <tr>
+                  <td>${exp.year || 'N/A'}</td>
+                  <td>${exp.department || 'N/A'}</td>
+                  <td>${exp.position || 'N/A'}</td>
+                  <td>${exp.hospital || 'N/A'}</td>
+                  <td>
+                    <span class="custom-badge badge ${badgeClass} text-white align-items-center rounded-pill text-capitalize me-2">${exp.feedback || 'N/A'}</span>
+                  </td>
+                </tr>
+              `);
+            });
+          }
+        },
+        error: function(xhr) {
+          if (xhr.status === 401) {
+            alert('Session expired. Please log in again.');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          }
+        }
+      });
+  
+      $.ajax({
+        url: `/api/v1/users/${userId}/conferences`,
+        type: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+          if (response && response.data && Array.isArray(response.data)) {
+            const conferences = response.data;
+            const conferencesDiv = $('#conferences');
+            conferencesDiv.empty();
+            conferences.forEach(conf => {
+              conferencesDiv.append(`<p class="text-gray">${conf.description || 'N/A'}</p>`);
+            });
+          }
+        },
+        error: function(xhr) {
+          if (xhr.status === 401) {
+            alert('Session expired. Please log in again.');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          }
+        }
+      });
+  
       function performSearch(query, targetResults) {
         if (query.length < 3) {
           targetResults.hide();
           return;
         }
-
+  
         $.ajax({
           url: `/api/v1/search/users?query=${encodeURIComponent(query)}&page=1&size=10`,
           type: 'GET',
@@ -751,23 +1387,23 @@
           success: function (response) {
             const resultsList = targetResults.find('ul');
             resultsList.empty();
-
+  
             if (response.data && response.data.content && response.data.content.length > 0) {
               response.data.content.forEach(user => {
                 resultsList.append(`
                   <li class="p-2 rounded-end-3">
-                    <a href="/fd-allassets.html?assetId=${user.id}">
+                    <a href="/admin-profile.html?id=${user.id}">
                       <div class="d-flex align-items-center notification-row">
                         <div class="d-flex align-items-center text-center p-0 notification-user-img">
-                          <img src="${user.image || '/includes/images/01.jpg'}" width="48" height="48" alt="">
+                          <img src="${user.profilePicture || '/includes/images/01.jpg'}" width="48" height="48" alt="">
                         </div>
                         <div class="notification-content">
                           <div class="text-dark mb-0 fw-500 notification-msg">
                             <span class="text-dark fw-bold mb-0">${user.firstName || ''} ${user.lastName || ''}</span>
                           </div>
                           <div class="d-flex justify-content-between">
-                            <div class="w-100 text-truncate fs-12 fw-500">${user.membershipNo}</div>
-                            <p class="text-dark text-end mb-0 fs-12 fw-500">${user.email} units</p>
+                            <div class="w-100 text-truncate fs-12 fw-500">${user.membershipNo || 'N/A'}</div>
+                            <p class="text-dark text-end mb-0 fs-12 fw-500">${user.email || 'N/A'}</p>
                           </div>
                         </div>
                       </div>
@@ -779,7 +1415,7 @@
             } else {
               resultsList.append(`
                 <li class="p-2 rounded-end-3">
-                  <div class="text-dark fs-12">No /assets found.</div>
+                  <div class="text-dark fs-12">No users found.</div>
                 </li>
               `);
               targetResults.show();
@@ -806,28 +1442,28 @@
           }
         });
       }
-
+  
       $('.desktop-search-input').on('input', function () {
         const query = $(this).val().trim();
         performSearch(query, $('#desktop-search-results'));
       });
-
+  
       $('.mobile-search-input').on('input', function () {
         const query = $(this).val().trim();
         performSearch(query, $('#mobile-search-results'));
       });
-
+  
       $(document).on('click', function (e) {
         if (!$(e.target).closest('#desktop-search-form').length && !$(e.target).closest('#mobile-search-form').length) {
           $('#desktop-search-results').hide();
           $('#mobile-search-results').hide();
         }
       });
-
+  
       $('#desktop-search-form, #mobile-search-form').on('submit', function (e) {
         e.preventDefault();
       });
-
+  
       function fetchNotifications() {
         $.ajax({
           url: '/api/v1/notifications',
@@ -839,7 +1475,7 @@
             if (response && response.data && Array.isArray(response.data)) {
               const notifications = response.data;
               const notificationBox = $('#notification_box');
-              const mobileNotifications = $('#mobile-notifications');
+              const mobileNotifications = $('#mobile-notifications ul');
               notificationBox.empty();
               mobileNotifications.empty();
               notifications.forEach(notification => {
@@ -876,7 +1512,7 @@
           }
         });
       }
-
+  
       function fetchMessages() {
         $.ajax({
           url: '/api/v1/messages',
@@ -888,7 +1524,7 @@
             if (response && response.data && Array.isArray(response.data)) {
               const messages = response.data;
               const messageBox = $('#message_box');
-              const mobileMessages = $('#mobile-messages');
+              const mobileMessages = $('#mobile-messages ul');
               messageBox.empty();
               mobileMessages.empty();
               messages.forEach(message => {
@@ -927,544 +1563,14 @@
           }
         });
       }
-
-      const urlParams = new URLSearchParams(window.location.search);
-      const userId = urlParams.get('id');
-
-      if (userId) {
-        // Fetch doctor details
-        $.ajax({
-            url: `/api/v1/users/${userId}`,
-            type: 'GET',
-            headers: {
-              'Authorization': 'Bearer ' + token
-            },
-            success: function(response) {
-              if (response && response.data && response.data.user) {
-                const user = response.data.user;
-                const fullName = `${user.firstName || ''} ${user.lastName || ''}`.trim();
-                const location = `${user.address?.city || ''}, ${user.address?.state || ''}, ${user.address?.country || ''}`.trim() || 'N/A';
-                const profilePicture = user.profilePicture || 'includes/images/01_2.png';
-                const designation = user.designation || 'N/A';
-
-                $('#profilePicture').attr('src', profilePicture);
-                $('#doctorFullName').text(fullName);
-                $('#doctorDesignation').text(designation);
-                $('#fullName').html(`<i class="bi bi-person-fill"></i>${fullName}`);
-                $('#phoneNumberInput').val(user.phoneNumber || '');
-                $('#email').html(`<i class="bi bi-envelope-fill"></i> ${user.email || 'N/A'}`);
-                $('#membershipNo').html(`<i class="bi bi-id-card-fill"></i> ${user.membershipNo || 'N/A'}`);
-                $('#locationInput').val(location);
-                $('#aboutInput').val(user.about || '');
-                
-                // Populate account settings form
-                $('#membershipNoInput').val(user.membershipNo || '');
-                $('#mobileInput').val(user.phoneNumber || '');
-                $('#emailInput').val(user.email || '');
-                $('#addressInput').val(user.address?.fullAddress || '');
-              } else {
-                alert('No user data found.');
-              }
-            },
-            error: function(xhr) {
-              let message = 'Failed to load user details.';
-              if (xhr.status === 401) {
-                message = 'Unauthorized: Please log in again.';
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('user');
-                window.location.href = '/index.html';
-              } else if (xhr.responseJSON && xhr.responseJSON.message) {
-                message = xhr.responseJSON.message;
-              }
-              alert(message);
-            }
-          });
-
-          // Fetch professional details (education, experience, conferences)
-          $.ajax({
-            url: `/api/v1/users/${userId}/professional-details`,
-            type: 'GET',
-            headers: {
-              'Authorization': 'Bearer ' + token
-            },
-            success: function(response) {
-              if (response && response.data) {
-                const professionalDetails = response.data;
-                educations = professionalDetails.educations || [];
-                experiences = professionalDetails.experiences || [];
-                conferences = professionalDetails.conferences || [];
-
-                // Populate education fields
-                $('#education_fields').empty();
-                educations.forEach((edu, index) => {
-                  $('#education_fields').append(`
-                    <div class="row mb-3 education-entry" data-index="${index}">
-                      <div class="col-sm-3">
-                        <input type="text" class="form-control rounded" name="education_year_${index}" placeholder="Year" value="${edu.year || ''}">
-                      </div>
-                      <div class="col-sm-3">
-                        <input type="text" class="form-control rounded" name="education_degree_${index}" placeholder="Degree" value="${edu.degree || ''}">
-                      </div>
-                      <div class="col-sm-3">
-                        <input type="text" class="form-control rounded" name="education_institute_${index}" placeholder="Institute" value="${edu.institute || ''}">
-                      </div>
-                      <div class="col-sm-2">
-                        <input type="text" class="form-control rounded" name="education_result_${index}" placeholder="Result" value="${edu.result || ''}">
-                      </div>
-                      <div class="col-sm-1">
-                        <button type="button" class="btn btn-danger remove-education" data-index="${index}">Remove</button>
-                      </div>
-                    </div>
-                  `);
-                });
-
-                // Populate experience fields
-                $('#experience_fields').empty();
-                experiences.forEach((exp, index) => {
-                  $('#experience_fields').append(`
-                    <div class="row mb-3 experience-entry" data-index="${index}">
-                      <div class="col-sm-2">
-                        <input type="text" class="form-control rounded" name="experience_year_${index}" placeholder="Year" value="${exp.year || ''}">
-                      </div>
-                      <div class="col-sm-2">
-                        <input type="text" class="form-control rounded" name="experience_department_${index}" placeholder="Department" value="${exp.department || ''}">
-                      </div>
-                      <div class="col-sm-2">
-                        <input type="text" class="form-control rounded" name="experience_position_${index}" placeholder="Position" value="${exp.position || ''}">
-                      </div>
-                      <div class="col-sm-2">
-                        <input type="text" class="form-control rounded" name="experience_hospital_${index}" placeholder="Hospital" value="${exp.hospital || ''}">
-                      </div>
-                      <div class="col-sm-2">
-                        <input type="text" class="form-control rounded" name="experience_feedback_${index}" placeholder="Feedback" value="${exp.feedback || ''}">
-                      </div>
-                      <div class="col-sm-1">
-                        <button type="button" class="btn btn-danger remove-experience" data-index="${index}">Remove</button>
-                      </div>
-                    </div>
-                  `);
-                });
-
-                // Populate conference fields
-                $('#conference_fields').empty();
-                conferences.forEach((conf, index) => {
-                  $('#conference_fields').append(`
-                    <div class="row mb-3 conference-entry" data-index="${index}">
-                      <div class="col-sm-10">
-                        <input type="text" class="form-control rounded" name="conference_${index}" placeholder="Conference Description" value="${conf || ''}">
-                      </div>
-                      <div class="col-sm-2">
-                        <button type="button" class="btn btn-danger remove-conference" data-index="${index}">Remove</button>
-                      </div>
-                    </div>
-                  `);
-                });
-              }
-            },
-            error: function(xhr) {
-              let message = 'Failed to load professional details.';
-              if (xhr.status === 401) {
-                message = 'Unauthorized: Please log in again.';
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('user');
-                window.location.href = '/index.html';
-              } else if (xhr.responseJSON && xhr.responseJSON.message) {
-                message = xhr.responseJSON.message;
-              }
-              alert(message);
-            }
-          });
-
-          // ... (rest of the JavaScript for adding/removing entries and saving remains unchanged, just update the URL in the save function) ...
-
-          // Save personal info
-          $('#edit_personal_info').on('submit', function(e) {
-            e.preventDefault();
-
-            const professionalDetailsData = {
-              educations: [],
-              experiences: [],
-              conferences: []
-            };
-
-            // Collect education data
-            $('#education_fields .education-entry').each(function() {
-              const index = $(this).data('index');
-              professionalDetailsData.educations.push({
-                year: $(`input[name="education_year_${index}"]`).val(),
-                degree: $(`input[name="education_degree_${index}"]`).val(),
-                institute: $(`input[name="education_institute_${index}"]`).val(),
-                result: $(`input[name="education_result_${index}"]`).val()
-              });
-            });
-
-            // Collect experience data
-            $('#experience_fields .experience-entry').each(function() {
-              const index = $(this).data('index');
-              professionalDetailsData.experiences.push({
-                year: $(`input[name="experience_year_${index}"]`).val(),
-                department: $(`input[name="experience_department_${index}"]`).val(),
-                position: $(`input[name="experience_position_${index}"]`).val(),
-                hospital: $(`input[name="experience_hospital_${index}"]`).val(),
-                feedback: $(`input[name="experience_feedback_${index}"]`).val()
-              });
-            });
-
-            // Collect conference data
-            $('#conference_fields .conference-entry').each(function() {
-              const index = $(this).data('index');
-              professionalDetailsData.conferences.push($(`input[name="conference_${index}"]`).val());
-            });
-
-            $.ajax({
-              url: `/api/v1/users/${userId}/professional-details`,
-              type: 'PUT',
-              headers: {
-                'Authorization': 'Bearer ' + token,
-                'Content-Type': 'application/json'
-              },
-              data: JSON.stringify(professionalDetailsData),
-              success: function(response) {
-                alert('Professional details updated successfully.');
-              },
-              error: function(xhr) {
-                let message = 'Failed to update professional details.';
-                if (xhr.status === 401) {
-                  message = 'Unauthorized: Please log in again.';
-                  localStorage.removeItem('access_token');
-                  localStorage.removeItem('user');
-                  window.location.href = '/index.html';
-                } else if (xhr.responseJSON && xhr.responseJSON.message) {
-                  message = xhr.responseJSON.message;
-                }
-                alert(message);
-              }
-            });
-          });
-
-        // Fetch user stats
-        $.ajax({
-          url: `/api/v1/users/${userId}/stats`,
-          type: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          },
-          success: function(response) {
-            if (response && response.data) {
-              const stats = response.data;
-              $('#doctorStats').html(`
-                <div class="col-4 mb-4 mb-md-0 col-md-2">
-                  <div>
-                    <span class="text-gray pb-3">Operations</span>
-                    <h4 class="text-primary mb-0">${stats.operations || 0}</h4>
-                  </div>
-                </div>
-                <div class="col-4 mb-4 mb-md-0 col-md-2">
-                  <div>
-                    <span class="text-gray pb-3">Hospitals</span>
-                    <h4 class="text-primary mb-0">${stats.hospitals || 0}</h4>
-                  </div>
-                </div>
-                <div class="col-4 mb-4 mb-md-0 col-md-2">
-                  <div>
-                    <span class="text-gray pb-3">Patients</span>
-                    <h4 class="text-primary mb-0">${stats.patients || 0}</h4>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="justify-content-md-end d-flex flex-wrap gap-2">
-                    <a href="#" class="btn btn-primary rounded-4 fw-500 py-2 rounded-pill mw-120 px-4 text-capitalize me-2">
-                      <i class="fa fa-user-edit me-2"></i> Edit Profile
-                    </a>
-                    <button class="btn btn-secondary rounded-4 fw-500 py-2 rounded-pill px-4 text-capitalize me-2">
-                      <i class="fa fa-share-alt me-2"></i> Share Profile
-                    </button>
-                  </div>
-                </div>
-              `);
-            }
-          },
-          error: function(xhr) {
-            if (xhr.status === 401) {
-              alert('Session expired. Please log in again.');
-              localStorage.removeItem('access_token');
-              localStorage.removeItem('user');
-              window.location.href = '/index.html';
-            }
-          }
-        });
-
-        // Fetch specialties
-        $.ajax({
-          url: `/api/v1/users/${userId}/specialties`,
-          type: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          },
-          success: function(response) {
-            if (response && response.data && Array.isArray(response.data)) {
-              const specialties = response.data;
-              const specialityBox = $('#speciality_box');
-              specialityBox.empty();
-              specialties.forEach(specialty => {
-                const badgeClass = specialty.level === 'Professional' ? 'badge-success text-success' : 
-                                 specialty.level === 'Certified' ? 'badge-orange text-orange' : 'badge-secondary text-info';
-                specialityBox.append(`
-                  <div class="d-flex flex-wrap align-items-center py-2 mb-2 border-b-dashed">
-                    <div class="rounded-circle ${badgeClass} reward-circle d-flex align-items-center justify-content-center me-3">
-                      <i class="bi bi-trophy-fill"></i>
-                    </div>
-                    <div>
-                      <h6 class="text-dark-primary mb-1">${specialty.level || 'N/A'}</h6>
-                      <span class="text-gray">${specialty.description || 'N/A'}</span>
-                    </div>
-                  </div>
-                `);
-              });
-            }
-          },
-          error: function(xhr) {
-            if (xhr.status === 401) {
-              alert('Session expired. Please log in again.');
-              localStorage.removeItem('access_token');
-              localStorage.removeItem('user');
-              window.location.href = '/index.html';
-            }
-          }
-        });
-
-        // Fetch activities
-        $.ajax({
-          url: `/api/v1/users/${userId}/activities`,
-          type: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          },
-          success: function(response) {
-            if (response && response.data && Array.isArray(response.data)) {
-              const activities = response.data;
-              const activityList = $('#activity_list');
-              activityList.empty();
-              activities.forEach(activity => {
-                activityList.append(`
-                  <li class="event mb-3">
-                    <h6 class="text-dark-primary mb-1">${activity.title || 'N/A'}</h6>
-                    <span class="text-gray">${activity.description || 'N/A'}</span>
-                  </li>
-                `);
-              });
-            }
-          },
-          error: function(xhr) {
-            if (xhr.status === 401) {
-              alert('Session expired. Please log in again.');
-              localStorage.removeItem('access_token');
-              localStorage.removeItem('user');
-              window.location.href = '/index.html';
-            }
-          }
-        });
-
-        // Fetch patient notes
-        $.ajax({
-          url: `/api/v1/users/${userId}/patient-notes`,
-          type: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          },
-          success: function(response) {
-            if (response && response.data && Array.isArray(response.data)) {
-              const notes = response.data;
-              const patNotes = $('#pat_notes ul');
-              patNotes.empty();
-              notes.forEach(note => {
-                const badgeClass = note.status === 'Open' ? 'badge-success text-success' : 'badge-orange text-orange';
-                patNotes.append(`
-                  <li class="py-2 px-3">
-                    <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#patnotes" data-name="${note.patientName}" data-note="${note.content}">
-                      <div class="d-flex align-items-center justify-content-between">
-                        <div class="text-dark poppins w-75">
-                          <span class="d-block text-capitalize text-dark fw-600 px-0 fs-14 mb-2">${note.patientName || 'N/A'}</span>
-                          <div class="w-100 text-truncate overflow-hidden fs-14">${note.content || 'N/A'}</div>
-                        </div>
-                        <div class="w-25 text-end">
-                          <div class="badge ${badgeClass} rounded-pill px-3">${note.status || 'N/A'}</div>
-                        </div>
-                      </div>
-                    </a>
-                  </li>
-                `);
-              });
-
-              // Handle modal data
-              $('#patnotes').on('show.bs.modal', function (event) {
-                const button = $(event.relatedTarget);
-                const name = button.data('name');
-                const note = button.data('note');
-                $('#modalPatientName').text(name);
-                $('#modalPatientNote').text(note);
-              });
-            }
-          },
-          error: function(xhr) {
-            if (xhr.status === 401) {
-              alert('Session expired. Please log in again.');
-              localStorage.removeItem('access_token');
-              localStorage.removeItem('user');
-              window.location.href = '/index.html';
-            }
-          }
-        });
-
-        // Fetch schedules
-        $.ajax({
-          url: `/api/v1/users/${userId}/schedules`,
-          type: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          },
-          success: function(response) {
-            if (response && response.data && Array.isArray(response.data)) {
-              const schedules = response.data;
-              const scheduleBox = $('#schedule-box');
-              scheduleBox.empty();
-              schedules.forEach(schedule => {
-                const badgeClass = schedule.patientType === 'New Patient' ? 'bg-primary' : 'bg-orange';
-                scheduleBox.append(`
-                  <div class="py-2 mb-2 border-b-dashed">
-                    <div class="fs-12 text-gray">${new Date(schedule.time).toLocaleString()}</div>
-                    <div class="d-flex align-items-center justify-content-between">
-                      <h6 class="text-dark-primary mb-1 fw-normal">${schedule.patientName || 'N/A'}</h6>
-                      <div>
-                        <span class="custom-badge badge ${badgeClass} text-white align-items-center rounded-pill text-capitalize me-2">${schedule.patientType || 'N/A'}</span>
-                      </div>
-                    </div>
-                  </div>
-                `);
-              });
-            }
-          },
-          error: function(xhr) {
-            if (xhr.status === 401) {
-              alert('Session expired. Please log in again.');
-              localStorage.removeItem('access_token');
-              localStorage.removeItem('user');
-              window.location.href = '/index.html';
-            }
-          }
-        });
-
-        // Fetch education
-        $.ajax({
-          url: `/api/v1/users/${userId}/education`,
-          type: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          },
-          success: function(response) {
-            if (response && response.data && Array.isArray(response.data)) {
-              const education = response.data;
-              const educationTable = $('#education_table');
-              educationTable.empty();
-              education.forEach(edu => {
-                educationTable.append(`
-                  <tr>
-                    <td>${edu.year || 'N/A'}</td>
-                    <td>${edu.degree || 'N/A'}</td>
-                    <td>${edu.institute || 'N/A'}</td>
-                    <td>
-                      <span class="custom-badge badge bg-secondary text-white align-items-center rounded-pill text-capitalize me-2">${edu.result || 'N/A'}</span>
-                    </td>
-                  </tr>
-                `);
-              });
-            }
-          },
-          error: function(xhr) {
-            if (xhr.status === 401) {
-              alert('Session expired. Please log in again.');
-              localStorage.removeItem('access_token');
-              localStorage.removeItem('user');
-              window.location.href = '/index.html';
-            }
-          }
-        });
-
-        // Fetch experience
-        $.ajax({
-          url: `/api/v1/users/${userId}/experience`,
-          type: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          },
-          success: function(response) {
-            if (response && response.data && Array.isArray(response.data)) {
-              const experiences = response.data;
-              const experienceTable = $('#experience_table');
-              experienceTable.empty();
-              experiences.forEach(exp => {
-                const badgeClass = exp.feedback === 'Excellent' || exp.feedback === 'Good' ? 'bg-success' : 'bg-warning';
-                experienceTable.append(`
-                  <tr>
-                    <td>${exp.year || 'N/A'}</td>
-                    <td>${exp.department || 'N/A'}</td>
-                    <td>${exp.position || 'N/A'}</td>
-                    <td>${exp.hospital || 'N/A'}</td>
-                    <td>
-                      <span class="custom-badge badge ${badgeClass} text-white align-items-center rounded-pill text-capitalize me-2">${exp.feedback || 'N/A'}</span>
-                    </td>
-                  </tr>
-                `);
-              });
-            }
-          },
-          error: function(xhr) {
-            if (xhr.status === 401) {
-              alert('Session expired. Please log in again.');
-              localStorage.removeItem('access_token');
-              localStorage.removeItem('user');
-              window.location.href = '/index.html';
-            }
-          }
-        });
-
-        // Fetch conferences
-        $.ajax({
-          url: `/api/v1/users/${userId}/conferences`,
-          type: 'GET',
-          headers: {
-            'Authorization': 'Bearer ' + token
-          },
-          success: function(response) {
-            if (response && response.data && Array.isArray(response.data)) {
-              const conferences = response.data;
-              const conferencesDiv = $('#conferences');
-              conferencesDiv.empty();
-              conferences.forEach(conf => {
-                conferencesDiv.append(`<p class="text-gray">${conf.description || 'N/A'}</p>`);
-              });
-            }
-          },
-          error: function(xhr) {
-            if (xhr.status === 401) {
-              alert('Session expired. Please log in again.');
-              localStorage.removeItem('access_token');
-              localStorage.removeItem('user');
-              window.location.href = '/index.html';
-            }
-          }
-        });
-      } else {
-        alert('No user ID provided.');
-      }
-
+  
       fetchNotifications();
       fetchMessages();
       setInterval(() => {
         fetchNotifications();
         fetchMessages();
       }, 30000);
-
+  
       $('.logout-btn').on('click', function(e) {
         e.preventDefault();
         $.ajax({

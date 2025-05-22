@@ -5,7 +5,6 @@ import com.ofektom.med.dto.response.ApiResponse;
 import com.ofektom.med.dto.response.EducationResponse;
 import com.ofektom.med.dto.response.ExperienceResponse;
 import com.ofektom.med.dto.response.ProfessionalDetailsResponse;
-import com.ofektom.med.exception.NotFoundException;
 import com.ofektom.med.model.Education;
 import com.ofektom.med.model.Experience;
 import com.ofektom.med.model.ProfessionalDetails;
@@ -35,7 +34,13 @@ public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsServic
 
     @Override
     public ResponseEntity<?> getProfessionalDetailsByUserId(Long userId) {
-        ProfessionalDetails professionalDetails = professionalDetailsRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException("Professional details not found for user ID: " + userId));
+        Optional<ProfessionalDetails> professionalDetailsOpt = professionalDetailsRepository.findByUserId(userId);
+        if (professionalDetailsOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "Professional details not found for user ID: " + userId, null, null));
+        }
+
+        ProfessionalDetails professionalDetails = professionalDetailsOpt.get();
         ProfessionalDetailsResponse professionalDetailsResponse = mapToProfessionalDetailsResponse(professionalDetails);
         ApiResponse<ProfessionalDetailsResponse> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
@@ -48,13 +53,20 @@ public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsServic
 
     @Override
     public ResponseEntity<?> updateProfessionalDetails(Long userId, ProfessionalDetailsDto professionalDetailsDTO) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with ID " + userId + " not found"));
+        Optional<User> userOpt = userRepository.findById(userId);
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(new ApiResponse<>(HttpStatus.NOT_FOUND.value(), "User not found with ID: " + userId, null, null));
+        }
 
-        ProfessionalDetails professionalDetails = professionalDetailsRepository.findByUserId(userId).orElseGet(() -> {
-                    ProfessionalDetails newDetails = new ProfessionalDetails();
-                    newDetails.setUser(user);
-                    return newDetails;
-                });
+        Optional<ProfessionalDetails> professionalDetailsOpt = professionalDetailsRepository.findByUserId(userId);
+        ProfessionalDetails professionalDetails;
+        if (professionalDetailsOpt.isPresent()) {
+            professionalDetails = professionalDetailsOpt.get();
+        } else {
+            professionalDetails = new ProfessionalDetails();
+            professionalDetails.setUser(userOpt.get());
+        }
 
         // Update educations
         if (professionalDetailsDTO.getEducations() != null) {
@@ -89,13 +101,13 @@ public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsServic
     }
 
     private ProfessionalDetailsResponse mapToProfessionalDetailsResponse(ProfessionalDetails professionalDetails) {
-        List<EducationResponse> educationResponses = professionalDetails.getEducations() != null
+        List<EducationResponse> educationDTOs = professionalDetails.getEducations() != null
                 ? professionalDetails.getEducations().stream()
                 .map(edu -> new EducationResponse(edu.getId(), edu.getYear(), edu.getDegree(), edu.getInstitute(), edu.getResult()))
                 .collect(Collectors.toList())
                 : null;
 
-        List<ExperienceResponse> experienceResponses = professionalDetails.getExperiences() != null
+        List<ExperienceResponse> experienceDTOs = professionalDetails.getExperiences() != null
                 ? professionalDetails.getExperiences().stream()
                 .map(exp -> new ExperienceResponse(exp.getId(), exp.getYear(), exp.getDepartment(), exp.getPosition(), exp.getHospital(), exp.getFeedback()))
                 .collect(Collectors.toList())
@@ -104,8 +116,8 @@ public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsServic
         return new ProfessionalDetailsResponse(
                 professionalDetails.getId(),
                 professionalDetails.getUser().getId(),
-                educationResponses,
-                experienceResponses,
+                educationDTOs,
+                experienceDTOs,
                 professionalDetails.getConferences()
         );
     }

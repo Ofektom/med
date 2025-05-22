@@ -1145,9 +1145,9 @@
           targetResults.hide();
           return;
         }
-
+  
         $.ajax({
-          url: `/api/v1/search/assets?query=${encodeURIComponent(query)}&page=1&size=10`,
+          url: `/api/v1/search/users?query=${encodeURIComponent(query)}&page=1&size=10`,
           type: 'GET',
           headers: {
             'Authorization': 'Bearer ' + token
@@ -1155,23 +1155,23 @@
           success: function (response) {
             const resultsList = targetResults.find('ul');
             resultsList.empty();
-
+  
             if (response.data && response.data.content && response.data.content.length > 0) {
-              response.data.content.forEach(asset => {
+              response.data.content.forEach(user => {
                 resultsList.append(`
                   <li class="p-2 rounded-end-3">
-                    <a href="/admin-allassets.html?assetId=${asset.id}">
+                    <a href="/admin-profile.html?id=${user.id}">
                       <div class="d-flex align-items-center notification-row">
                         <div class="d-flex align-items-center text-center p-0 notification-user-img">
-                          <img src="${asset.image || '/includes/images/01.jpg'}" width="48" height="48" alt="">
+                          <img src="${user.profilePicture || '/includes/images/01.jpg'}" width="48" height="48" alt="">
                         </div>
                         <div class="notification-content">
                           <div class="text-dark mb-0 fw-500 notification-msg">
-                            <span class="text-dark fw-bold mb-0">${asset.name}</span>
+                            <span class="text-dark fw-bold mb-0">${user.firstName || ''} ${user.lastName || ''}</span>
                           </div>
                           <div class="d-flex justify-content-between">
-                            <div class="w-100 text-truncate fs-12 fw-500">${asset.description || 'N/A'}</div>
-                            <p class="text-dark text-end mb-0 fs-12 fw-500">${asset.quantity} units</p>
+                            <div class="w-100 text-truncate fs-12 fw-500">${user.membershipNo || 'N/A'}</div>
+                            <p class="text-dark text-end mb-0 fs-12 fw-500">${user.email || 'N/A'}</p>
                           </div>
                         </div>
                       </div>
@@ -1183,7 +1183,7 @@
             } else {
               resultsList.append(`
                 <li class="p-2 rounded-end-3">
-                  <div class="text-dark fs-12">No assets found.</div>
+                  <div class="text-dark fs-12">No users found.</div>
                 </li>
               `);
               targetResults.show();
@@ -1210,28 +1210,24 @@
           }
         });
       }
-
-      // Desktop search
+  
       $('.desktop-search-input').on('input', function () {
         const query = $(this).val().trim();
         performSearch(query, $('#desktop-search-results'));
       });
-
-      // Mobile search (assuming mobile search input exists in a collapsed section)
+  
       $('.mobile-search-input').on('input', function () {
         const query = $(this).val().trim();
         performSearch(query, $('#mobile-search-results'));
       });
-
-      // Hide search results when clicking outside
+  
       $(document).on('click', function (e) {
         if (!$(e.target).closest('#desktop-search-form').length && !$(e.target).closest('#mobile-search-form').length) {
           $('#desktop-search-results').hide();
           $('#mobile-search-results').hide();
         }
       });
-
-      // Prevent form submission
+  
       $('#desktop-search-form, #mobile-search-form').on('submit', function (e) {
         e.preventDefault();
       });

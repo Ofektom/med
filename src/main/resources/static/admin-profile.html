@@ -1165,8 +1165,9 @@
               localStorage.removeItem('user');
               window.location.href = '/index.html';
             } else if (xhr.responseJSON && xhr.responseJSON.message) {
-              message = xhr.responseJSON.message;
+              message = xhr.responseJSON.message || 'Unknown error';
             }
+            console.error('Update error:', xhr.responseText); // Debug the error
             alert(message);
           }
         });
@@ -1178,7 +1179,11 @@
         const personalData = {
           phoneNumber: $('#phoneNumberInput').val(),
           location: $('#locationInput').val(),
-          about: $('#aboutInput').val()
+          about: $('#aboutInput').val(),
+          membershipNo: $('#membershipNoInput').val(),
+          mobile: $('#mobileInput').val(),
+          email: $('#emailInput').val(),
+          address: $('#addressInput').val()
         };
   
         $.ajax({
@@ -1203,8 +1208,9 @@
               localStorage.removeItem('user');
               window.location.href = '/index.html';
             } else if (xhr.responseJSON && xhr.responseJSON.message) {
-              message = xhr.responseJSON.message;
+              message = xhr.responseJSON.message || 'Unknown error';
             }
+            console.error('Update error:', xhr.responseText); // Debug the error
             alert(message);
           }
         });

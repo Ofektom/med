@@ -529,22 +529,80 @@
                           <textarea class="form-control rounded" name="about" id="aboutInput"></textarea>
                         </div>
                       </div>
-                      <h5 class="border-bottom p-3">Education</h5>
-                      <div id="education_fields">
-                        <!-- Education entries will be populated dynamically -->
+              
+                      <!-- Education Section -->
+                      <div class="d-flex justify-content-between align-items-center border-bottom p-3">
+                        <h5 class="mb-0">Education</h5>
+                        <button type="button" class="btn btn-link text-primary toggle-add-education" style="font-size: 14px;">Add Education</button>
                       </div>
-                      <button type="button" class="btn btn-primary mt-2 mb-4" id="addEducation">Add Education</button>
-                      <h5 class="border-bottom p-3">Experience</h5>
-                      <div id="experience_fields">
-                        <!-- Experience entries will be populated dynamically -->
+                      <div id="education_fields" class="p-3"></div>
+                      <div id="education_add_form" style="display: none;" class="p-3 border-top">
+                        <div class="row mb-3 education-entry" data-index="new">
+                          <div class="col-sm-3">
+                            <input type="text" class="form-control rounded" name="education_year_new" placeholder="Year">
+                          </div>
+                          <div class="col-sm-3">
+                            <input type="text" class="form-control rounded" name="education_degree_new" placeholder="Degree">
+                          </div>
+                          <div class="col-sm-3">
+                            <input type="text" class="form-control rounded" name="education_institute_new" placeholder="Institute">
+                          </div>
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control rounded" name="education_result_new" placeholder="Result">
+                          </div>
+                          <div class="col-sm-1">
+                            <button type="button" class="btn btn-primary add-education-submit">Add</button>
+                          </div>
+                        </div>
                       </div>
-                      <button type="button" class="btn btn-primary mt-2 mb-4" id="addExperience">Add Experience</button>
-                      <h5 class="border-bottom p-3">Conferences, Courses & Workshops</h5>
-                      <div id="conference_fields">
-                        <!-- Conference entries will be populated dynamically -->
+              
+                      <!-- Experience Section -->
+                      <div class="d-flex justify-content-between align-items-center border-bottom p-3">
+                        <h5 class="mb-0">Experience</h5>
+                        <button type="button" class="btn btn-link text-primary toggle-add-experience" style="font-size: 14px;">Add Experience</button>
                       </div>
-                      <button type="button" class="btn btn-primary mt-2 mb-4" id="addConference">Add Conference</button>
-                      <div class="text-end">
+                      <div id="experience_fields" class="p-3"></div>
+                      <div id="experience_add_form" style="display: none;" class="p-3 border-top">
+                        <div class="row mb-3 experience-entry" data-index="new">
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control rounded" name="experience_year_new" placeholder="Year">
+                          </div>
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control rounded" name="experience_department_new" placeholder="Department">
+                          </div>
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control rounded" name="experience_position_new" placeholder="Position">
+                          </div>
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control rounded" name="experience_hospital_new" placeholder="Hospital">
+                          </div>
+                          <div class="col-sm-2">
+                            <input type="text" class="form-control rounded" name="experience_feedback_new" placeholder="Feedback">
+                          </div>
+                          <div class="col-sm-1">
+                            <button type="button" class="btn btn-primary add-experience-submit">Add</button>
+                          </div>
+                        </div>
+                      </div>
+              
+                      <!-- Conferences Section -->
+                      <div class="d-flex justify-content-between align-items-center border-bottom p-3">
+                        <h5 class="mb-0">Conferences, Courses & Workshops</h5>
+                        <button type="button" class="btn btn-link text-primary toggle-add-conference" style="font-size: 14px;">Add Conference</button>
+                      </div>
+                      <div id="conference_fields" class="p-3"></div>
+                      <div id="conference_add_form" style="display: none;" class="p-3 border-top">
+                        <div class="row mb-3 conference-entry" data-index="new">
+                          <div class="col-sm-10">
+                            <input type="text" class="form-control rounded" name="conference_new" placeholder="Conference Description">
+                          </div>
+                          <div class="col-sm-2">
+                            <button type="button" class="btn btn-primary add-conference-submit">Add</button>
+                          </div>
+                        </div>
+                      </div>
+              
+                      <div class="text-end mt-4">
                         <button type="submit" class="btn btn-primary mw-120 rounded-pill">Save Changes</button>
                       </div>
                     </form>
@@ -736,11 +794,10 @@
   
       $('#currentYear').text(new Date().getFullYear());
   
-      // Determine userId from URL or localStorage
       const urlParams = new URLSearchParams(window.location.search);
       let userId = urlParams.get('id');
       if (!userId && userData && userData.id) {
-        userId = userData.id; // Fallback to localStorage id
+        userId = userData.id;
       }
   
       if (!userId) {
@@ -773,7 +830,6 @@
             $('#locationInput').val(location);
             $('#aboutInput').val(user.about || '');
   
-            // Populate account settings form
             $('#membershipNoInput').val(user.membershipNo || '');
             $('#mobileInput').val(user.phoneNumber || '');
             $('#emailInput').val(user.email || '');
@@ -796,140 +852,329 @@
         }
       });
   
-      // Fetch professional details (education, experience, conferences)
-      $.ajax({
-        url: `/api/v1/users/${userId}/professional-details`,
-        type: 'GET',
-        headers: {
-          'Authorization': 'Bearer ' + token
-        },
-        success: function(response) {
-          if (response && response.data) {
-            const professionalDetails = response.data;
-            const educations = professionalDetails.educations || [];
-            const experiences = professionalDetails.experiences || [];
-            const conferences = professionalDetails.conferences || [];
+      // Fetch professional details
+      let educations = [], experiences = [], conferences = [];
+      function fetchProfessionalDetails() {
+        $.ajax({
+          url: `/api/v1/users/${userId}/professional-details`,
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            if (response && response.data) {
+              educations = response.data.educations || [];
+              experiences = response.data.experiences || [];
+              conferences = response.data.conferences || [];
   
-            // Populate education fields
-            $('#education_fields').empty();
-            educations.forEach((edu, index) => {
-              $('#education_fields').append(`
-                <div class="row mb-3 education-entry" data-index="${index}">
-                  <div class="col-sm-3">
-                    <input type="text" class="form-control rounded" name="education_year_${index}" placeholder="Year" value="${edu.year || ''}">
+              // Display education
+              $('#education_fields').empty();
+              educations.forEach((edu, index) => {
+                $('#education_fields').append(`
+                  <div class="row mb-3 education-entry" data-index="${index}">
+                    <div class="col-sm-11">
+                      <p class="mb-1"><strong>Year:</strong> ${edu.year || 'N/A'}</p>
+                      <p class="mb-1"><strong>Degree:</strong> ${edu.degree || 'N/A'}</p>
+                      <p class="mb-1"><strong>Institute:</strong> ${edu.institute || 'N/A'}</p>
+                      <p class="mb-1"><strong>Result:</strong> ${edu.result || 'N/A'}</p>
+                    </div>
+                    <div class="col-sm-1 text-end">
+                      <div class="dropdown">
+                        <button class="btn btn-link text-dark" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item edit-education" href="#" data-index="${index}">Update</a></li>
+                          <li><a class="dropdown-item delete-education" href="#" data-index="${index}">Delete</a></li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-sm-3">
-                    <input type="text" class="form-control rounded" name="education_degree_${index}" placeholder="Degree" value="${edu.degree || ''}">
-                  </div>
-                  <div class="col-sm-3">
-                    <input type="text" class="form-control rounded" name="education_institute_${index}" placeholder="Institute" value="${edu.institute || ''}">
-                  </div>
-                  <div class="col-sm-2">
-                    <input type="text" class="form-control rounded" name="education_result_${index}" placeholder="Result" value="${edu.result || ''}">
-                  </div>
-                  <div class="col-sm-1">
-                    <button type="button" class="btn btn-danger remove-education" data-index="${index}">Remove</button>
-                  </div>
-                </div>
-              `);
-            });
+                `);
+              });
   
-            // Populate experience fields
-            $('#experience_fields').empty();
-            experiences.forEach((exp, index) => {
-              $('#experience_fields').append(`
-                <div class="row mb-3 experience-entry" data-index="${index}">
-                  <div class="col-sm-2">
-                    <input type="text" class="form-control rounded" name="experience_year_${index}" placeholder="Year" value="${exp.year || ''}">
+              // Display experience
+              $('#experience_fields').empty();
+              experiences.forEach((exp, index) => {
+                $('#experience_fields').append(`
+                  <div class="row mb-3 experience-entry" data-index="${index}">
+                    <div class="col-sm-11">
+                      <p class="mb-1"><strong>Year:</strong> ${exp.year || 'N/A'}</p>
+                      <p class="mb-1"><strong>Department:</strong> ${exp.department || 'N/A'}</p>
+                      <p class="mb-1"><strong>Position:</strong> ${exp.position || 'N/A'}</p>
+                      <p class="mb-1"><strong>Hospital:</strong> ${exp.hospital || 'N/A'}</p>
+                      <p class="mb-1"><strong>Feedback:</strong> ${exp.feedback || 'N/A'}</p>
+                    </div>
+                    <div class="col-sm-1 text-end">
+                      <div class="dropdown">
+                        <button class="btn btn-link text-dark" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item edit-experience" href="#" data-index="${index}">Update</a></li>
+                          <li><a class="dropdown-item delete-experience" href="#" data-index="${index}">Delete</a></li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-sm-2">
-                    <input type="text" class="form-control rounded" name="experience_department_${index}" placeholder="Department" value="${exp.department || ''}">
-                  </div>
-                  <div class="col-sm-2">
-                    <input type="text" class="form-control rounded" name="experience_position_${index}" placeholder="Position" value="${exp.position || ''}">
-                  </div>
-                  <div class="col-sm-2">
-                    <input type="text" class="form-control rounded" name="experience_hospital_${index}" placeholder="Hospital" value="${exp.hospital || ''}">
-                  </div>
-                  <div class="col-sm-2">
-                    <input type="text" class="form-control rounded" name="experience_feedback_${index}" placeholder="Feedback" value="${exp.feedback || ''}">
-                  </div>
-                  <div class="col-sm-1">
-                    <button type="button" class="btn btn-danger remove-experience" data-index="${index}">Remove</button>
-                  </div>
-                </div>
-              `);
-            });
+                `);
+              });
   
-            // Populate conference fields
-            $('#conference_fields').empty();
-            conferences.forEach((conf, index) => {
-              $('#conference_fields').append(`
-                <div class="row mb-3 conference-entry" data-index="${index}">
-                  <div class="col-sm-10">
-                    <input type="text" class="form-control rounded" name="conference_${index}" placeholder="Conference Description" value="${conf || ''}">
+              // Display conferences
+              $('#conference_fields').empty();
+              conferences.forEach((conf, index) => {
+                $('#conference_fields').append(`
+                  <div class="row mb-3 conference-entry" data-index="${index}">
+                    <div class="col-sm-11">
+                      <p class="mb-1">${conf || 'N/A'}</p>
+                    </div>
+                    <div class="col-sm-1 text-end">
+                      <div class="dropdown">
+                        <button class="btn btn-link text-dark" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu">
+                          <li><a class="dropdown-item edit-conference" href="#" data-index="${index}">Update</a></li>
+                          <li><a class="dropdown-item delete-conference" href="#" data-index="${index}">Delete</a></li>
+                        </ul>
+                      </div>
+                    </div>
                   </div>
-                  <div class="col-sm-2">
-                    <button type="button" class="btn btn-danger remove-conference" data-index="${index}">Remove</button>
-                  </div>
-                </div>
-              `);
-            });
+                `);
+              });
+            }
+          },
+          error: function(xhr) {
+            let message = 'Failed to load professional details.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            alert(message);
           }
-        },
-        error: function(xhr) {
-          let message = 'Failed to load professional details.';
-          if (xhr.status === 401) {
-            message = 'Unauthorized: Please log in again.';
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('user');
-            window.location.href = '/index.html';
-          } else if (xhr.responseJSON && xhr.responseJSON.message) {
-            message = xhr.responseJSON.message;
-          }
-          alert(message);
-        }
+        });
+      }
+  
+      fetchProfessionalDetails();
+  
+      // Toggle add forms
+      $('.toggle-add-education').on('click', function() {
+        $('#education_add_form').toggle();
       });
+  
+      $('.toggle-add-experience').on('click', function() {
+        $('#experience_add_form').toggle();
+      });
+  
+      $('.toggle-add-conference').on('click', function() {
+        $('#conference_add_form').toggle();
+      });
+  
+      // Add new education
+      $('.add-education-submit').on('click', function() {
+        const newEducation = {
+          year: $('input[name="education_year_new"]').val(),
+          degree: $('input[name="education_degree_new"]').val(),
+          institute: $('input[name="education_institute_new"]').val(),
+          result: $('input[name="education_result_new"]').val()
+        };
+        educations.push(newEducation);
+        updateProfessionalDetails();
+        $('#education_add_form').hide();
+        $('input[name^="education_"]').val('');
+      });
+  
+      // Add new experience
+      $('.add-experience-submit').on('click', function() {
+        const newExperience = {
+          year: $('input[name="experience_year_new"]').val(),
+          department: $('input[name="experience_department_new"]').val(),
+          position: $('input[name="experience_position_new"]').val(),
+          hospital: $('input[name="experience_hospital_new"]').val(),
+          feedback: $('input[name="experience_feedback_new"]').val()
+        };
+        experiences.push(newExperience);
+        updateProfessionalDetails();
+        $('#experience_add_form').hide();
+        $('input[name^="experience_"]').val('');
+      });
+  
+      // Add new conference
+      $('.add-conference-submit').on('click', function() {
+        const newConference = $('input[name="conference_new"]').val();
+        conferences.push(newConference);
+        updateProfessionalDetails();
+        $('#conference_add_form').hide();
+        $('input[name="conference_new"]').val('');
+      });
+  
+      // Edit education
+      $(document).on('click', '.edit-education', function(e) {
+        e.preventDefault();
+        const index = $(this).data('index');
+        const edu = educations[index];
+        const entry = $(this).closest('.education-entry');
+        entry.html(`
+          <div class="col-sm-3">
+            <input type="text" class="form-control rounded" name="education_year_${index}" value="${edu.year || ''}">
+          </div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control rounded" name="education_degree_${index}" value="${edu.degree || ''}">
+          </div>
+          <div class="col-sm-3">
+            <input type="text" class="form-control rounded" name="education_institute_${index}" value="${edu.institute || ''}">
+          </div>
+          <div class="col-sm-2">
+            <input type="text" class="form-control rounded" name="education_result_${index}" value="${edu.result || ''}">
+          </div>
+          <div class="col-sm-1">
+            <button type="button" class="btn btn-primary save-education" data-index="${index}">Save</button>
+          </div>
+        `);
+      });
+  
+      // Save edited education
+      $(document).on('click', '.save-education', function() {
+        const index = $(this).data('index');
+        educations[index] = {
+          year: $(`input[name="education_year_${index}"]`).val(),
+          degree: $(`input[name="education_degree_${index}"]`).val(),
+          institute: $(`input[name="education_institute_${index}"]`).val(),
+          result: $(`input[name="education_result_${index}"]`).val()
+        };
+        updateProfessionalDetails();
+      });
+  
+      // Delete education
+      $(document).on('click', '.delete-education', function(e) {
+        e.preventDefault();
+        const index = $(this).data('index');
+        educations.splice(index, 1);
+        updateProfessionalDetails();
+      });
+  
+      // Edit experience
+      $(document).on('click', '.edit-experience', function(e) {
+        e.preventDefault();
+        const index = $(this).data('index');
+        const exp = experiences[index];
+        const entry = $(this).closest('.experience-entry');
+        entry.html(`
+          <div class="col-sm-2">
+            <input type="text" class="form-control rounded" name="experience_year_${index}" value="${exp.year || ''}">
+          </div>
+          <div class="col-sm-2">
+            <input type="text" class="form-control rounded" name="experience_department_${index}" value="${exp.department || ''}">
+          </div>
+          <div class="col-sm-2">
+            <input type="text" class="form-control rounded" name="experience_position_${index}" value="${exp.position || ''}">
+          </div>
+          <div class="col-sm-2">
+            <input type="text" class="form-control rounded" name="experience_hospital_${index}" value="${exp.hospital || ''}">
+          </div>
+          <div class="col-sm-2">
+            <input type="text" class="form-control rounded" name="experience_feedback_${index}" value="${exp.feedback || ''}">
+          </div>
+          <div class="col-sm-1">
+            <button type="button" class="btn btn-primary save-experience" data-index="${index}">Save</button>
+          </div>
+        `);
+      });
+  
+      // Save edited experience
+      $(document).on('click', '.save-experience', function() {
+        const index = $(this).data('index');
+        experiences[index] = {
+          year: $(`input[name="experience_year_${index}"]`).val(),
+          department: $(`input[name="experience_department_${index}"]`).val(),
+          position: $(`input[name="experience_position_${index}"]`).val(),
+          hospital: $(`input[name="experience_hospital_${index}"]`).val(),
+          feedback: $(`input[name="experience_feedback_${index}"]`).val()
+        };
+        updateProfessionalDetails();
+      });
+  
+      // Delete experience
+      $(document).on('click', '.delete-experience', function(e) {
+        e.preventDefault();
+        const index = $(this).data('index');
+        experiences.splice(index, 1);
+        updateProfessionalDetails();
+      });
+  
+      // Edit conference
+      $(document).on('click', '.edit-conference', function(e) {
+        e.preventDefault();
+        const index = $(this).data('index');
+        const conf = conferences[index];
+        const entry = $(this).closest('.conference-entry');
+        entry.html(`
+          <div class="col-sm-10">
+            <input type="text" class="form-control rounded" name="conference_${index}" value="${conf || ''}">
+          </div>
+          <div class="col-sm-2">
+            <button type="button" class="btn btn-primary save-conference" data-index="${index}">Save</button>
+          </div>
+        `);
+      });
+  
+      // Save edited conference
+      $(document).on('click', '.save-conference', function() {
+        const index = $(this).data('index');
+        conferences[index] = $(`input[name="conference_${index}"]`).val();
+        updateProfessionalDetails();
+      });
+  
+      // Delete conference
+      $(document).on('click', '.delete-conference', function(e) {
+        e.preventDefault();
+        const index = $(this).data('index');
+        conferences.splice(index, 1);
+        updateProfessionalDetails();
+      });
+  
+      // Update professional details
+      function updateProfessionalDetails() {
+        const professionalDetailsData = {
+          educations: educations,
+          experiences: experiences,
+          conferences: conferences
+        };
+  
+        $.ajax({
+          url: `/api/v1/users/${userId}/professional-details`,
+          type: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          data: JSON.stringify(professionalDetailsData),
+          success: function(response) {
+            fetchProfessionalDetails(); // Refresh the display
+            alert('Professional details updated successfully.');
+          },
+          error: function(xhr) {
+            let message = 'Failed to update professional details.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            alert(message);
+          }
+        });
+      }
   
       // Save personal info
       $('#edit_personal_info').on('submit', function(e) {
         e.preventDefault();
-  
-        const professionalDetailsData = {
-          educations: [],
-          experiences: [],
-          conferences: []
-        };
-  
-        // Collect education data
-        $('#education_fields .education-entry').each(function() {
-          const index = $(this).data('index');
-          professionalDetailsData.educations.push({
-            year: $(`input[name="education_year_${index}"]`).val(),
-            degree: $(`input[name="education_degree_${index}"]`).val(),
-            institute: $(`input[name="education_institute_${index}"]`).val(),
-            result: $(`input[name="education_result_${index}"]`).val()
-          });
-        });
-  
-        // Collect experience data
-        $('#experience_fields .experience-entry').each(function() {
-          const index = $(this).data('index');
-          professionalDetailsData.experiences.push({
-            year: $(`input[name="experience_year_${index}"]`).val(),
-            department: $(`input[name="experience_department_${index}"]`).val(),
-            position: $(`input[name="experience_position_${index}"]`).val(),
-            hospital: $(`input[name="experience_hospital_${index}"]`).val(),
-            feedback: $(`input[name="experience_feedback_${index}"]`).val()
-          });
-        });
-  
-        // Collect conference data
-        $('#conference_fields .conference-entry').each(function() {
-          const index = $(this).data('index');
-          professionalDetailsData.conferences.push($(`input[name="conference_${index}"]`).val());
-        });
-  
         const personalData = {
           phoneNumber: $('#phoneNumberInput').val(),
           location: $('#locationInput').val(),
@@ -946,7 +1191,6 @@
           data: JSON.stringify(personalData),
           success: function(response) {
             alert('Personal details updated successfully.');
-            // Update localStorage with new data if needed
             if (response.data && response.data.user) {
               localStorage.setItem('user', JSON.stringify(response.data.user));
             }
@@ -964,110 +1208,9 @@
             alert(message);
           }
         });
-  
-        $.ajax({
-          url: `/api/v1/users/${userId}/professional-details`,
-          type: 'PUT',
-          headers: {
-            'Authorization': 'Bearer ' + token,
-            'Content-Type': 'application/json'
-          },
-          data: JSON.stringify(professionalDetailsData),
-          success: function(response) {
-            alert('Professional details updated successfully.');
-          },
-          error: function(xhr) {
-            let message = 'Failed to update professional details.';
-            if (xhr.status === 401) {
-              message = 'Unauthorized: Please log in again.';
-              localStorage.removeItem('access_token');
-              localStorage.removeItem('user');
-              window.location.href = '/index.html';
-            } else if (xhr.responseJSON && xhr.responseJSON.message) {
-              message = xhr.responseJSON.message;
-            }
-            alert(message);
-          }
-        });
       });
   
-      // Add education, experience, and conference handlers (unchanged)
-      $('#addEducation').on('click', function() {
-        const index = $('#education_fields .education-entry').length;
-        $('#education_fields').append(`
-          <div class="row mb-3 education-entry" data-index="${index}">
-            <div class="col-sm-3">
-              <input type="text" class="form-control rounded" name="education_year_${index}" placeholder="Year">
-            </div>
-            <div class="col-sm-3">
-              <input type="text" class="form-control rounded" name="education_degree_${index}" placeholder="Degree">
-            </div>
-            <div class="col-sm-3">
-              <input type="text" class="form-control rounded" name="education_institute_${index}" placeholder="Institute">
-            </div>
-            <div class="col-sm-2">
-              <input type="text" class="form-control rounded" name="education_result_${index}" placeholder="Result">
-            </div>
-            <div class="col-sm-1">
-              <button type="button" class="btn btn-danger remove-education" data-index="${index}">Remove</button>
-            </div>
-          </div>
-        `);
-      });
-  
-      $('#addExperience').on('click', function() {
-        const index = $('#experience_fields .experience-entry').length;
-        $('#experience_fields').append(`
-          <div class="row mb-3 experience-entry" data-index="${index}">
-            <div class="col-sm-2">
-              <input type="text" class="form-control rounded" name="experience_year_${index}" placeholder="Year">
-            </div>
-            <div class="col-sm-2">
-              <input type="text" class="form-control rounded" name="experience_department_${index}" placeholder="Department">
-            </div>
-            <div class="col-sm-2">
-              <input type="text" class="form-control rounded" name="experience_position_${index}" placeholder="Position">
-            </div>
-            <div class="col-sm-2">
-              <input type="text" class="form-control rounded" name="experience_hospital_${index}" placeholder="Hospital">
-            </div>
-            <div class="col-sm-2">
-              <input type="text" class="form-control rounded" name="experience_feedback_${index}" placeholder="Feedback">
-            </div>
-            <div class="col-sm-1">
-              <button type="button" class="btn btn-danger remove-experience" data-index="${index}">Remove</button>
-            </div>
-          </div>
-        `);
-      });
-  
-      $('#addConference').on('click', function() {
-        const index = $('#conference_fields .conference-entry').length;
-        $('#conference_fields').append(`
-          <div class="row mb-3 conference-entry" data-index="${index}">
-            <div class="col-sm-10">
-              <input type="text" class="form-control rounded" name="conference_${index}" placeholder="Conference Description">
-            </div>
-            <div class="col-sm-2">
-              <button type="button" class="btn btn-danger remove-conference" data-index="${index}">Remove</button>
-            </div>
-          </div>
-        `);
-      });
-  
-      $(document).on('click', '.remove-education', function() {
-        $(this).closest('.education-entry').remove();
-      });
-  
-      $(document).on('click', '.remove-experience', function() {
-        $(this).closest('.experience-entry').remove();
-      });
-  
-      $(document).on('click', '.remove-conference', function() {
-        $(this).closest('.conference-entry').remove();
-      });
-  
-      // Fetch additional data (stats, specialties, activities, etc.) - unchanged
+      // Fetch additional data (stats, specialties, activities, etc.)
       $.ajax({
         url: `/api/v1/users/${userId}/stats`,
         type: 'GET',
@@ -1261,104 +1404,6 @@
                   </div>
                 </div>
               `);
-            });
-          }
-        },
-        error: function(xhr) {
-          if (xhr.status === 401) {
-            alert('Session expired. Please log in again.');
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('user');
-            window.location.href = '/index.html';
-          }
-        }
-      });
-  
-      $.ajax({
-        url: `/api/v1/users/${userId}/education`,
-        type: 'GET',
-        headers: {
-          'Authorization': 'Bearer ' + token
-        },
-        success: function(response) {
-          if (response && response.data && Array.isArray(response.data)) {
-            const education = response.data;
-            const educationTable = $('#education_table');
-            educationTable.empty();
-            education.forEach(edu => {
-              educationTable.append(`
-                <tr>
-                  <td>${edu.year || 'N/A'}</td>
-                  <td>${edu.degree || 'N/A'}</td>
-                  <td>${edu.institute || 'N/A'}</td>
-                  <td>
-                    <span class="custom-badge badge bg-secondary text-white align-items-center rounded-pill text-capitalize me-2">${edu.result || 'N/A'}</span>
-                  </td>
-                </tr>
-              `);
-            });
-          }
-        },
-        error: function(xhr) {
-          if (xhr.status === 401) {
-            alert('Session expired. Please log in again.');
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('user');
-            window.location.href = '/index.html';
-          }
-        }
-      });
-  
-      $.ajax({
-        url: `/api/v1/users/${userId}/experience`,
-        type: 'GET',
-        headers: {
-          'Authorization': 'Bearer ' + token
-        },
-        success: function(response) {
-          if (response && response.data && Array.isArray(response.data)) {
-            const experiences = response.data;
-            const experienceTable = $('#experience_table');
-            experienceTable.empty();
-            experiences.forEach(exp => {
-              const badgeClass = exp.feedback === 'Excellent' || exp.feedback === 'Good' ? 'bg-success' : 'bg-warning';
-              experienceTable.append(`
-                <tr>
-                  <td>${exp.year || 'N/A'}</td>
-                  <td>${exp.department || 'N/A'}</td>
-                  <td>${exp.position || 'N/A'}</td>
-                  <td>${exp.hospital || 'N/A'}</td>
-                  <td>
-                    <span class="custom-badge badge ${badgeClass} text-white align-items-center rounded-pill text-capitalize me-2">${exp.feedback || 'N/A'}</span>
-                  </td>
-                </tr>
-              `);
-            });
-          }
-        },
-        error: function(xhr) {
-          if (xhr.status === 401) {
-            alert('Session expired. Please log in again.');
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('user');
-            window.location.href = '/index.html';
-          }
-        }
-      });
-  
-      $.ajax({
-        url: `/api/v1/users/${userId}/conferences`,
-        type: 'GET',
-        headers: {
-          'Authorization': 'Bearer ' + token
-        },
-        success: function(response) {
-          if (response && response.data && Array.isArray(response.data)) {
-            const conferences = response.data;
-            const conferencesDiv = $('#conferences');
-            conferencesDiv.empty();
-            conferences.forEach(conf => {
-              conferencesDiv.append(`<p class="text-gray">${conf.description || 'N/A'}</p>`);
             });
           }
         },

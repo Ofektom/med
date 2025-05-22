@@ -34,172 +34,74 @@
          </div>
          <div class="sidebar-box-data text-start px-3" id="sidebar-data">
           <div class="list-group list-group-flush mt-3">
-            <div class="accordion" id="accordionExampleOne">
+            <div class="accordion" id="accordionExampleOne"> 
               <div class="accordion-item mb-4">
-                <a href="/doc-addprescription.html" class="active no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
-                  <i class="bi bi-grid-1x2-fill px-2"></i><span>ADMIN Dashboard</span>
-                </a>
+                <a href="/doc-dashboard.html" class="active no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                 <i class="bi bi-grid-1x2-fill px-2"></i><span>Doctor Dashboard</span></a>
+              </div>
+              
+              <div class="accordion-item mb-4">
+                  <a href="/doc-patientlist.html"
+                    class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center"><i class="fa-regular fa-address-book px-2"></i>Patient List</a>
               </div>
               <div class="accordion-item mb-4">
-                <div class="accordion-header" id="headingOne">
-                  <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                    <i class="fa-solid fa-user-doctor px-2"></i><span class="fw-600">Doctor</span>
+                <a href="/doc-reports.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
+                  <i class="bi bi-file-earmark-pdf-fill px-2"></i> <span>Reports</span></a>
+              </div>
+              <div class="accordion-item mb-4">
+                <div class="accordion-header" id="headingPrescription">
+                  <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#collapsePrescription" aria-expanded="true"
+                    aria-controls="collapsePrescription">
+                    <i class="fa-solid fa-calendar-days px-2"></i>
+                    Prescription
                   </button>
                 </div>
-                <div id="collapseOne" class="accordion-collapse collapse" aria-labelledby="headingOne" data-bs-parent="#accordionExampleOne">
+                <div id="collapsePrescription" class="accordion-collapse collapse" aria-labelledby="headingPrescription"
+                  data-bs-parent="#accordionExampleOne">
                   <div class="accordion-body">
                     <ul class="navbar-nav d-block">
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-doctorlist.html">Doctor's List</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-adddoctor.html">Add doctor</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-editdoctor.html">Edit doctor</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-doctorprofile.html">Doctor profile</a></li>
+                      <li class="nav-item mb-2 rounded-3 px-3">
+                        <a class="nav-link fs-14 text-white" href="/doc-prescriptionlist.html">
+                          Prescription list</a>
+                      </li>
+                      <li class="nav-item mb-2 rounded-3 px-3">
+                        <a class="nav-link fs-14 text-white" href="/doc-addprescription.html">
+                          Add Prescription</a>
+                      </li>
+                      <li class="nav-item mb-2 rounded-3 px-3">
+                        <a class="nav-link fs-14 text-white" href="/doc-editprescription.html">
+                          Edit Prescription</a>
+                      </li>
                     </ul>
                   </div>
                 </div>
               </div>
               <div class="accordion-item mb-4">
-                <div class="accordion-header" id="headingUn">
-                  <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseUn" aria-expanded="true" aria-controls="collapseUn">
-                    <i class="fa-solid fa-user-doctor px-2"></i><span class="fw-600">Pharmacist</span>
+                <div class="accordion-header" id="headingAppointments">
+                  <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center"
+                    type="button" data-bs-toggle="collapse" data-bs-target="#collapseAppointments" aria-expanded="true"
+                    aria-controls="collapseAppointments">
+                    <i class="fa-solid fa-calendar-days px-2"></i>
+                    Appointments
                   </button>
                 </div>
-                <div id="collapseUn" class="accordion-collapse collapse" aria-labelledby="headingUn" data-bs-parent="#accordionExampleOne">
+                <div id="collapseAppointments" class="accordion-collapse collapse" aria-labelledby="headingAppointments"
+                  data-bs-parent="#accordionExampleOne">
                   <div class="accordion-body">
                     <ul class="navbar-nav d-block">
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-pharmacistlist.html">Pharmacist's List</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-addpharmacist.html">Add pharmacist</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-editpharmacist.html">Edit pharmacist</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item mb-4">
-                <div class="accordion-header" id="headingDuo">
-                  <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseDuo" aria-expanded="true" aria-controls="collapseDuo">
-                    <i class="fa-solid fa-user-doctor px-2"></i><span class="fw-600">Lab Scientist</span>
-                  </button>
-                </div>
-                <div id="collapseDuo" class="accordion-collapse collapse" aria-labelledby="headingDuo" data-bs-parent="#accordionExampleOne">
-                  <div class="accordion-body">
-                    <ul class="navbar-nav d-block">
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-labscientistlist.html">Lab Scientist's List</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-addlabscientist.html">Add lab scientist</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-editlabscientist.html">Edit lab scientist</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item mb-4">
-                <div class="accordion-header" id="headingTra">
-                  <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTra" aria-expanded="true" aria-controls="collapseTra">
-                    <i class="fa-solid fa-user-doctor px-2"></i><span class="fw-600">Accountant</span>
-                  </button>
-                </div>
-                <div id="collapseTra" class="accordion-collapse collapse" aria-labelledby="headingTra" data-bs-parent="#accordionExampleOne">
-                  <div class="accordion-body">
-                    <ul class="navbar-nav d-block">
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-accountantlist.html">Accountant's List</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-addaccountant.html">Add accountant</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-editaccountant.html">Edit accountant</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item mb-4">
-                <div class="accordion-header" id="headingNuet">
-                  <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseNuet" aria-expanded="true" aria-controls="collapseNuet">
-                    <i class="fa-solid fa-user-doctor px-2"></i><span class="fw-600">Front Desk</span>
-                  </button>
-                </div>
-                <div id="collapseNuet" class="accordion-collapse collapse" aria-labelledby="headingNuet" data-bs-parent="#accordionExampleOne">
-                  <div class="accordion-body">
-                    <ul class="navbar-nav d-block">
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-frontdesklist.html">Front Desk's List</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-addfrontdesk.html">Add front desk</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-editfrontdesk.html">Edit front desk</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item mb-4">
-                <div class="accordion-header" id="headingTwo">
-                  <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
-                    <i class="fa-solid fa-users px-2"></i><span class="fw-600">Patient</span>
-                  </button>
-                </div>
-                <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExampleOne">
-                  <div class="accordion-body">
-                    <ul class="navbar-nav d-block">
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-patientlist.html">patient List</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-addpatient.html">Add patient</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-editpatient.html">Edit patient</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item mb-4">
-                <a href="/doc-addprescription.html-stafflist.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
-                  <i class="fa-regular fa-address-book px-2"></i>Staff
-                </a>
-              </div>
-              <div class="accordion-item mb-4">
-                <a href="/doc-addprescription.html-reports.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
-                  <i class="bi bi-file-earmark-pdf-fill px-2"></i><span>Reports</span>
-                </a>
-              </div>
-              <div class="accordion-item mb-4">
-                <div class="accordion-header" id="headingEleven">
-                  <button class="accordion-button p-2 text-white mb-0 d-flex align-items-center collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEleven" aria-expanded="true" aria-controls="collapseEleven">
-                    <i class="bi bi-boxes px-2"></i>Assets
-                  </button>
-                </div>
-                <div id="collapseEleven" class="accordion-collapse collapse show" aria-labelledby="headingEleven" data-bs-parent="#accordionExampleOne">
-                  <div class="accordion-body">
-                    <ul class="navbar-nav d-block">
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-addassets.html">add asset</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-assetslist.html">view assets list</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white active" href="/doc-addprescription.html-allassets.html">all asset</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item mb-4">
-                <div class="accordion-header" id="headingFour">
-                  <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
-                    <i class="fa-solid fa-calendar-days px-2"></i>Appointments
-                  </button>
-                </div>
-                <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#accordionExampleOne">
-                  <div class="accordion-body">
-                    <ul class="navbar-nav d-block">
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-appointmentlist.html">appointment list</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-bookappointment.html">Book Appointment</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-editappointment.html">Edit Appointment</a></li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-              <div class="accordion-item mb-4">
-                <a href="/doc-addprescription.html-departmentlist.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
-                  <i class="fa-solid fa-timeline px-2"></i>Department
-                </a>
-              </div>
-              <div class="accordion-item mb-4">
-                <a href="/doc-addprescription.html-allotedrooms.html" class="no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
-                  <i class="fa-solid fa-bed px-2"></i>Wards
-                </a>
-              </div>
-              <div class="accordion-item mb-4">
-                <div class="accordion-header" id="headingFive">
-                  <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="true" aria-controls="collapseFive">
-                    <i class="fa-solid fa-file-invoice-dollar px-2"></i>Payments
-                  </button>
-                </div>
-                <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#accordionExampleOne">
-                  <div class="accordion-body">
-                    <ul class="navbar-nav d-block">
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-paymentlist.html">payment list</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-paymentinvoice.html">payment invoice</a></li>
+                      <li class="nav-item mb-2 rounded-3 px-3">
+                        <a class="nav-link fs-14 text-white" href="/doc-appointmentlist.html">
+                          appointment list</a>
+                      </li>
+                      <li class="nav-item mb-2 rounded-3 px-3">
+                        <a class="nav-link fs-14 text-white" href="/doc-bookappointment.html">
+                          Book Appointment</a>
+                      </li>
+                      <li class="nav-item mb-2 rounded-3 px-3">
+                        <a class="nav-link fs-14 text-white" href="/doc-editappointment.html">
+                          Edit Appointment</a>
+                      </li>
                     </ul>
                   </div>
                 </div>
@@ -245,8 +147,8 @@
                 <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExampleOne">
                   <div class="accordion-body">
                     <ul class="navbar-nav d-block">
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-adminprofile.html">Profile</a></li>
-                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-addprescription.html-resetpass.html">Reset Password</a></li>
+                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/doc-profile.html">Profile</a></li>
+                      <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/resetpass.html">Reset Password</a></li>
                     </ul>
                   </div>
                 </div>
@@ -267,7 +169,7 @@
                 <button class="btn shadow-0 focus-0 sidebar-btn rounded border-0 sidebarToggle">
                   <img src="/includes/images/menu-icons.svg" alt="">
                 </button>
-                <a href="/index.html">
+                <a href="/doc-dashboard.html">
                   <img src="/includes/images/ERP-Logo(1).png" width="180" alt="">
                 </a>
               </div>
@@ -369,7 +271,7 @@
                         </div>
                         <ul class="list-unstyled text-dark-primary mb-0 click-menu p-3">
                           <li class="py-3 px-2 rounded-end-3">
-                            <a href="/doc-addprescription.html-profile.html">
+                            <a href="/doc-profile.html">
                               <div class="d-flex align-items-center">
                                 <div class="rounded bg-light reward-circle d-flex align-items-center justify-content-center me-3 text-center">
                                   <i class="fa fa-user fs-5 text-primary"></i>
@@ -413,15 +315,16 @@
         </div>
       </div>
     </div>
+    </div>
       <div class="px-4 mb-4 min-vh-100 outer-main">
         <h3 class="fw-600 text-dark-primary text-capitalize">Patient List</h3>
         <div class="d-flex flex-wrap justify-content-between align-items-center my-3">
           <div class="d-flex flex-wrap text-capitalize align-items-center">
-            <p class="mb-0 pb-0 fw-bold text-dark-primary"><a href="/doc-addprescription.html">Home</a></p>
+            <p class="mb-0 pb-0 fw-bold text-dark-primary"><a href="/doc-dashboard.html">Home</a></p>
             <i class="bi bi-chevron-right pagination-arrow text-dark-primary"></i>
             <p class="mb-0 pb-0 text-dark">Patient List</p>
           </div>
-          <a href="/doc-addprescription.html-addpatient.html"
+          <a href="/doc-addpatient.html"
             class="btn btn-primary rounded-4 fw-500 py-2 rounded-pill mw-120 px-4 text-capitalize"> <i
               class="bi bi-plus-circle me-2"></i> add new patient</a>
         </div>

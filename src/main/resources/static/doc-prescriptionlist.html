@@ -319,11 +319,11 @@
         <h3 class="fw-600 text-dark-primary text-capitalize">Prescription List</h3>
         <div class="d-flex flex-wrap justify-content-between align-items-center my-3">
           <div class="d-flex flex-wrap text-capitalize align-items-center">
-            <p class="mb-0 pb-0 fw-bold text-dark-primary"><a href="index.html">Home</a></p>
+            <p class="mb-0 pb-0 fw-bold text-dark-primary"><a href="/doc-dashboard.html">Home</a></p>
             <i class="bi bi-chevron-right pagination-arrow text-dark-primary"></i>
             <p class="mb-0 pb-0 text-dark">Prescription List</p>
           </div>
-          <a href="addpatient.html"
+          <a href="/doc-addprescription.html"
             class="btn btn-primary rounded-4 fw-500 py-2 rounded-pill mw-120 px-4 text-capitalize"> <i
               class="bi bi-plus-circle me-2"></i> add new prescription</a>
         </div>
@@ -922,6 +922,362 @@
   <script src="/assets/js/togglepassword.js"></script>
   <script src="/assets/js/all.min.js"></script>
   <script src="/assets/js/script.js"></script>
+  <script>
+    $(document).ready(function() {
+      let currentPage = 0;
+
+      // Check if the user is authenticated (token exists)
+      const token = localStorage.getItem('access_token');
+      const userStatusElement = $('.user-status');
+
+      let lastActivityTime = Date.now();
+      const INACTIVITY_TIMEOUT = 30 * 60 * 1000; // 30 minutes in milliseconds
+
+      // Update last activity time on user interaction
+      $(document).on('mousemove keydown click', function () {
+        lastActivityTime = Date.now();
+      });
+
+      function checkInactivity() {
+        const currentTime = Date.now();
+        if (currentTime - lastActivityTime > INACTIVITY_TIMEOUT) {
+          localStorage.removeItem('access_token');
+          localStorage.removeItem('user');
+          userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+          alert('You have been inactive for too long. Please log in.');
+          window.location.href = '/index.html';
+        }
+      }
+
+      // Check inactivity every minute
+      setInterval(checkInactivity, 60 * 1000);
+
+      function updateUserStatus() {
+        if (!token) {
+          userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+          setTimeout(() => {
+            alert('No session found. Please log in.');
+            window.location.href = '/index.html';
+          }, 1000);
+          return;
+        }
+
+        $.ajax({
+          url: '/api/v1/auth/validate-token',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data && response.data.status) {
+              const status = response.data.status;
+              if (status === 'Available') {
+                userStatusElement.text(status).removeClass('text-danger text-warning').addClass('text-success');
+              } else if (status === 'Offline') {
+                userStatusElement.text(status).removeClass('text-success text-warning').addClass('text-danger');
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user');
+                setTimeout(() => {
+                  alert('Session invalid. Please log in again.');
+                  window.location.href = '/index.html';
+                }, 1000);
+              } else if (status === 'Away') {
+                userStatusElement.text(status).removeClass('text-success text-danger').addClass('text-warning');
+                localStorage.removeItem('access_token');
+                localStorage.removeItem('user');
+                setTimeout(() => {
+                  alert('Session expired. Please log in again.');
+                  window.location.href = '/index.html';
+                }, 1000);
+              }
+            } else {
+              userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              setTimeout(() => {
+                alert('Session invalid. Please log in again.');
+                window.location.href = '/index.html';
+              }, 1000);
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              userStatusElement.text('Away').removeClass('text-success text-danger').addClass('text-warning');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              setTimeout(() => {
+                alert('Session expired. Please log in again.');
+                window.location.href = '/index.html';
+              }, 1000);
+            } else {
+              userStatusElement.text('Offline').removeClass('text-success text-warning').addClass('text-danger');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              setTimeout(() => {
+                alert('Session invalid. Please log in again.');
+                window.location.href = '/index.html';
+              }, 1000);
+            }
+          }
+        });
+      }
+
+      // Initial status check and periodic updates
+      updateUserStatus();
+      setInterval(updateUserStatus, 300000); // 5 minutes
+
+      // Retrieve user data from localStorage
+      const userData = JSON.parse(localStorage.getItem('user'));
+      if (userData) {
+        const userFirstName = userData.firstName || 'User';
+        let userRole = userData.userRole || 'Unknown';
+        userRole = userRole.replace('ROLE_', '').replace('_', ' ').toLowerCase();
+        userRole = userRole.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        $('.user-firstname').text(userFirstName);
+        $('.user-role').text(userRole);
+        $('.dropdown-user-greeting').text(`Hello ${userFirstName}`);
+      } else {
+        console.warn('User data not found in localStorage. Redirecting to login page.');
+        window.location.href = '/index.html';
+        return;
+      }
+
+      // Display current year in footer
+      $('#currentYear').text(new Date().getFullYear());
+
+      // Search functionality
+      function performSearch(query, targetResults) {
+        if (query.length < 3) {
+          targetResults.hide();
+          return;
+        }
+  
+        $.ajax({
+          url: `/api/v1/search/users?query=${encodeURIComponent(query)}&page=1&size=10`,
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            const resultsList = targetResults.find('ul');
+            resultsList.empty();
+  
+            if (response.data && response.data.content && response.data.content.length > 0) {
+              response.data.content.forEach(user => {
+                resultsList.append(`
+                  <li class="p-2 rounded-end-3">
+                    <a href="/admin-profile.html?id=${user.id}">
+                      <div class="d-flex align-items-center notification-row">
+                        <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                          <img src="${user.profilePicture || '/includes/images/01.jpg'}" width="48" height="48" alt="">
+                        </div>
+                        <div class="notification-content">
+                          <div class="text-dark mb-0 fw-500 notification-msg">
+                            <span class="text-dark fw-bold mb-0">${user.firstName || ''} ${user.lastName || ''}</span>
+                          </div>
+                          <div class="d-flex justify-content-between">
+                            <div class="w-100 text-truncate fs-12 fw-500">${user.membershipNo || 'N/A'}</div>
+                            <p class="text-dark text-end mb-0 fs-12 fw-500">${user.email || 'N/A'}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>
+                `);
+              });
+              targetResults.show();
+            } else {
+              resultsList.append(`
+                <li class="p-2 rounded-end-3">
+                  <div class="text-dark fs-12">No users found.</div>
+                </li>
+              `);
+              targetResults.show();
+            }
+          },
+          error: function (xhr) {
+            const resultsList = targetResults.find('ul');
+            resultsList.empty();
+            let message = 'Search failed.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            resultsList.append(`
+              <li class="p-2 rounded-end-3">
+                <div class="text-dark fs-12">${message}</div>
+              </li>
+            `);
+            targetResults.show();
+          }
+        });
+      }
+  
+      $('.desktop-search-input').on('input', function () {
+        const query = $(this).val().trim();
+        performSearch(query, $('#desktop-search-results'));
+      });
+  
+      $('.mobile-search-input').on('input', function () {
+        const query = $(this).val().trim();
+        performSearch(query, $('#mobile-search-results'));
+      });
+  
+      $(document).on('click', function (e) {
+        if (!$(e.target).closest('#desktop-search-form').length && !$(e.target).closest('#mobile-search-form').length) {
+          $('#desktop-search-results').hide();
+          $('#mobile-search-results').hide();
+        }
+      });
+  
+      $('#desktop-search-form, #mobile-search-form').on('submit', function (e) {
+        e.preventDefault();
+      });
+
+      // Fetch notifications
+      function fetchNotifications() {
+        $.ajax({
+          url: '/api/v1/notifications',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const notifications = response.data;
+              const notificationBox = $('#notification_box');
+              const mobileNotifications = $('#mobile-notifications ul');
+              notificationBox.empty();
+              mobileNotifications.empty();
+              notifications.forEach(notification => {
+                const timeAgo = new Date(notification.createdAt).toLocaleString();
+                const notificationItem = `
+                  <li class="p-2 rounded-end-3">
+                    <a href="javascript:void(0)">
+                      <div class="d-flex align-items-center notification-row">
+                        <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                          <img src="${notification.senderProfilePicture || '/includes/images/01.jpg'}" width="48" height="48" alt="">
+                        </div>
+                        <div class="notification-content">
+                          <div class="text-dark mb-0 fw-500 notification-msg">
+                            <span class="text-dark fw-bold mb-0">${notification.senderName || 'Unknown'}</span>
+                            <span class="fw-light fs-14">${notification.message || 'No message'}</span>
+                          </div>
+                          <p class="text-dark text-end mb-0 fs-12 fw-500">${timeAgo}</p>
+                        </div>
+                      </div>
+                    </a>
+                  </li>`;
+                notificationBox.append(notificationItem);
+                mobileNotifications.append(notificationItem);
+              });
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+      }
+
+      // Fetch messages
+      function fetchMessages() {
+        $.ajax({
+          url: '/api/v1/messages',
+          type: 'GET',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response && response.data && Array.isArray(response.data)) {
+              const messages = response.data;
+              const messageBox = $('#message_box');
+              const mobileMessages = $('#mobile-messages ul');
+              messageBox.empty();
+              mobileMessages.empty();
+              messages.forEach(message => {
+                const timeAgo = new Date(message.createdAt).toLocaleString();
+                const messageItem = `
+                  <li class="p-2 rounded-end-3">
+                    <a href="javascript:void(0)">
+                      <div class="d-flex align-items-center notification-row">
+                        <div class="d-flex align-items-center text-center p-0 notification-user-img">
+                          <img src="${message.senderProfilePicture || '/includes/images/01.jpg'}" width="48" height="48" alt="">
+                        </div>
+                        <div class="notification-content">
+                          <div class="text-dark mb-0 fw-500 notification-msg">
+                            <span class="text-dark fw-bold mb-0">${message.senderName || 'Unknown'}</span>
+                          </div>
+                          <div class="d-flex justify-content-between">
+                            <div class="w-100 text-truncate fs-12 fw-500">${message.content || 'No content'}</div>
+                            <p class="text-dark text-end mb-0 fs-12 fw-500 msg-time">${timeAgo}</p>
+                          </div>
+                        </div>
+                      </div>
+                    </a>
+                  </li>`;
+                messageBox.append(messageItem);
+                mobileMessages.append(messageItem);
+              });
+            }
+          },
+          error: function (xhr) {
+            if (xhr.status === 401) {
+              alert('Session expired. Please log in again.');
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            }
+          }
+        });
+      }
+
+      // Initial fetch for all required data
+      fetchNotifications();
+      fetchMessages();
+
+      // Poll for updates every 30 seconds
+      setInterval(() => {
+        fetchNotifications();
+        fetchMessages();
+      }, 30000);
+
+     
+
+      // Logout Handler
+      $('.logout-btn').on('click', function(e) {
+        e.preventDefault();
+        $.ajax({
+          url: '/api/v1/auth/logout',
+          type: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            updateUserStatus(); // Update to Offline after logout
+            window.location.href = '/index.html';
+          },
+          error: function(xhr) {
+            alert('Logout failed: ' + (xhr.responseText || 'Unknown error'));
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            updateUserStatus(); // Update to Offline on failure
+            window.location.href = '/index.html';
+          }
+        });
+      });
+    });
+  </script>
 </body>
 
 </html>

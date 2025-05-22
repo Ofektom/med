@@ -6,14 +6,14 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>EMR Book Appointment</title>
-  <link rel="icon" type="image/x-icon" href="includes/images/favicon.ico">
-  <link rel="stylesheet" href="assets/css/bootstrap-icons.css">
-  <link rel="stylesheet" href="assets/css/responsive.bootstrap5.min.css">
-  <link rel="stylesheet" href="assets/css/dataTables.bootstrap5.min.css">
-  <link rel="stylesheet" href="assets/css/bootstrap-datepicker.min.css">
+  <link rel="icon" type="image/x-icon" href="/includes/images/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/bootstrap-icons.css">
+  <link rel="stylesheet" href="/assets/css/responsive.bootstrap5.min.css">
+  <link rel="stylesheet" href="/assets/css/dataTables.bootstrap5.min.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap-datepicker.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
-  <link rel="stylesheet" href="assets/css/bootstrap.css">
-  <link rel="stylesheet" href="assets/css/style.css">
+  <link rel="stylesheet" href="/assets/css/bootstrap.css">
+  <link rel="stylesheet" href="/assets/css/style.css">
 </head>
 
 <body>
@@ -27,7 +27,7 @@
         <div class="sidebar-box text-center position-fixed slim-outer bg-dark-primary">
           <div class="sidebar-heading bg-dark d-flex align-items-center justify-content-between p-3 border-dark border-bottom">
             <a href="index.html">
-              <img src="includes/images/healthcare-logo.png" width="200" alt="">
+              <img src="/includes/images/healthcare-logo.png" width="200" alt="">
             </a>
             <button class="btn btn-primary rounded closesidebar d-lg-none btn-sm"> <i class="fa-solid fa-xmark text-white"></i></button> 
           </div>
@@ -439,20 +439,20 @@
     </div>
     <!-- pagecontent -->
   </div>
-  <script src="assets/js/jquery-3.7.0.js"></script>
-  <script src="assets/js/jquery.min.js"></script>
-  <script src="assets/js/popper.min.js"></script>
-  <script src="assets/js/bootstrap.min.js"></script>
-  <script src="assets/js/jquery.dataTables.min.js"></script>
-  <script src="assets/js/dataTables.bootstrap5.min.js"></script>
-  <script src="assets/js/dataTables.responsive.min.js"></script>
-  <script src="assets/js/apexcharts.js"></script>
-  <script src="assets/js/jquery.validate.js"></script>
-  <script src="assets/js/bootstrap-datepicker.min.js"></script>
-  <script src="assets/js/jquery.slimscroll.min.js"></script>
-  <script src="assets/js/togglepassword.js"></script>
-  <script src="assets/js/all.min.js"></script>
-  <script src="assets/js/script.js"></script>
+  <script src="/assets/js/jquery-3.7.0.js"></script>
+  <script src="/assets/js/jquery.min.js"></script>
+  <script src="/assets/js/popper.min.js"></script>
+  <script src="/assets/js/bootstrap.min.js"></script>
+  <script src="/assets/js/jquery.dataTables.min.js"></script>
+  <script src="/assets/js/dataTables.bootstrap5.min.js"></script>
+  <script src="/assets/js/dataTables.responsive.min.js"></script>
+  <script src="/assets/js/apexcharts.js"></script>
+  <script src="/assets/js/jquery.validate.js"></script>
+  <script src="/assets/js/bootstrap-datepicker.min.js"></script>
+  <script src="/assets/js/jquery.slimscroll.min.js"></script>
+  <script src="/assets/js/togglepassword.js"></script>
+  <script src="/assets/js/all.min.js"></script>
+  <script src="/assets/js/script.js"></script>
   <script>
     $(document).ready(function() {
       let currentPage = 0;
@@ -919,6 +919,31 @@
             }
           });
         }
+      });
+
+      // Logout function
+      $('.logout-btn').on('click', function (e) {
+        e.preventDefault();
+        $.ajax({
+          url: '/api/v1/auth/logout',
+          type: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            updateUserStatus(); // Update to Offline after logout
+            window.location.href = '/index.html';
+          },
+          error: function (xhr) {
+            alert('Logout failed: ' + (xhr.responseText || 'Unknown error'));
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            updateUserStatus(); // Update to Offline on failure
+            window.location.href = '/index.html';
+          }
+        });
       });
 
       // Update current year

@@ -274,13 +274,8 @@
           <div class="d-flex flex-wrap text-capitalize align-items-center">
             <p class="mb-0 pb-0 fw-600 text-dark-primary"><a href="/lad-dashboard.html">Home</a></p>
             <i class="bi bi-chevron-right pagination-arrow text-dark-primary"></i>
-            <p class="mb-0 pb-0 fw-600 text-dark"><a href="/lab-doctorlist.html">Lab Scientists List</a></p>
-            <i class="bi bi-chevron-right pagination-arrow text-dark-primary"></i>
             <p class="mb-0 pb-0 text-dark">Lab Scientist Profile</p>
           </div>
-          <a href="/lab-profile.html"
-            class="btn btn-primary rounded-4 fw-500 py-2 rounded-pill mw-120 px-4 text-capitalize">Back To Lab Scientist
-            List <i class="fa-solid fa-right-to-bracket ms-2"></i> </a>
         </div>
         <div class="bg-white rounded-10 mb-4 overflow-hidden">
           <div class="doct-profile-banner"></div>
@@ -288,7 +283,7 @@
             <div class="col-lg-4 mb-4 mb-lg-0">
               <div class="d-flex flex-wrap px-4">
                 <div class="doct-profile-img me-3">
-                  <img src="includes/images/01_2.png" alt="" width="100" height="100" class="rounded-circle" id="profilePicture">
+                  <img src="/includes/images/01_2.png" alt="" width="100" height="100" class="rounded-circle" id="profilePicture">
                 </div>
                 <div class="doctor-name d-flex flex-column justify-content-center m-1">
                   <h5 class="text-primary mb-1" id="doctorFullName"></h5>
@@ -512,7 +507,7 @@
       <div
         class="shadow-sm py-4 px-4 bg-white footer d-flex flex-wrap justify-content-between align-items-center  fs-14">
         <div>
-          <span id="currentYear"></span> © All Rights Reserved By Health Care ERP
+          <span id="currentYear"></span> © All Rights Reserved By Ofektom Technologies
         </div>
         <div>
           <a href="javascript:void(0)" class="text-primary text-decoration-underline fw-600">Privacy Policy</a> | <a
@@ -643,7 +638,7 @@
         $('.user-firstname').text(userFirstName);
         $('.user-role').text(userRole);
         $('.dropdown-user-greeting').text(`Hello ${userFirstName}`);
-        $('#userProfilePicture').attr('src', userData.profilePicture || 'includes/images/01_2.png');
+        $('#userProfilePicture').attr('src', userData.profilePicture || '/includes/images/01_2.png');
       } else {
         console.warn('User data not found in localStorage. Redirecting to login page.');
         window.location.href = '/index.html';

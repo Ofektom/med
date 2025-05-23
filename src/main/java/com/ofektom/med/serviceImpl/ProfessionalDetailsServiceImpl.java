@@ -17,9 +17,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,7 +37,8 @@ public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsServic
 
     @Override
     public ResponseEntity<?> getProfessionalDetailsByUserId(Long userId) {
-        ProfessionalDetails professionalDetails = professionalDetailsRepository.findByUserId(userId).orElseThrow(() -> new NotFoundException("Professional details not found for user ID: " + userId));
+        ProfessionalDetails professionalDetails = professionalDetailsRepository.findByUserId(userId)
+                .orElseThrow(() -> new NotFoundException("Professional details not found for user ID: " + userId));
         ProfessionalDetailsResponse professionalDetailsResponse = mapToProfessionalDetailsResponse(professionalDetails);
         ApiResponse<ProfessionalDetailsResponse> response = new ApiResponse<>(
                 HttpStatus.OK.value(),
@@ -47,34 +50,35 @@ public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsServic
     }
 
     @Override
+    @Transactional
     public ResponseEntity<?> updateProfessionalDetails(Long userId, ProfessionalDetailsDto professionalDetailsDTO) {
-        User user = userRepository.findById(userId).orElseThrow(() -> new NotFoundException("User with ID " + userId + " not found"));
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundException("User with ID " + userId + " not found"));
 
-        ProfessionalDetails professionalDetails = professionalDetailsRepository.findByUserId(userId).orElseGet(() -> {
+        ProfessionalDetails professionalDetails = professionalDetailsRepository.findByUserId(userId)
+                .orElseGet(() -> {
                     ProfessionalDetails newDetails = new ProfessionalDetails();
                     newDetails.setUser(user);
                     return newDetails;
                 });
 
-        // Update educations
+        // Update educations (overwrite if provided)
         if (professionalDetailsDTO.getEducations() != null) {
-            List<Education> educations = professionalDetailsDTO.getEducations().stream()
+            professionalDetails.setEducations(professionalDetailsDTO.getEducations().stream()
                     .map(dto -> new Education(dto.getYear(), dto.getDegree(), dto.getInstitute(), dto.getResult()))
-                    .collect(Collectors.toList());
-            professionalDetails.setEducations(educations);
+                    .collect(Collectors.toList()));
         }
 
-        // Update experiences
+        // Update experiences (overwrite if provided)
         if (professionalDetailsDTO.getExperiences() != null) {
-            List<Experience> experiences = professionalDetailsDTO.getExperiences().stream()
+            professionalDetails.setExperiences(professionalDetailsDTO.getExperiences().stream()
                     .map(dto -> new Experience(dto.getYear(), dto.getDepartment(), dto.getPosition(), dto.getHospital(), dto.getFeedback()))
-                    .collect(Collectors.toList());
-            professionalDetails.setExperiences(experiences);
+                    .collect(Collectors.toList()));
         }
 
-        // Update conferences
+        // Update conferences (overwrite if provided)
         if (professionalDetailsDTO.getConferences() != null) {
-            professionalDetails.setConferences(professionalDetailsDTO.getConferences());
+            professionalDetails.setConferences(new ArrayList<>(professionalDetailsDTO.getConferences()));
         }
 
         professionalDetailsRepository.save(professionalDetails);
@@ -89,24 +93,24 @@ public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsServic
     }
 
     private ProfessionalDetailsResponse mapToProfessionalDetailsResponse(ProfessionalDetails professionalDetails) {
-        List<EducationResponse> educationResponses = professionalDetails.getEducations() != null
+        List<EducationResponse> educationDTOs = professionalDetails.getEducations() != null
                 ? professionalDetails.getEducations().stream()
                 .map(edu -> new EducationResponse(edu.getId(), edu.getYear(), edu.getDegree(), edu.getInstitute(), edu.getResult()))
                 .collect(Collectors.toList())
-                : null;
+                : Collections.emptyList();
 
-        List<ExperienceResponse> experienceResponses = professionalDetails.getExperiences() != null
+        List<ExperienceResponse> experienceDTOs = professionalDetails.getExperiences() != null
                 ? professionalDetails.getExperiences().stream()
                 .map(exp -> new ExperienceResponse(exp.getId(), exp.getYear(), exp.getDepartment(), exp.getPosition(), exp.getHospital(), exp.getFeedback()))
                 .collect(Collectors.toList())
-                : null;
+                : Collections.emptyList();
 
         return new ProfessionalDetailsResponse(
                 professionalDetails.getId(),
                 professionalDetails.getUser().getId(),
-                educationResponses,
-                experienceResponses,
-                professionalDetails.getConferences()
+                educationDTOs,
+                experienceDTOs,
+                professionalDetails.getConferences() != null ? professionalDetails.getConferences() : Collections.emptyList()
         );
     }
 }

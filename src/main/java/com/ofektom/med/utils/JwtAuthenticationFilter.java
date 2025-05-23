@@ -40,25 +40,36 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
         String token = null;
-        String authenticationHeader = null;
-        String username = null;
-        UserDetails userDetails = null;
-        authenticationHeader = request.getHeader("Authorization");
-        if (authenticationHeader!=null&&authenticationHeader.startsWith("Bearer ")){
-            token = authenticationHeader.substring(7);
-            username =utils.extractUsername.apply(token);
-        }
-        if (username!=null&& SecurityContextHolder.getContext().getAuthentication()==null){
-            userDetails = userService.loadUserByUsername(username);
-            if (userDetails!=null&&utils.isTokenValid.apply(token, userDetails.getUsername())){
-                UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                        new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        String authenticationHeader = request.getHeader("Authorization");
+        System.out.println("Processing request: " + request.getMethod() + " " + request.getRequestURI());
+        System.out.println("Authorization Header: " + authenticationHeader);
+
+        if (authenticationHeader != null && authenticationHeader.startsWith("Bearer ")) {
+            token = authenticationHeader.substring(7).trim(); // Trim to handle extra spaces
+            System.out.println("Extracted Token: " + token.substring(0, 10) + "..."); // Log first 10 chars for brevity
+            String username = utils.extractUsername.apply(token);
+            System.out.println("Extracted Username: " + username);
+
+            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = userService.loadUserByUsername(username);
+                System.out.println("User Details Loaded: " + (userDetails != null));
+                if (userDetails != null && utils.isTokenValid.apply(token, userDetails.getUsername())) {
+                    System.out.println("Token is valid for user: " + username);
+                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                    usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                    System.out.println("Authentication set for user: " + username);
+                } else {
+                    System.out.println("Token validation failed or user not found");
+                }
+            } else {
+                System.out.println("Skipping authentication: Username null or context already set");
             }
+        } else {
+            System.out.println("No valid Authorization header found");
         }
+
         filterChain.doFilter(request, response);
-
-
     }
 }

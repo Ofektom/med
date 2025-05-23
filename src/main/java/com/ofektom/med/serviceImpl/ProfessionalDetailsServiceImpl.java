@@ -16,6 +16,7 @@ import com.ofektom.med.service.ProfessionalDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -37,6 +38,7 @@ public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsServic
 
     @Override
     public ResponseEntity<?> getProfessionalDetailsByUserId(Long userId) {
+        System.out.println("Authentication in updateProfessionalDetails: " + SecurityContextHolder.getContext().getAuthentication());
         ProfessionalDetails professionalDetails = professionalDetailsRepository.findByUserId(userId)
                 .orElseThrow(() -> new NotFoundException("Professional details not found for user ID: " + userId));
         ProfessionalDetailsResponse professionalDetailsResponse = mapToProfessionalDetailsResponse(professionalDetails);

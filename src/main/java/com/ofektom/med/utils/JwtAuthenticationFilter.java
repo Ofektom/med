@@ -45,8 +45,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         System.out.println("Authorization Header: " + authenticationHeader);
 
         if (authenticationHeader != null && authenticationHeader.startsWith("Bearer ")) {
-            token = authenticationHeader.substring(7).trim(); // Trim to handle extra spaces
-            System.out.println("Extracted Token: " + token.substring(0, 10) + "..."); // Log first 10 chars for brevity
+            token = authenticationHeader.substring(7).trim();
+            System.out.println("Extracted Token: " + token.substring(0, 10) + "...");
             String username = utils.extractUsername.apply(token);
             System.out.println("Extracted Username: " + username);
 
@@ -59,15 +59,15 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                    System.out.println("Authentication set for user: " + username);
+                    System.out.println("Authentication set for user: " + username + " on " + request.getMethod() + " request");
                 } else {
-                    System.out.println("Token validation failed or user not found");
+                    System.out.println("Token validation failed or user not found for " + request.getMethod() + " request");
                 }
             } else {
-                System.out.println("Skipping authentication: Username null or context already set");
+                System.out.println("Skipping authentication: Username null or context already set for " + request.getMethod() + " request");
             }
         } else {
-            System.out.println("No valid Authorization header found");
+            System.out.println("No valid Authorization header found for " + request.getMethod() + " request");
         }
 
         filterChain.doFilter(request, response);

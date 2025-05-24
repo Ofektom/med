@@ -1,35 +1,22 @@
-package com.ofektom.med.model;
+package com.ofektom.med.dto.request;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "educations")
-public class Education {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "education_id")
+public class EducationDto {
     private Long id;
-
     private String year;
     private String degree;
     private String institute;
     private String result;
 
-    @ManyToOne
-    private ProfessionalDetails professionalDetails;
+    public EducationDto(){}
 
-    public Education() {}
-
-    public Education(String year, String degree, String institute, String result, ProfessionalDetails professionalDetails) {
+    public EducationDto(Long id, String year, String degree, String institute, String result) {
+        this.id = id;
         this.year = year;
         this.degree = degree;
         this.institute = institute;
         this.result = result;
-        this.professionalDetails = professionalDetails;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -68,13 +55,5 @@ public class Education {
 
     public void setResult(String result) {
         this.result = result;
-    }
-
-    public ProfessionalDetails getProfessionalDetails() {
-        return professionalDetails;
-    }
-
-    public void setProfessionalDetails(ProfessionalDetails professionalDetails) {
-        this.professionalDetails = professionalDetails;
     }
 }

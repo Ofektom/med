@@ -981,64 +981,32 @@
       });
     
       // Update professional details
-      function updateProfessionalDetails() {
-        // Fetch the latest data before updating to minimize race conditions
-        fetchProfessionalDetails().then(() => {
-          const professionalDetailsData = {
-            educations: educations,
-            experiences: experiences,
-            conferences: conferences
-          };
-          console.log('Sending update request at ' + new Date().toLocaleString() + ' WAT');
-          console.log('User ID:', userId);
-          console.log('Token (first 10 chars):', token.substring(0, 10) + '...');
-          console.log('Payload:', JSON.stringify(professionalDetailsData, null, 2));
-    
-          if (!token) {
-            alert('No authentication token found. Please log in again.');
-            localStorage.removeItem('access_token');
-            localStorage.removeItem('user');
-            window.location.href = '/index.html';
-            return;
-          }
-    
-          $.ajax({
-            url: `/api/v1/users/${userId}/professional-details`,
-            type: 'PUT',
-            headers: {
-              'Authorization': 'Bearer ' + token,
-              'Content-Type': 'application/json'
-            },
-            data: JSON.stringify(professionalDetailsData),
-            success: function(response) {
-              console.log('Update successful at ' + new Date().toLocaleString() + ' WAT');
-              console.log('Response:', response);
-              fetchProfessionalDetails(); // Refresh the display
-              alert('Professional details updated successfully.');
-            },
-            error: function(xhr) {
-              console.error('Update failed at ' + new Date().toLocaleString() + ' WAT');
-              console.error('Status:', xhr.status);
-              console.error('Status Text:', xhr.statusText);
-              console.error('Response Text:', xhr.responseText);
-              let message = 'Failed to update professional details.';
-              if (xhr.status === 401) {
-                message = 'Unauthorized: Please log in again.';
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('user');
-                window.location.href = '/index.html';
-              } else if (xhr.status === 403) {
-                message = 'Forbidden: Check token or permissions.';
-                console.error('Token details:', token.substring(0, 10) + '...');
-              } else if (xhr.responseJSON && xhr.responseJSON.message) {
-                message = xhr.responseJSON.message || 'Unknown error';
-              }
-              console.error('Error details:', xhr);
-              alert(message);
+      function updateProfessionalDetails(type, id, data) {
+        const url = `/api/v1/users/${userId}/professional-details/${type}/${id}`;
+        $.ajax({
+          url: url,
+          type: 'PUT',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          data: JSON.stringify(data),
+          success: function(response) {
+            fetchProfessionalDetails();
+            alert(`${type.charAt(0).toUpperCase() + type.slice(1)} updated successfully.`);
+          },
+          error: function(xhr) {
+            let message = `Failed to update ${type}.`;
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
             }
-          });
-        }).catch(error => {
-          console.error('Failed to fetch latest data before update:', error);
+            alert(message);
+          }
         });
       }
     
@@ -1052,15 +1020,33 @@
           alert('Please fill in all required fields (Year, Degree, Institute).');
           return;
         }
-        fetchProfessionalDetails().then(() => {
-          const newEducation = { year, degree, institute, result };
-          educations.push(newEducation);
-          console.log('Added education:', newEducation);
-          updateProfessionalDetails();
-          $('#education_add_form').hide();
-          $('input[name^="education_"]').val('');
-        }).catch(error => {
-          console.error('Failed to fetch latest data before adding education:', error);
+        const newEducation = { year, degree, institute, result };
+        $.ajax({
+          url: `/api/v1/users/${userId}/professional-details/education`,
+          type: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          data: JSON.stringify(newEducation),
+          success: function(response) {
+            fetchProfessionalDetails();
+            $('#education_add_form').hide();
+            $('input[name^="education_"]').val('');
+            alert('Education added successfully.');
+          },
+          error: function(xhr) {
+            let message = 'Failed to add education.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            alert(message);
+          }
         });
       });
     
@@ -1075,15 +1061,33 @@
           alert('Please fill in all required fields (Year, Department, Position, Hospital).');
           return;
         }
-        fetchProfessionalDetails().then(() => {
-          const newExperience = { year, department, position, hospital, feedback };
-          experiences.push(newExperience);
-          console.log('Added experience:', newExperience);
-          updateProfessionalDetails();
-          $('#experience_add_form').hide();
-          $('input[name^="experience_"]').val('');
-        }).catch(error => {
-          console.error('Failed to fetch latest data before adding experience:', error);
+        const newExperience = { year, department, position, hospital, feedback };
+        $.ajax({
+          url: `/api/v1/users/${userId}/professional-details/experience`,
+          type: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          data: JSON.stringify(newExperience),
+          success: function(response) {
+            fetchProfessionalDetails();
+            $('#experience_add_form').hide();
+            $('input[name^="experience_"]').val('');
+            alert('Experience added successfully.');
+          },
+          error: function(xhr) {
+            let message = 'Failed to add experience.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            alert(message);
+          }
         });
       });
     
@@ -1094,14 +1098,32 @@
           alert('Please enter a conference description.');
           return;
         }
-        fetchProfessionalDetails().then(() => {
-          conferences.push(newConference);
-          console.log('Added conference:', newConference);
-          updateProfessionalDetails();
-          $('#conference_add_form').hide();
-          $('input[name="conference_new"]').val('');
-        }).catch(error => {
-          console.error('Failed to fetch latest data before adding conference:', error);
+        $.ajax({
+          url: `/api/v1/users/${userId}/professional-details/conference`,
+          type: 'POST',
+          headers: {
+            'Authorization': 'Bearer ' + token,
+            'Content-Type': 'application/json'
+          },
+          data: JSON.stringify({ conference: newConference }),
+          success: function(response) {
+            fetchProfessionalDetails();
+            $('#conference_add_form').hide();
+            $('input[name="conference_new"]').val('');
+            alert('Conference added successfully.');
+          },
+          error: function(xhr) {
+            let message = 'Failed to add conference.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            alert(message);
+          }
         });
       });
     
@@ -1141,25 +1163,36 @@
           alert('Please fill in all required fields (Year, Degree, Institute).');
           return;
         }
-        fetchProfessionalDetails().then(() => {
-          educations[index] = { year, degree, institute, result };
-          console.log('Updated education at index ' + index + ':', educations[index]);
-          updateProfessionalDetails();
-        }).catch(error => {
-          console.error('Failed to fetch latest data before updating education:', error);
-        });
+        const updatedEducation = { year, degree, institute, result };
+        updateProfessionalDetails('education', index, updatedEducation);
       });
     
       // Delete education
       $(document).on('click', '.delete-education', function(e) {
         e.preventDefault();
         const index = $(this).data('index');
-        fetchProfessionalDetails().then(() => {
-          educations.splice(index, 1);
-          console.log('Deleted education at index ' + index);
-          updateProfessionalDetails();
-        }).catch(error => {
-          console.error('Failed to fetch latest data before deleting education:', error);
+        $.ajax({
+          url: `/api/v1/users/${userId}/professional-details/education/${index}`,
+          type: 'DELETE',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            fetchProfessionalDetails();
+            alert('Education deleted successfully.');
+          },
+          error: function(xhr) {
+            let message = 'Failed to delete education.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            alert(message);
+          }
         });
       });
     
@@ -1203,25 +1236,36 @@
           alert('Please fill in all required fields (Year, Department, Position, Hospital).');
           return;
         }
-        fetchProfessionalDetails().then(() => {
-          experiences[index] = { year, department, position, hospital, feedback };
-          console.log('Updated experience at index ' + index + ':', experiences[index]);
-          updateProfessionalDetails();
-        }).catch(error => {
-          console.error('Failed to fetch latest data before updating experience:', error);
-        });
+        const updatedExperience = { year, department, position, hospital, feedback };
+        updateProfessionalDetails('experience', index, updatedExperience);
       });
     
       // Delete experience
       $(document).on('click', '.delete-experience', function(e) {
         e.preventDefault();
         const index = $(this).data('index');
-        fetchProfessionalDetails().then(() => {
-          experiences.splice(index, 1);
-          console.log('Deleted experience at index ' + index);
-          updateProfessionalDetails();
-        }).catch(error => {
-          console.error('Failed to fetch latest data before deleting experience:', error);
+        $.ajax({
+          url: `/api/v1/users/${userId}/professional-details/experience/${index}`,
+          type: 'DELETE',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            fetchProfessionalDetails();
+            alert('Experience deleted successfully.');
+          },
+          error: function(xhr) {
+            let message = 'Failed to delete experience.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            alert(message);
+          }
         });
       });
     
@@ -1249,25 +1293,35 @@
           alert('Please enter a conference description.');
           return;
         }
-        fetchProfessionalDetails().then(() => {
-          conferences[index] = newConference;
-          console.log('Updated conference at index ' + index + ':', newConference);
-          updateProfessionalDetails();
-        }).catch(error => {
-          console.error('Failed to fetch latest data before updating conference:', error);
-        });
+        updateProfessionalDetails('conference', index, { conference: newConference });
       });
     
       // Delete conference
       $(document).on('click', '.delete-conference', function(e) {
         e.preventDefault();
         const index = $(this).data('index');
-        fetchProfessionalDetails().then(() => {
-          conferences.splice(index, 1);
-          console.log('Deleted conference at index ' + index);
-          updateProfessionalDetails();
-        }).catch(error => {
-          console.error('Failed to fetch latest data before deleting conference:', error);
+        $.ajax({
+          url: `/api/v1/users/${userId}/professional-details/conference/${index}`,
+          type: 'DELETE',
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function(response) {
+            fetchProfessionalDetails();
+            alert('Conference deleted successfully.');
+          },
+          error: function(xhr) {
+            let message = 'Failed to delete conference.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
+            }
+            alert(message);
+          }
         });
       });
     
@@ -1312,6 +1366,58 @@
             alert(message);
           }
         });
+      });
+    
+      // Fetch additional data (stats, specialties, activities, etc.)
+      $.ajax({
+        url: `/api/v1/users/${userId}/stats`,
+        type: 'GET',
+        headers: {
+          'Authorization': 'Bearer ' + token
+        },
+        success: function(response) {
+          if (response && response.data) {
+            const stats = response.data;
+            $('#doctorStats').html(`
+              <div class="col-4 mb-4 mb-md-0 col-md-2">
+                <div>
+                  <span class="text-gray pb-3">Operations</span>
+                  <h4 class="text-primary mb-0">${stats.operations || 0}</h4>
+                </div>
+              </div>
+              <div class="col-4 mb-4 mb-md-0 col-md-2">
+                <div>
+                  <span class="text-gray pb-3">Hospitals</span>
+                  <h4 class="text-primary mb-0">${stats.hospitals || 0}</h4>
+                </div>
+              </div>
+              <div class="col-4 mb-4 mb-md-0 col-md-2">
+                <div>
+                  <span class="text-gray pb-3">Patients</span>
+                  <h4 class="text-primary mb-0">${stats.patients || 0}</h4>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="justify-content-md-end d-flex flex-wrap gap-2">
+                  <a href="#" class="btn btn-primary rounded-4 fw-500 py-2 rounded-pill mw-120 px-4 text-capitalize me-2">
+                    <i class="fa fa-user-edit me-2"></i> Edit Profile
+                  </a>
+                  <button class="btn btn-secondary rounded-4 fw-500 py-2 rounded-pill px-4 text-capitalize me-2">
+                    <i class="fa fa-share-alt me-2"></i> Share Profile
+                  </button>
+                </div>
+              </div>
+            `);
+          }
+        },
+        error: function(xhr) {
+          if (xhr.status === 401) {
+            alert('Session expired. Please log in again.');
+            localStorage.removeItem('access_token');
+            localStorage.removeItem('user');
+            window.location.href = '/index.html';
+          }
+        }
       });
     
       // Fetch additional data (stats, specialties, activities, etc.)

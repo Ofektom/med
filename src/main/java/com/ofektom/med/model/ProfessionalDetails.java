@@ -5,7 +5,10 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "professional_details")
@@ -20,18 +23,16 @@ public class ProfessionalDetails {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "professional_details_id")
-    private List<Education> educations;
+    @OneToMany(mappedBy = "professionalDetails", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Education> educations = new HashSet<>();
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-    @JoinColumn(name = "professional_details_id")
-    private List<Experience> experiences;
+    @OneToMany(mappedBy = "professionalDetails", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Experience> experiences = new HashSet<>();
 
     @ElementCollection
-    @CollectionTable(name = "professional_details_conferences", joinColumns = @JoinColumn(name = "professional_details_id"))
-    @Column(name = "conference_description")
-    private List<String> conferences;
+    @CollectionTable(name = "professional_conferences", joinColumns = @JoinColumn(name = "professional_details_id"))
+    @Column(name = "conference")
+    private List<String> conferences = new ArrayList<>();
 
     @CreationTimestamp
     @Column(name = "created_at", updatable = false)
@@ -44,7 +45,7 @@ public class ProfessionalDetails {
     public ProfessionalDetails() {
     }
 
-    public ProfessionalDetails(Long id, User user, List<Education> educations, List<Experience> experiences, List<String> conferences, LocalDateTime createdAt, LocalDateTime updatedAt) {
+    public ProfessionalDetails(Long id, User user, Set<Education> educations, Set<Experience> experiences, List<String> conferences, LocalDateTime createdAt, LocalDateTime updatedAt) {
         this.id = id;
         this.user = user;
         this.educations = educations;
@@ -70,19 +71,19 @@ public class ProfessionalDetails {
         this.user = user;
     }
 
-    public List<Education> getEducations() {
+    public Set<Education> getEducations() {
         return educations;
     }
 
-    public void setEducations(List<Education> educations) {
+    public void setEducations(Set<Education> educations) {
         this.educations = educations;
     }
 
-    public List<Experience> getExperiences() {
+    public Set<Experience> getExperiences() {
         return experiences;
     }
 
-    public void setExperiences(List<Experience> experiences) {
+    public void setExperiences(Set<Experience> experiences) {
         this.experiences = experiences;
     }
 

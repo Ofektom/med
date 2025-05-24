@@ -1,37 +1,24 @@
-package com.ofektom.med.model;
+package com.ofektom.med.dto.request;
 
-import jakarta.persistence.*;
-
-@Entity
-@Table(name = "experiences")
-public class Experience {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "experience_id")
+public class ExperienceDto {
     private Long id;
-
     private String year;
     private String department;
     private String position;
     private String hospital;
     private String feedback;
 
-    @ManyToOne
-    private ProfessionalDetails professionalDetails;
+    public ExperienceDto(){}
 
-    public Experience() {}
-
-    public Experience(String year, String department, String position, String hospital, String feedback, ProfessionalDetails professionalDetails) {
+    public ExperienceDto(Long id, String year, String department, String position, String hospital, String feedback) {
+        this.id = id;
         this.year = year;
         this.department = department;
         this.position = position;
         this.hospital = hospital;
         this.feedback = feedback;
-        this.professionalDetails = professionalDetails;
     }
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -78,13 +65,5 @@ public class Experience {
 
     public void setFeedback(String feedback) {
         this.feedback = feedback;
-    }
-
-    public ProfessionalDetails getProfessionalDetails() {
-        return professionalDetails;
-    }
-
-    public void setProfessionalDetails(ProfessionalDetails professionalDetails) {
-        this.professionalDetails = professionalDetails;
     }
 }

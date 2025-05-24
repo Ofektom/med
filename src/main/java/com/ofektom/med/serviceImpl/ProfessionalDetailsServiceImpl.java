@@ -1,10 +1,8 @@
 package com.ofektom.med.serviceImpl;
 
-import com.ofektom.med.dto.request.ProfessionalDetailsDto;
-import com.ofektom.med.dto.response.ApiResponse;
-import com.ofektom.med.dto.response.EducationResponse;
-import com.ofektom.med.dto.response.ExperienceResponse;
-import com.ofektom.med.dto.response.ProfessionalDetailsResponse;
+import com.ofektom.med.dto.request.EducationDto;
+import com.ofektom.med.dto.request.ExperienceDto;
+import com.ofektom.med.dto.response.*;
 import com.ofektom.med.exception.NotFoundException;
 import com.ofektom.med.model.Education;
 import com.ofektom.med.model.Experience;
@@ -14,84 +12,168 @@ import com.ofektom.med.repositroy.ProfessionalDetailsRepository;
 import com.ofektom.med.repositroy.UserRepository;
 import com.ofektom.med.service.ProfessionalDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
 public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsService {
-    private final ProfessionalDetailsRepository professionalDetailsRepository;
     private final UserRepository userRepository;
+    private final ProfessionalDetailsRepository professionalDetailsRepository;
 
     @Autowired
-    public ProfessionalDetailsServiceImpl(ProfessionalDetailsRepository professionalDetailsRepository, UserRepository userRepository) {
-        this.professionalDetailsRepository = professionalDetailsRepository;
+    public ProfessionalDetailsServiceImpl(UserRepository userRepository, ProfessionalDetailsRepository professionalDetailsRepository) {
         this.userRepository = userRepository;
-    }
-
-    @Override
-    public ResponseEntity<?> getProfessionalDetailsByUserId(Long userId) {
-        System.out.println("Authentication in updateProfessionalDetails: " + SecurityContextHolder.getContext().getAuthentication());
-        ProfessionalDetails professionalDetails = professionalDetailsRepository.findByUserId(userId)
-                .orElseThrow(() -> new NotFoundException("Professional details not found for user ID: " + userId));
-        ProfessionalDetailsResponse professionalDetailsResponse = mapToProfessionalDetailsResponse(professionalDetails);
-        ApiResponse<ProfessionalDetailsResponse> response = new ApiResponse<>(
-                HttpStatus.OK.value(),
-                "Professional details retrieved successfully",
-                null,
-                professionalDetailsResponse
-        );
-        return ResponseEntity.ok(response);
+        this.professionalDetailsRepository = professionalDetailsRepository;
     }
 
     @Override
     @Transactional
-    public ResponseEntity<?> updateProfessionalDetails(Long userId, ProfessionalDetailsDto professionalDetailsDTO) {
+    public ResponseEntity<?> getProfessionalDetailsByUserId(Long userId) {
+        ProfessionalDetails professionalDetails = professionalDetailsRepository.findByUserId(userId)
+                .orElseThrow(() -> new NotFoundException("Professional details not found for user ID " + userId));
+
+        return ResponseEntity.ok(new ApiResponse<>(200, "Professional details retrieved successfully", null, mapToProfessionalDetailsResponse(professionalDetails)));
+    }
+
+    private ProfessionalDetails getOrCreateProfessionalDetails(Long userId) {
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("User with ID " + userId + " not found"));
-
-        ProfessionalDetails professionalDetails = professionalDetailsRepository.findByUserId(userId)
+        return professionalDetailsRepository.findByUserId(userId)
                 .orElseGet(() -> {
                     ProfessionalDetails newDetails = new ProfessionalDetails();
                     newDetails.setUser(user);
-                    return newDetails;
+                    return professionalDetailsRepository.save(newDetails);
                 });
+    }
 
-        // Update educations (overwrite if provided)
-        if (professionalDetailsDTO.getEducations() != null) {
-            professionalDetails.setEducations(professionalDetailsDTO.getEducations().stream()
-                    .map(dto -> new Education(dto.getYear(), dto.getDegree(), dto.getInstitute(), dto.getResult()))
-                    .collect(Collectors.toList()));
-        }
-
-        // Update experiences (overwrite if provided)
-        if (professionalDetailsDTO.getExperiences() != null) {
-            professionalDetails.setExperiences(professionalDetailsDTO.getExperiences().stream()
-                    .map(dto -> new Experience(dto.getYear(), dto.getDepartment(), dto.getPosition(), dto.getHospital(), dto.getFeedback()))
-                    .collect(Collectors.toList()));
-        }
-
-        // Update conferences (overwrite if provided)
-        if (professionalDetailsDTO.getConferences() != null) {
-            professionalDetails.setConferences(new ArrayList<>(professionalDetailsDTO.getConferences()));
-        }
-
+    @Override
+    @Transactional
+    public ResponseEntity<?> addEducation(Long userId, EducationDto educationDto) {
+        ProfessionalDetails professionalDetails = getOrCreateProfessionalDetails(userId);
+        Education education = new Education();
+        education.setYear(educationDto.getYear());
+        education.setDegree(educationDto.getDegree());
+        education.setInstitute(educationDto.getInstitute());
+        education.setResult(educationDto.getResult());
+        education.setProfessionalDetails(professionalDetails);
+        professionalDetails.getEducations().add(education);
         professionalDetailsRepository.save(professionalDetails);
-        ProfessionalDetailsResponse professionalDetailsResponse = mapToProfessionalDetailsResponse(professionalDetails);
-        ApiResponse<ProfessionalDetailsResponse> response = new ApiResponse<>(
-                HttpStatus.OK.value(),
-                "Professional details updated successfully",
-                null,
-                professionalDetailsResponse
-        );
-        return ResponseEntity.ok(response);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Education added successfully", null, mapToEducationResponse(education)));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> addExperience(Long userId, ExperienceDto experienceDto) {
+        ProfessionalDetails professionalDetails = getOrCreateProfessionalDetails(userId);
+        Experience experience = new Experience();
+        experience.setYear(experienceDto.getYear());
+        experience.setDepartment(experienceDto.getDepartment());
+        experience.setPosition(experienceDto.getPosition());
+        experience.setHospital(experienceDto.getHospital());
+        experience.setFeedback(experienceDto.getFeedback());
+        experience.setProfessionalDetails(professionalDetails);
+        professionalDetails.getExperiences().add(experience);
+        professionalDetailsRepository.save(professionalDetails);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Experience added successfully", null, mapToExperienceResponse(experience)));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> addConference(Long userId, String conference) {
+        ProfessionalDetails professionalDetails = getOrCreateProfessionalDetails(userId);
+        professionalDetails.getConferences().add(conference);
+        professionalDetailsRepository.save(professionalDetails);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Conference added successfully", null, conference));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> updateEducation(Long userId, Long educationId, EducationDto educationDto) {
+        ProfessionalDetails professionalDetails = getOrCreateProfessionalDetails(userId);
+        Education education = professionalDetails.getEducations().stream()
+                .filter(e -> e.getId().equals(educationId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Education with ID " + educationId + " not found"));
+        education.setYear(educationDto.getYear());
+        education.setDegree(educationDto.getDegree());
+        education.setInstitute(educationDto.getInstitute());
+        education.setResult(educationDto.getResult());
+        professionalDetailsRepository.save(professionalDetails);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Education updated successfully", null, mapToEducationResponse(education)));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> updateExperience(Long userId, Long experienceId, ExperienceDto experienceDto) {
+        ProfessionalDetails professionalDetails = getOrCreateProfessionalDetails(userId);
+        Experience experience = professionalDetails.getExperiences().stream()
+                .filter(e -> e.getId().equals(experienceId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Experience with ID " + experienceId + " not found"));
+        experience.setYear(experienceDto.getYear());
+        experience.setDepartment(experienceDto.getDepartment());
+        experience.setPosition(experienceDto.getPosition());
+        experience.setHospital(experienceDto.getHospital());
+        experience.setFeedback(experienceDto.getFeedback());
+        professionalDetailsRepository.save(professionalDetails);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Experience updated successfully", null, mapToExperienceResponse(experience)));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> updateConference(Long userId, int index, String conference) {
+        ProfessionalDetails professionalDetails = getOrCreateProfessionalDetails(userId);
+        List<String> conferences = professionalDetails.getConferences();
+        if (index < 0 || index >= conferences.size()) {
+            throw new NotFoundException("Conference at index " + index + " not found");
+        }
+        conferences.set(index, conference);
+        professionalDetailsRepository.save(professionalDetails);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Conference updated successfully", null, conference));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> deleteEducation(Long userId, Long educationId) {
+        ProfessionalDetails professionalDetails = getOrCreateProfessionalDetails(userId);
+        Education education = professionalDetails.getEducations().stream()
+                .filter(e -> e.getId().equals(educationId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Education with ID " + educationId + " not found"));
+        professionalDetails.getEducations().remove(education);
+        professionalDetailsRepository.save(professionalDetails);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Education deleted successfully", null, null));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> deleteExperience(Long userId, Long experienceId) {
+        ProfessionalDetails professionalDetails = getOrCreateProfessionalDetails(userId);
+        Experience experience = professionalDetails.getExperiences().stream()
+                .filter(e -> e.getId().equals(experienceId))
+                .findFirst()
+                .orElseThrow(() -> new NotFoundException("Experience with ID " + experienceId + " not found"));
+        professionalDetails.getExperiences().remove(experience);
+        professionalDetailsRepository.save(professionalDetails);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Experience deleted successfully", null, null));
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> deleteConference(Long userId, int index) {
+        ProfessionalDetails professionalDetails = getOrCreateProfessionalDetails(userId);
+        List<String> conferences = professionalDetails.getConferences();
+        if (index < 0 || index >= conferences.size()) {
+            throw new NotFoundException("Conference at index " + index + " not found");
+        }
+        String removedConference = conferences.remove(index);
+        professionalDetailsRepository.save(professionalDetails);
+        return ResponseEntity.ok(new ApiResponse<>(200, "Conference deleted successfully", null, removedConference));
     }
 
     private ProfessionalDetailsResponse mapToProfessionalDetailsResponse(ProfessionalDetails professionalDetails) {
@@ -114,5 +196,13 @@ public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsServic
                 experienceDTOs,
                 professionalDetails.getConferences() != null ? professionalDetails.getConferences() : Collections.emptyList()
         );
+    }
+
+    private ExperienceResponse mapToExperienceResponse(Experience exp){
+        return  new ExperienceResponse(exp.getId(), exp.getYear(), exp.getDepartment(), exp.getPosition(), exp.getHospital(), exp.getFeedback());
+    }
+
+    private EducationResponse mapToEducationResponse(Education edu){
+        return  new EducationResponse(edu.getId(), edu.getYear(), edu.getDegree(), edu.getInstitute(), edu.getResult());
     }
 }

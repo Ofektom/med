@@ -853,10 +853,27 @@
             conferenceFields.append('<p class="text-gray">No conferences added.</p>');
         } else {
             professionalDetails.conferences.forEach((conf, index) => {
+                let conferenceText = 'N/A';
+                
+                // Handle different data structures
+                if (typeof conf === 'string') {
+                    try {
+                        // If conf is a JSON string, parse it
+                        const parsedConf = JSON.parse(conf);
+                        conferenceText = parsedConf.conference || 'N/A';
+                    } catch (e) {
+                        // If conf is a plain string (not JSON), use it directly
+                        conferenceText = conf || 'N/A';
+                    }
+                } else if (typeof conf === 'object' && conf !== null) {
+                    // If conf is already an object, access the conference property
+                    conferenceText = conf.conference || 'N/A';
+                }
+
                 conferenceFields.append(`
                     <div class="row mb-3 conference-entry" data-index="${index}" data-id="${index}">
                         <div class="col-sm-11">
-                            <p class="mb-1">${conf || 'N/A'}</p>
+                            <p class="mb-1">${conferenceText}</p>
                         </div>
                         <div class="col-sm-1 text-end">
                             <div class="dropdown">

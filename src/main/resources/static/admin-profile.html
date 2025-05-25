@@ -937,8 +937,23 @@
             conferenceFields.append('<p class="text-gray">No conferences added.</p>');
         } else {
             professionalDetails.conferences.forEach((conf, index) => {
-                // Extract the conference value from the object
-                const conferenceText = conf.conference || 'N/A';
+                let conferenceText = 'N/A';
+                
+                // Handle different data structures
+                if (typeof conf === 'string') {
+                    try {
+                        // If conf is a JSON string, parse it
+                        const parsedConf = JSON.parse(conf);
+                        conferenceText = parsedConf.conference || 'N/A';
+                    } catch (e) {
+                        // If conf is a plain string (not JSON), use it directly
+                        conferenceText = conf || 'N/A';
+                    }
+                } else if (typeof conf === 'object' && conf !== null) {
+                    // If conf is already an object, access the conference property
+                    conferenceText = conf.conference || 'N/A';
+                }
+
                 conferenceFields.append(`
                     <div class="row mb-3 conference-entry" data-index="${index}" data-id="${index}">
                         <div class="col-sm-11">
@@ -1243,10 +1258,24 @@
         const index = $(this).data('index');
         const id = $(this).data('id');
         const conf = professionalDetails.conferences[index];
+        let conferenceText = '';
+
+        // Extract the conference text for editing, mirroring the rendering logic
+        if (typeof conf === 'string') {
+            try {
+                const parsedConf = JSON.parse(conf);
+                conferenceText = parsedConf.conference || '';
+            } catch (e) {
+                conferenceText = conf || '';
+            }
+        } else if (typeof conf === 'object' && conf !== null) {
+            conferenceText = conf.conference || '';
+        }
+
         const entry = $(this).closest('.conference-entry');
         entry.html(`
             <div class="col-sm-10">
-                <input type="text" class="form-control rounded" name="conference_${index}" value="${conf || ''}">
+                <input type="text" class="form-control rounded" name="conference_${index}" value="${conferenceText}">
             </div>
             <div class="col-sm-2">
                 <button type="button" class="btn btn-primary save-conference" data-index="${index}" data-id="${id}">Save</button>
@@ -1504,55 +1533,6 @@
                             <span class="text-gray">${activity.description || 'N/A'}</span>
                         </li>
                     `);
-                });
-            }
-        },
-        error: function(xhr) {
-            if (xhr.status === 401) {
-                alert('Session expired. Please log in again.');
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('user');
-                window.location.href = '/index.html';
-            }
-        }
-    });
-
-    $.ajax({
-        url: `/api/v1/users/${userId}/patient-notes`,
-        type: 'GET',
-        headers: {
-            'Authorization': 'Bearer ' + token
-        },
-        success: function(response) {
-            if (response && response.data && Array.isArray(response.data)) {
-                const notes = response.data;
-                const patNotes = $('#pat_notes ul');
-                patNotes.empty();
-                notes.forEach(note => {
-                    const badgeClass = note.status === 'Open' ? 'badge-success text-success' : 'badge-orange text-orange';
-                    patNotes.append(`
-                        <li class="py-2 px-3">
-                            <a href="javascript:void(0)" data-bs-toggle="modal" data-bs-target="#patnotes" data-name="${note.patientName}" data-note="${note.content}">
-                                <div class="d-flex align-items-center justify-content-between">
-                                    <div class="text-dark poppins w-75">
-                                        <span class="d-block text-capitalize text-dark fw-600 px-0 fs-14 mb-2">${note.patientName || 'N/A'}</span>
-                                        <div class="w-100 text-truncate overflow-hidden fs-14">${note.content || 'N/A'}</div>
-                                    </div>
-                                    <div class="w-25 text-end">
-                                        <div class="badge ${badgeClass} rounded-pill px-3">${note.status || 'N/A'}</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </li>
-                    `);
-                });
-
-                $('#patnotes').on('show.bs.modal', function (event) {
-                    const button = $(event.relatedTarget);
-                    const name = button.data('name');
-                    const note = button.data('note');
-                    $('#modalPatientName').text(name);
-                    $('#modalPatientNote').text(note);
                 });
             }
         },

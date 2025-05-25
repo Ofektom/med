@@ -937,10 +937,12 @@
             conferenceFields.append('<p class="text-gray">No conferences added.</p>');
         } else {
             professionalDetails.conferences.forEach((conf, index) => {
+                // Extract the conference value from the object
+                const conferenceText = conf.conference || 'N/A';
                 conferenceFields.append(`
                     <div class="row mb-3 conference-entry" data-index="${index}" data-id="${index}">
                         <div class="col-sm-11">
-                            <p class="mb-1">${conf || 'N/A'}</p>
+                            <p class="mb-1">${conferenceText}</p>
                         </div>
                         <div class="col-sm-1 text-end">
                             <div class="dropdown">

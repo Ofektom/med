@@ -3,6 +3,7 @@ package com.ofektom.med.serviceImpl;
 import com.ofektom.med.dto.request.EducationDto;
 import com.ofektom.med.dto.request.ExperienceDto;
 import com.ofektom.med.dto.response.*;
+import com.ofektom.med.exception.BadRequestException;
 import com.ofektom.med.exception.NotFoundException;
 import com.ofektom.med.model.Education;
 import com.ofektom.med.model.Experience;
@@ -85,6 +86,9 @@ public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsServic
     @Override
     @Transactional
     public ResponseEntity<?> addConference(Long userId, String conference) {
+        if (conference == null || conference.trim().isEmpty()) {
+            throw new BadRequestException("Conference description cannot be empty");
+        }
         ProfessionalDetails professionalDetails = getOrCreateProfessionalDetails(userId);
         professionalDetails.getConferences().add(conference);
         professionalDetailsRepository.save(professionalDetails);
@@ -127,6 +131,9 @@ public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsServic
     @Override
     @Transactional
     public ResponseEntity<?> updateConference(Long userId, int index, String conference) {
+        if (conference == null || conference.trim().isEmpty()) {
+            throw new BadRequestException("Conference description cannot be empty");
+        }
         ProfessionalDetails professionalDetails = getOrCreateProfessionalDetails(userId);
         List<String> conferences = professionalDetails.getConferences();
         if (index < 0 || index >= conferences.size()) {
@@ -193,7 +200,7 @@ public class ProfessionalDetailsServiceImpl implements ProfessionalDetailsServic
                 professionalDetails.getId(),
                 professionalDetails.getUser().getId(),
                 educationDTOs,
-                experienceDTOs,
+                experienceDTOs, // This will be serialized as "experiences" in the JSON
                 professionalDetails.getConferences() != null ? professionalDetails.getConferences() : Collections.emptyList()
         );
     }

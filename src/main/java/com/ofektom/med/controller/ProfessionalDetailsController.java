@@ -2,8 +2,8 @@ package com.ofektom.med.controller;
 
 import com.ofektom.med.dto.request.EducationDto;
 import com.ofektom.med.dto.request.ExperienceDto;
-import com.ofektom.med.dto.request.ConferenceDto;
 import com.ofektom.med.service.ProfessionalDetailsService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/api/v1/users/{userId}/professional-details")
 public class ProfessionalDetailsController {
+
     private final ProfessionalDetailsService professionalDetailsService;
 
     @Autowired
@@ -19,50 +20,52 @@ public class ProfessionalDetailsController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getProfessionalDetails(@PathVariable("userId") Long userId) {
+    public ResponseEntity<?> getProfessionalDetails(@PathVariable Long userId) {
         return professionalDetailsService.getProfessionalDetailsByUserId(userId);
     }
 
-    // Add new data (education, experience, or conference)
-    @PostMapping("/{type}")
-    public ResponseEntity<?> addProfessionalDetail(
-            @PathVariable("userId") Long userId,
-            @PathVariable("type") String type,
-            @RequestBody Object detail) {
-        return switch (type.toLowerCase()) {
-            case "education" -> professionalDetailsService.addEducation(userId, (EducationDto) detail);
-            case "experience" -> professionalDetailsService.addExperience(userId, (ExperienceDto) detail);
-            case "conference" -> professionalDetailsService.addConference(userId, ((ConferenceDto) detail).getConference());
-            default -> ResponseEntity.badRequest().body("Invalid type: " + type);
-        };
+    @PostMapping("/education")
+    public ResponseEntity<?> addEducation(@PathVariable Long userId, @Valid @RequestBody EducationDto educationDto) {
+        return professionalDetailsService.addEducation(userId, educationDto);
     }
 
-    // Update existing data (education, experience, or conference)
-    @PutMapping("/{type}/{id}")
-    public ResponseEntity<?> updateProfessionalDetail(
-            @PathVariable("userId") Long userId,
-            @PathVariable("type") String type,
-            @PathVariable("id") Long id, // For conferences, this will be the index
-            @RequestBody Object detail) {
-        return switch (type.toLowerCase()) {
-            case "education" -> professionalDetailsService.updateEducation(userId, id, (EducationDto) detail);
-            case "experience" -> professionalDetailsService.updateExperience(userId, id, (ExperienceDto) detail);
-            case "conference" -> professionalDetailsService.updateConference(userId, id.intValue(), ((ConferenceDto) detail).getConference());
-            default -> ResponseEntity.badRequest().body("Invalid type: " + type);
-        };
+    @PostMapping("/experience")
+    public ResponseEntity<?> addExperience(@PathVariable Long userId, @Valid @RequestBody ExperienceDto experienceDto) {
+        return professionalDetailsService.addExperience(userId, experienceDto);
     }
 
-    // Delete specific data (education, experience, or conference)
-    @DeleteMapping("/{type}/{id}")
-    public ResponseEntity<?> deleteProfessionalDetail(
-            @PathVariable("userId") Long userId,
-            @PathVariable("type") String type,
-            @PathVariable("id") Long id) { // For conferences, this will be the index
-        return switch (type.toLowerCase()) {
-            case "education" -> professionalDetailsService.deleteEducation(userId, id);
-            case "experience" -> professionalDetailsService.deleteExperience(userId, id);
-            case "conference" -> professionalDetailsService.deleteConference(userId, id.intValue());
-            default -> ResponseEntity.badRequest().body("Invalid type: " + type);
-        };
+    @PostMapping("/conference")
+    public ResponseEntity<?> addConference(@PathVariable Long userId, @RequestBody String conference) {
+        return professionalDetailsService.addConference(userId, conference);
+    }
+
+    @PutMapping("/education/{educationId}")
+    public ResponseEntity<?> updateEducation(@PathVariable Long userId, @PathVariable Long educationId, @Valid @RequestBody EducationDto educationDto) {
+        return professionalDetailsService.updateEducation(userId, educationId, educationDto);
+    }
+
+    @PutMapping("/experience/{experienceId}")
+    public ResponseEntity<?> updateExperience(@PathVariable Long userId, @PathVariable Long experienceId, @Valid @RequestBody ExperienceDto experienceDto) {
+        return professionalDetailsService.updateExperience(userId, experienceId, experienceDto);
+    }
+
+    @PutMapping("/conference/{index}")
+    public ResponseEntity<?> updateConference(@PathVariable Long userId, @PathVariable int index, @RequestBody String conference) {
+        return professionalDetailsService.updateConference(userId, index, conference);
+    }
+
+    @DeleteMapping("/education/{educationId}")
+    public ResponseEntity<?> deleteEducation(@PathVariable Long userId, @PathVariable Long educationId) {
+        return professionalDetailsService.deleteEducation(userId, educationId);
+    }
+
+    @DeleteMapping("/experience/{experienceId}")
+    public ResponseEntity<?> deleteExperience(@PathVariable Long userId, @PathVariable Long experienceId) {
+        return professionalDetailsService.deleteExperience(userId, experienceId);
+    }
+
+    @DeleteMapping("/conference/{index}")
+    public ResponseEntity<?> deleteConference(@PathVariable Long userId, @PathVariable int index) {
+        return professionalDetailsService.deleteConference(userId, index);
     }
 }

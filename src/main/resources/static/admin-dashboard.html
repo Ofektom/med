@@ -30,10 +30,10 @@
           </div>
           <div class="sidebar-box-data text-start px-3" id="sidebar-data">
             <div class="list-group list-group-flush mt-3">
-              <div class="accordion" id="accordionExampleOne">
+              <div class="accordion" id="accordionAdmin">
                 <div class="accordion-item mb-4">
                   <a href="/admin-dashboard.html" class="active no-arrow rounded accordion-button p-2 fw-600 text-white mb-0 d-flex align-items-center">
-                    <i class="bi bi-grid-1x2-fill px-2"></i><span>ADMIN Dashboard</span>
+                    <i class="bi bi-grid-1x2-fill px-2"></i><span>Admin Dashboard</span>
                   </a>
                 </div>
                 <div class="accordion-item mb-4">
@@ -201,12 +201,12 @@
                   </div>
                 </div>
                 <div class="accordion-item mb-4 d-block d-sm-none">
-                  <div class="accordion-header" id="headingSeven">
-                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
+                  <div class="accordion-header" id="headingAdminMobileNotification">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdminMobileNotification" aria-expanded="false" aria-controls="collapseAdminMobileNotification">
                       <i class="bi bi-bell-fill text-white px-2"></i><span class="fw-600">Notification</span>
                     </button>
                   </div>
-                  <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExampleOne">
+                  <div id="collapseAdminMobileNotification" class="accordion-collapse collapse" aria-labelledby="headingAdminMobileNotification" data-bs-parent="#accordionAdmin">
                     <div class="accordion-body">
                       <div class="slim-outer">
                         <div class="card border-0 shadow bg-white rounded-2 overflow-hidden" id="mobile-notifications">
@@ -217,12 +217,12 @@
                   </div>
                 </div>
                 <div class="accordion-item mb-4 d-block d-sm-none">
-                  <div class="accordion-header" id="headingEight">
-                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseEight" aria-expanded="true" aria-controls="collapseEight">
+                  <div class="accordion-header" id="headingAdminMobileMessages">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdminMobileMessages" aria-expanded="false" aria-controls="collapseAdminMobileMessages">
                       <i class="bi bi-envelope-fill text-white px-2"></i><span class="fw-600">Messages</span>
                     </button>
                   </div>
-                  <div id="collapseEight" class="accordion-collapse collapse" aria-labelledby="headingEight" data-bs-parent="#accordionExampleOne">
+                  <div id="collapseAdminMobileMessages" class="accordion-collapse collapse" aria-labelledby="headingAdminMobileMessages" data-bs-parent="#accordionAdmin">
                     <div class="accordion-body">
                       <div class="slim-outer">
                         <div class="card border-0 shadow bg-white rounded-2 overflow-hidden" id="mobile-messages">
@@ -233,12 +233,12 @@
                   </div>
                 </div>
                 <div class="accordion-item mb-4">
-                  <div class="accordion-header" id="headingSeven">
-                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseSeven" aria-expanded="true" aria-controls="collapseSeven">
-                      <i class="fa-solid fa-user-shield px-2"></i>Setting
+                  <div class="accordion-header" id="headingAdminSettings">
+                    <button class="accordion-button p-2 collapsed text-white mb-0 d-flex align-items-center" type="button" data-bs-toggle="collapse" data-bs-target="#collapseAdminSettings" aria-expanded="false" aria-controls="collapseAdminSettings">
+                      <i class="fa-solid fa-user-shield px-2"></i>Settings
                     </button>
                   </div>
-                  <div id="collapseSeven" class="accordion-collapse collapse" aria-labelledby="headingSeven" data-bs-parent="#accordionExampleOne">
+                  <div id="collapseAdminSettings" class="accordion-collapse collapse" aria-labelledby="headingAdminSettings" data-bs-parent="#accordionAdmin">
                     <div class="accordion-body">
                       <ul class="navbar-nav d-block">
                         <li class="nav-item mb-2 rounded-3 px-3"><a class="nav-link fs-14 text-white" href="/admin-profile.html">Profile</a></li>
@@ -651,6 +651,7 @@
   <script src="/assets/js/togglepassword.js"></script>
   <script src="/assets/js/all.min.js"></script>
   <script src="/assets/js/script.js"></script>
+  <script src="/assets/js/sidebar-utils.js"></script>
   <script>
     $(document).ready(function () {
       // Check if the user is authenticated (token exists)

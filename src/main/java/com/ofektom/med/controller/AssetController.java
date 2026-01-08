@@ -21,7 +21,11 @@ import java.util.UUID;
 @RequestMapping("/api/v1/assets")
 public class AssetController {
     @Autowired
-    private AssetService assetsService;
+    private final AssetService assetsService;
+
+    public AssetController(AssetService assetsService) {
+        this.assetsService = assetsService;
+    }
 
     @PostMapping("/add")
     @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')")

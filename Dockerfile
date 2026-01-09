@@ -1,5 +1,5 @@
-# Build stage with Maven and OpenJDK 17
-FROM maven:3.8.5-openjdk-17-slim AS builder
+# Build stage with Maven and Eclipse Temurin JDK 17
+FROM maven:3.9-eclipse-temurin-17 AS builder
 
 WORKDIR /app
 
@@ -10,8 +10,8 @@ COPY src/ src/
 # Build the project with Java 17
 RUN mvn clean package -DskipTests
 
-# Final stage with OpenJDK 21 for runtime
-FROM openjdk:21-jdk-slim
+# Final stage with Eclipse Temurin JRE 17 for runtime (matches build version, smaller image)
+FROM eclipse-temurin:17-jre-jammy
 
 WORKDIR /app
 

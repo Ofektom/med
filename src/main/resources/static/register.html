@@ -138,9 +138,10 @@
                 }
 
                 // Validate password complexity: at least one uppercase, one lowercase, one digit, one special character
-                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$/;
+                // This matches the backend regex: ^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$
+                const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$/;
                 if (!passwordRegex.test(password)) {
-                    alert('Password must contain at least:\n- 8 characters\n- One uppercase letter\n- One lowercase letter\n- One digit\n- One special character (@#$%^&+=)');
+                    alert('Password must contain at least:\n- 8 characters\n- One uppercase letter (A-Z)\n- One lowercase letter (a-z)\n- One digit (0-9)\n- One special character (@#$%^&+=)');
                     return;
                 }
 
@@ -173,60 +174,98 @@
                     url: '/api/v1/auth/register',
                     type: 'POST',
                     contentType: 'application/json',
+                    dataType: 'json',
                     data: JSON.stringify(signupData),
                     success: function (response) {
                         console.log("AJAX Success Response:", response);
-                        if (response.status_code === 200) {
+                        if (response.status_code === 200 || response.status === 'success') {
                             console.log("Registration successful, redirecting to index.html");
                             alert('Super Admin registration successful! Please login.');
                             window.location.href = 'index.html';
                         } else {
                             console.log("Registration failed with message:", response.message);
-                            alert('Registration failed: ' + response.message);
+                            alert('Registration failed: ' + (response.message || 'Unknown error'));
                         }
                     },
                     error: function (xhr, status, error) {
-                        console.log("AJAX Error:", {
-                            xhr: xhr,
-                            status: status,
-                            error: error,
-                            responseJSON: xhr.responseJSON,
-                            responseText: xhr.responseText
-                        });
+                        // Log everything for debugging
+                        console.log("=== AJAX ERROR DEBUG ===");
+                        console.log("Status:", xhr.status);
+                        console.log("Status Text:", xhr.statusText);
+                        console.log("Response Text (raw):", xhr.responseText);
+                        console.log("Response JSON (auto-parsed):", xhr.responseJSON);
+                        console.log("All Response Headers:", xhr.getAllResponseHeaders());
+                        console.log("=========================");
                         
                         let errorMessage = 'Registration failed.';
+                        let responseData = null;
                         
-                        // Handle validation errors (422)
-                        if (xhr.status === 422 && xhr.responseJSON) {
-                            // ValidationError structure: { status_code, error, detail: Map<String, String> }
-                            if (xhr.responseJSON.detail && typeof xhr.responseJSON.detail === 'object') {
-                                // Validation error with field details
-                                const errors = xhr.responseJSON.detail;
-                                const errorList = Object.entries(errors).map(([field, msg]) => {
-                                    // Format field names nicely
-                                    const fieldName = field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-                                    return `${fieldName}: ${msg}`;
-                                }).join('\n');
-                                errorMessage = 'Validation errors:\n\n' + errorList;
-                            } else if (xhr.responseJSON.error) {
-                                errorMessage = xhr.responseJSON.error;
-                            } else if (xhr.responseJSON.message) {
-                                errorMessage = xhr.responseJSON.message;
-                            }
-                        } else if (xhr.responseJSON) {
-                            // Handle other error responses
-                            if (xhr.responseJSON.message) {
-                                errorMessage = xhr.responseJSON.message;
-                            } else if (xhr.responseJSON.error) {
-                                errorMessage = xhr.responseJSON.error;
-                            } else if (xhr.responseText) {
-                                errorMessage = xhr.responseText;
-                            }
+                        // Try to parse response as JSON - jQuery should auto-parse if Content-Type is application/json
+                        if (xhr.responseJSON) {
+                            responseData = xhr.responseJSON;
+                            console.log("Using auto-parsed responseJSON:", responseData);
                         } else if (xhr.responseText) {
-                            errorMessage = xhr.responseText;
+                            try {
+                                responseData = JSON.parse(xhr.responseText);
+                                console.log("Manually parsed responseText:", responseData);
+                            } catch (e) {
+                                console.log("Failed to parse responseText as JSON:", e);
+                                console.log("Raw responseText:", xhr.responseText);
+                                // If it's not JSON, show the raw text
+                                errorMessage = 'Server error: ' + xhr.responseText.substring(0, 500);
+                                alert(errorMessage);
+                                return;
+                            }
                         }
                         
-                        console.log("Displaying error message:", errorMessage);
+                        // Handle validation errors (422)
+                        if (xhr.status === 422) {
+                            console.log("422 Validation Error - Processing responseData:", responseData);
+                            
+                            if (responseData) {
+                                // ValidationError structure: { status_code, error, detail: Map<String, String> }
+                                if (responseData.detail && typeof responseData.detail === 'object') {
+                                    // Validation error with field details
+                                    const errors = responseData.detail;
+                                    console.log("Found validation errors in detail:", errors);
+                                    
+                                    const errorList = Object.entries(errors).map(([field, msg]) => {
+                                        // Format field names nicely (e.g., "firstName" -> "First Name")
+                                        const fieldName = field
+                                            .replace(/([A-Z])/g, ' $1')
+                                            .replace(/^./, str => str.toUpperCase())
+                                            .trim();
+                                        return `${fieldName}: ${msg}`;
+                                    }).join('\n');
+                                    errorMessage = 'Validation errors:\n\n' + errorList;
+                                } else if (responseData.error) {
+                                    errorMessage = responseData.error;
+                                    if (responseData.detail) {
+                                        errorMessage += '\n\nDetails: ' + JSON.stringify(responseData.detail, null, 2);
+                                    }
+                                } else if (responseData.message) {
+                                    errorMessage = responseData.message;
+                                } else {
+                                    // Fallback: show the whole response
+                                    errorMessage = 'Validation failed. Response: ' + JSON.stringify(responseData, null, 2);
+                                }
+                            } else {
+                                errorMessage = 'Validation failed (422). No response data received.';
+                            }
+                        } else if (responseData) {
+                            // Handle other error responses
+                            if (responseData.message) {
+                                errorMessage = responseData.message;
+                            } else if (responseData.error) {
+                                errorMessage = responseData.error;
+                            } else {
+                                errorMessage = 'Error: ' + JSON.stringify(responseData, null, 2);
+                            }
+                        } else if (xhr.responseText) {
+                            errorMessage = 'Server error: ' + xhr.responseText.substring(0, 500);
+                        }
+                        
+                        console.log("Final error message to display:", errorMessage);
                         alert(errorMessage);
                     }
                 });

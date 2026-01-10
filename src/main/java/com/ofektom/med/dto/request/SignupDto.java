@@ -20,7 +20,7 @@ public class SignupDto {
     private String postalCode;
     @NotEmpty
     private String phoneNumber;
-    @Pattern(regexp = "^.*(?=.{8,})(?=...*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", message = "*Enter at least one uppercase,lowercase,digit and special character and minimum 8 characters")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$", message = "*Enter at least one uppercase,lowercase,digit and special character and minimum 8 characters")
     private String password;
     private String education;
 
@@ -159,11 +159,11 @@ public class SignupDto {
         this.phoneNumber = phoneNumber;
     }
 
-    public @Pattern(regexp = "^.*(?=.{8,})(?=...*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", message = "*Enter at least one uppercase,lowercase,digit and special character and minimum 8 characters") String getPassword() {
+    public @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$", message = "*Enter at least one uppercase,lowercase,digit and special character and minimum 8 characters") String getPassword() {
         return password;
     }
 
-    public void setPassword(@Pattern(regexp = "^.*(?=.{8,})(?=...*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=]).*$", message = "*Enter at least one uppercase,lowercase,digit and special character and minimum 8 characters") String password) {
+    public void setPassword(@Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$", message = "*Enter at least one uppercase,lowercase,digit and special character and minimum 8 characters") String password) {
         this.password = password;
     }
 

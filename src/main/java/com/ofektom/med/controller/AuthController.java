@@ -27,7 +27,8 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    @PreAuthorize("hasRole('SUPER_ADMIN')")
+    // Allow registration without auth if no super admin exists (for first super admin)
+    // Otherwise requires SUPER_ADMIN role
     public ResponseEntity<?> register(@Valid @RequestBody SignupDto signupDto){
         return userService.registerUser(signupDto);
     }

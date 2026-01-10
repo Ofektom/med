@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="/assets/css/responsive.bootstrap5.min.css">
     <link rel="stylesheet" href="/assets/css/dataTables.bootstrap5.min.css">
     <link rel="stylesheet" href="/assets/css/bootstrap-datepicker.min.css">
-    <link rel="stylesheet" href="../../../../cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <link rel="stylesheet" href="/assets/css/bootstrap.css">
     <link rel="stylesheet" href="/assets/css/style.css">
 </head>
@@ -100,11 +100,49 @@
                 e.preventDefault();
                 console.log("Form submitted, preventing default behavior");
 
-                // Validate password match
+                // Validate form fields before submission
+                const firstName = $('#firstName').val().trim();
+                const lastName = $('#lastName').val().trim();
+                const email = $('#email').val().trim();
+                const phoneNumber = $('#phoneNumber').val().trim();
                 const password = $('#password').val().trim();
                 const confirmPassword = $('#cnfpass').val().trim();
-                console.log("Password:", password);
-                console.log("Confirm Password:", confirmPassword);
+                const streetAddress = $('#streetAddress').val().trim();
+
+                console.log("Form values:", { firstName, lastName, email, phoneNumber, password: '***', streetAddress });
+
+                // Client-side validation
+                if (firstName.length < 3) {
+                    alert('First name must be at least 3 characters.');
+                    return;
+                }
+
+                if (lastName.length < 3) {
+                    alert('Last name must be at least 3 characters.');
+                    return;
+                }
+
+                if (!email || !email.includes('@')) {
+                    alert('Please enter a valid email address.');
+                    return;
+                }
+
+                if (!phoneNumber) {
+                    alert('Phone number is required.');
+                    return;
+                }
+
+                if (password.length < 8) {
+                    alert('Password must be at least 8 characters long.');
+                    return;
+                }
+
+                // Validate password complexity: at least one uppercase, one lowercase, one digit, one special character
+                const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$/;
+                if (!passwordRegex.test(password)) {
+                    alert('Password must contain at least:\n- 8 characters\n- One uppercase letter\n- One lowercase letter\n- One digit\n- One special character (@#$%^&+=)');
+                    return;
+                }
 
                 if (password !== confirmPassword) {
                     console.log("Passwords do not match");
@@ -112,17 +150,22 @@
                     return;
                 }
 
+                if (!streetAddress) {
+                    alert('Street address is required.');
+                    return;
+                }
+
                 // Prepare signup data
                 const signupData = {
-                    firstName: $('#firstName').val().trim(),
-                    lastName: $('#lastName').val().trim(),
-                    email: $('#email').val().trim(),
-                    phoneNumber: $('#phoneNumber').val().trim(),
+                    firstName: firstName,
+                    lastName: lastName,
+                    email: email,
+                    phoneNumber: phoneNumber,
                     password: password,
-                    streetAddress: $('#streetAddress').val().trim(),
+                    streetAddress: streetAddress,
                     userRole: 'ROLE_SUPER_ADMIN'
                 };
-                console.log("Signup Data prepared:", signupData);
+                console.log("Signup Data prepared:", { ...signupData, password: '***' });
 
                 // Submit without profile picture
                 console.log("Sending AJAX request to register endpoint");
@@ -146,16 +189,45 @@
                         console.log("AJAX Error:", {
                             xhr: xhr,
                             status: status,
-                            error: error
+                            error: error,
+                            responseJSON: xhr.responseJSON,
+                            responseText: xhr.responseText
                         });
-                        let message = 'Registration failed.';
-                        if (xhr.responseJSON && xhr.responseJSON.message) {
-                            message = xhr.responseJSON.message;
-                            console.log("Error message from response:", message);
-                        } else {
-                            console.log("No specific error message in response, using default");
+                        
+                        let errorMessage = 'Registration failed.';
+                        
+                        // Handle validation errors (422)
+                        if (xhr.status === 422 && xhr.responseJSON) {
+                            // ValidationError structure: { status_code, error, detail: Map<String, String> }
+                            if (xhr.responseJSON.detail && typeof xhr.responseJSON.detail === 'object') {
+                                // Validation error with field details
+                                const errors = xhr.responseJSON.detail;
+                                const errorList = Object.entries(errors).map(([field, msg]) => {
+                                    // Format field names nicely
+                                    const fieldName = field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
+                                    return `${fieldName}: ${msg}`;
+                                }).join('\n');
+                                errorMessage = 'Validation errors:\n\n' + errorList;
+                            } else if (xhr.responseJSON.error) {
+                                errorMessage = xhr.responseJSON.error;
+                            } else if (xhr.responseJSON.message) {
+                                errorMessage = xhr.responseJSON.message;
+                            }
+                        } else if (xhr.responseJSON) {
+                            // Handle other error responses
+                            if (xhr.responseJSON.message) {
+                                errorMessage = xhr.responseJSON.message;
+                            } else if (xhr.responseJSON.error) {
+                                errorMessage = xhr.responseJSON.error;
+                            } else if (xhr.responseText) {
+                                errorMessage = xhr.responseText;
+                            }
+                        } else if (xhr.responseText) {
+                            errorMessage = xhr.responseText;
                         }
-                        alert(message);
+                        
+                        console.log("Displaying error message:", errorMessage);
+                        alert(errorMessage);
                     }
                 });
             });

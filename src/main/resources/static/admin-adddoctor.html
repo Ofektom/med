@@ -832,7 +832,7 @@
           formData.append('profilePicture', profilePictureFile);
 
           $.ajax({
-            url: '/api/v1/auth/register',
+            url: '/api/v1/auth/add',
             type: 'POST',
             data: formData,
             contentType: false,
@@ -865,7 +865,7 @@
           });
         } else {
           $.ajax({
-            url: '/api/v1/auth/register',
+            url: '/api/v1/auth/add',
             type: 'POST',
             contentType: 'application/json',
             data: JSON.stringify(signupData),

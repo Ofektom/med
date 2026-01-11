@@ -150,9 +150,19 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             }
         }
 
-        Set<String> allowedRoles = Set.of("ROLE_STAFF", "ROLE_PATIENT", "ROLE_NURSE");
+        Set<String> allowedRoles = Set.of(
+            "ROLE_STAFF", 
+            "ROLE_PATIENT", 
+            "ROLE_NURSE",
+            "ROLE_DOCTOR",
+            "ROLE_FRONT_DESK",
+            "ROLE_PHARMACIST",
+            "ROLE_ACCOUNTANT",
+            "ROLE_LAB_SCIENTIST",
+            "ROLE_RADIOGRAPHER"
+        );
         if (!allowedRoles.contains(signupDto.getUserRole())) {
-            throw new BadRequestException("You cannot add this user.");
+            throw new BadRequestException("You cannot add this user with the specified role.");
         }
 
         User user = new User();

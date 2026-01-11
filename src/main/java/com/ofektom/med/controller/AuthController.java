@@ -34,7 +34,7 @@ public class AuthController {
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasRole('SUPER_ADMIN', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public ResponseEntity<?> addPatientAndStaff(@Valid @RequestBody AddPatientAndStaffDto addPatientAndStaffDto){
         return userService.addStaffAndPatient(addPatientAndStaffDto);
     }

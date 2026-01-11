@@ -341,7 +341,7 @@
                 <h6 class="text-slate my-2 mt-xl-0 mb-xl-3 fs-6 fw-medium">
                   Total Appointments
                 </h6>
-                <h3 class="text-primary mb-2 fw-bold lh-sm" id="totalAppointments">2500</h3>
+                <h3 class="text-primary mb-2 fw-bold lh-sm" id="totalAppointments">0</h3>
                 <div class="text-nowrap">
                   <span class="fs-12 text-success fw-500"><i class="bi bi-arrow-up-right-circle-fill"></i>
                     +20%</span>
@@ -359,7 +359,7 @@
                 <h6 class="text-slate my-2 mt-xl-0 mb-xl-3 fs-6 fw-medium">
                   Patients
                 </h6>
-                <h3 class="text-primary mb-2 fw-bold lh-sm" id="totalPatients">3145</h3>
+                <h3 class="text-primary mb-2 fw-bold lh-sm" id="totalPatients">0</h3>
                 <div class="text-nowrap">
                   <span class="fs-12 text-danger fw-500"><i class="bi bi-arrow-down-right-circle-fill"></i>
                     -15%</span>
@@ -706,12 +706,12 @@
           },
           success: function (response) {
             if (response && response.data) {
-              $('#totalAppointments').text(response.data.totalAppointments || 2500);
-              $('#totalPatients').text(response.data.totalPatients || 3145);
-              $('#totalStaffs').text(response.data.totalStaffs || 350);
-              $('#totalBeds').text(response.data.totalBeds || 345);
-              $('#totalDeaths').text(response.data.totalDeaths || '15k');
-              $('#totalAccidents').text(response.data.totalAccidents || '10k');
+              $('#totalAppointments').text(response.data.totalAppointments || 0);
+              $('#totalPatients').text(response.data.totalPatients || 0);
+              $('#totalStaffs').text(response.data.totalStaffs || 0);
+              $('#totalBeds').text(response.data.totalBeds || 0);
+              $('#totalDeaths').text(response.data.totalDeaths || 0);
+              $('#totalAccidents').text(response.data.totalAccidents || 0);
             }
           },
           error: function (xhr) {
@@ -720,6 +720,14 @@
               localStorage.removeItem('access_token');
               localStorage.removeItem('user');
               window.location.href = '/index.html';
+            } else {
+              // Set all values to 0 on error
+              $('#totalAppointments').text(0);
+              $('#totalPatients').text(0);
+              $('#totalStaffs').text(0);
+              $('#totalBeds').text(0);
+              $('#totalDeaths').text(0);
+              $('#totalAccidents').text(0);
             }
           }
         });

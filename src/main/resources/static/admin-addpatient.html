@@ -434,24 +434,32 @@
                   <input type="text" name="lname" id="lname" class="border form-control rounded" required>
                 </div>
                 <div class="col-sm-6 col-lg-4 mb-2">
-                  <label for="streetAddress" class="text-dark-primary mb-2">Street Address<sup><span class="required">*</span></sup></label>
-                  <textarea name="streetAddress" id="streetAddress" cols="30" rows="3" class="form-control rounded" required></textarea>
+                  <label for="streetAddress" class="text-dark-primary mb-2">Street Address</label>
+                  <textarea name="streetAddress" id="streetAddress" cols="30" rows="3" class="form-control rounded"></textarea>
                 </div>
                 <div class="col-sm-6 col-lg-4 mb-3">
-                  <label for="mobile" class="text-dark-primary mb-2">Mobile Number<sup><span class="required">*</span></sup></label>
-                  <input type="text" id="mobile" name="mobile" class="border form-control rounded" required>
+                  <label for="mobile" class="text-dark-primary mb-2">Mobile Number</label>
+                  <input type="text" id="mobile" name="mobile" class="border form-control rounded">
                 </div>
                 <div class="col-sm-6 col-lg-4 mb-2">
-                  <label for="email" class="text-dark-primary mb-2">Email</label>
-                  <input type="email" id="email" name="email" class="border form-control rounded">
+                  <label for="email" class="text-dark-primary mb-2">Email<sup><span class="required">*</span></sup></label>
+                  <input type="email" id="email" name="email" class="border form-control rounded" required>
+                </div>
+                <div class="col-sm-6 col-lg-4 mb-3 custom-err">
+                  <label for="pass" class="text-dark-primary mb-2">Password<sup><span class="required">*</span></sup></label>
+                  <input type="password" id="pass" name="pass" class="border form-control rounded" required>
+                </div>
+                <div class="col-sm-6 col-lg-4 mb-3 custom-err">
+                  <label for="repeatpass" class="text-dark-primary mb-2">Confirm Password<sup><span class="required">*</span></sup></label>
+                  <input type="password" id="repeatpass" name="repeatpass" class="border form-control rounded" required>
                 </div>
                 <div class="col-sm-6 col-lg-4 mb-3">
-                  <label for="age" class="text-dark-primary mb-2">Age<sup><span class="required">*</span></sup></label>
-                  <input type="text" name="age" id="age" class="border form-control rounded" required>
+                  <label for="age" class="text-dark-primary mb-2">Age</label>
+                  <input type="text" name="age" id="age" class="border form-control rounded">
                 </div>
                 <div class="col-sm-6 col-lg-4 mb-3">
-                  <label for="maritalstatus" class="text-dark-primary mb-2">Marital Status<sup><span class="required">*</span></sup></label>
-                  <select name="maritalstatus" id="maritalstatus" class="form-select" required>
+                  <label for="maritalstatus" class="text-dark-primary mb-2">Marital Status</label>
+                  <select name="maritalstatus" id="maritalstatus" class="form-select">
                     <option value="">Select</option>
                     <option value="Single">Single</option>
                     <option value="Married">Married</option>
@@ -482,25 +490,25 @@
                   <input type="text" name="injury" id="injury" class="border form-control rounded">
                 </div>
                 <div class="col-sm-6 col-lg-4 mb-3">
-                  <label for="city" class="text-dark-primary mb-2">City<sup><span class="required">*</span></sup></label>
-                  <input type="text" id="city" name="city" class="border form-control rounded" required>
+                  <label for="city" class="text-dark-primary mb-2">City</label>
+                  <input type="text" id="city" name="city" class="border form-control rounded">
                 </div>
                 <div class="col-sm-6 col-lg-4 mb-2">
-                  <label for="state" class="text-dark-primary mb-2">State<sup><span class="required">*</span></sup></label>
-                  <input type="text" id="state" name="state" class="border form-control rounded" required>
+                  <label for="state" class="text-dark-primary mb-2">State</label>
+                  <input type="text" id="state" name="state" class="border form-control rounded">
                 </div>
                 <div class="col-sm-6 col-lg-4 mb-3">
-                  <label for="country" class="text-dark-primary mb-2">Country<sup><span class="required">*</span></sup></label>
-                  <input type="text" id="country" name="country" class="border form-control rounded" required>
+                  <label for="country" class="text-dark-primary mb-2">Country</label>
+                  <input type="text" id="country" name="country" class="border form-control rounded">
                 </div>
                 <div class="col-sm-6 col-lg-4 mb-3">
-                  <label for="postalcode" class="text-dark-primary mb-2">Postal Code<sup><span class="required">*</span></sup></label>
-                  <input type="text" id="postalcode" name="postalcode" class="border form-control rounded" required>
+                  <label for="postalcode" class="text-dark-primary mb-2">Postal Code</label>
+                  <input type="text" id="postalcode" name="postalcode" class="border form-control rounded">
                 </div>
                 <div class="col-sm-6 col-lg-4 mb-3">
-                  <label for="dob" class="text-dark-primary mb-2">Date Of Birth<sup><span class="required">*</span></sup></label>
+                  <label for="dob" class="text-dark-primary mb-2">Date Of Birth</label>
                   <div class="input-group date border custom-err rounded mb-3" id="dob_dtmain">
-                    <input type="text" name="dob" id="dob" class="form-control border-0" autocomplete="off" required>
+                    <input type="text" name="dob" id="dob" class="form-control border-0" autocomplete="off">
                     <span class="input-group-append">
                       <span class="input-group-text date-btn d-block">
                         <i class="fa fa-calendar"></i>
@@ -509,10 +517,10 @@
                   </div>
                 </div>
                 <div class="col-sm-6 col-lg-4 px-3 mb-3">
-                  <label class="mb-2 text-dark fw-600">Gender<sup><span class="required">*</span></sup></label>
+                  <label class="mb-2 text-dark fw-600">Gender</label>
                   <div class="d-flex gap-2 custom-err">
                     <span>
-                      <input type="radio" name="gender" value="Male" required>
+                      <input type="radio" name="gender" value="Male">
                       <span>Male</span>
                     </span>
                     <span>
@@ -522,10 +530,10 @@
                   </div>
                 </div>
                 <div class="px-3 mb-3">
-                  <label class="mb-2 text-dark fw-600">Status<sup><span class="required">*</span></sup></label>
+                  <label class="mb-2 text-dark fw-600">Status</label>
                   <div class="d-flex gap-2 custom-err">
                     <span>
-                      <input type="radio" name="status" value="Active" required>
+                      <input type="radio" name="status" value="Active">
                       <span>Active</span>
                     </span>
                     <span>

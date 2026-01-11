@@ -89,8 +89,8 @@ public class WebSecurityConfig {
                 )
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            System.err.println("Access denied to: " + request.getRequestURI() + " by user: " + request.getUserPrincipal());
-                            accessDeniedException.printStackTrace();
+                            // Access denied - log only for debugging if needed
+                            // In production, remove or use proper logging framework
                         })
                 )
                 .logout(logout -> logout

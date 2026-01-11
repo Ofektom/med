@@ -22,7 +22,6 @@ import java.io.IOException;
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
-
     private JwtUtils utils;
     private UserServiceImpl userService;
 
@@ -33,41 +32,67 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         this.userService = userService;
     }
 
+    /**
+     * Skip JWT filter for static resources and public endpoints
+     * Returns true to SKIP the filter, false to RUN it
+     */
+    @Override
+    protected boolean shouldNotFilter(HttpServletRequest request) {
+        String path = request.getRequestURI();
+        
+        // Skip static resources (CSS, JS, images, fonts, etc.)
+        if (path.startsWith("/assets/") || path.startsWith("/includes/")) {
+            return true;
+        }
+        
+        // Skip HTML files (static pages)
+        if (path.endsWith(".html") && !path.startsWith("/api/")) {
+            return true;
+        }
+        
+        // Skip root path
+        if (path.equals("/") || path.equals("")) {
+            return true;
+        }
+        
+        // Skip public auth endpoints (login, register)
+        if (path.equals("/api/v1/auth/login") || path.equals("/api/v1/auth/register")) {
+            return true;
+        }
+        
+        // Process all other requests (including logout and authenticated API endpoints)
+        return false;
+    }
 
     @Override
     protected void doFilterInternal(
             @NonNull HttpServletRequest request,
             @NonNull HttpServletResponse response,
             @NonNull FilterChain filterChain) throws ServletException, IOException {
-        String token = null;
+        
         String authenticationHeader = request.getHeader("Authorization");
-        System.out.println("Processing request: " + request.getMethod() + " " + request.getRequestURI());
-        System.out.println("Authorization Header: " + authenticationHeader);
 
+        // Only process if Authorization header is present
         if (authenticationHeader != null && authenticationHeader.startsWith("Bearer ")) {
-            token = authenticationHeader.substring(7).trim();
-            System.out.println("Extracted Token: " + token.substring(0, 10) + "...");
-            String username = utils.extractUsername.apply(token);
-            System.out.println("Extracted Username: " + username);
+            String token = authenticationHeader.substring(7).trim();
 
-            if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
-                UserDetails userDetails = userService.loadUserByUsername(username);
-                System.out.println("User Details Loaded: " + (userDetails != null));
-                if (userDetails != null && utils.isTokenValid.apply(token, userDetails.getUsername())) {
-                    System.out.println("Token is valid for user: " + username);
-                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
-                            new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
-                    usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                    System.out.println("Authentication set for user: " + username + " on " + request.getMethod() + " request");
-                } else {
-                    System.out.println("Token validation failed or user not found for " + request.getMethod() + " request");
+            try {
+                String username = utils.extractUsername.apply(token);
+
+                if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
+                    UserDetails userDetails = userService.loadUserByUsername(username);
+                    
+                    if (userDetails != null && utils.isTokenValid.apply(token, userDetails.getUsername())) {
+                        UsernamePasswordAuthenticationToken authToken =
+                                new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+                        authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(authToken);
+                    }
                 }
-            } else {
-                System.out.println("Skipping authentication: Username null or context already set for " + request.getMethod() + " request");
+            } catch (Exception e) {
+                // Log error but don't block the request - let Spring Security handle it
+                // Token validation failed, continue without authentication
             }
-        } else {
-            System.out.println("No valid Authorization header found for " + request.getMethod() + " request");
         }
 
         filterChain.doFilter(request, response);

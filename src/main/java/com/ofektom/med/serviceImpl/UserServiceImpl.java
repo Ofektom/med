@@ -136,8 +136,18 @@ public class UserServiceImpl implements UserService, UserDetailsService {
             throw new ConflictException("Email is already taken, try Logging In or Signup with another email" );
         }
 
-        if (userRepository.existsByPhoneNumber(signupDto.getPhoneNumber())) {
-            throw new BadRequestException("Phone number is already taken");
+        // Only check phone number if provided (optional field)
+        if (signupDto.getPhoneNumber() != null && !signupDto.getPhoneNumber().trim().isEmpty()) {
+            if (userRepository.existsByPhoneNumber(signupDto.getPhoneNumber())) {
+                throw new BadRequestException("Phone number is already taken");
+            }
+        }
+
+        // Validate password if provided
+        if (signupDto.getPassword() != null && !signupDto.getPassword().trim().isEmpty()) {
+            if (!validatePassword(signupDto.getPassword())) {
+                throw new ConflictException("Password does not meet the required criteria");
+            }
         }
 
         Set<String> allowedRoles = Set.of("ROLE_STAFF", "ROLE_PATIENT", "ROLE_NURSE");
@@ -147,10 +157,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
         User user = new User();
 
+        // Required fields
         user.setFirstName(signupDto.getFirstName());
         user.setLastName(signupDto.getLastName());
-        user.setPhoneNumber(signupDto.getPhoneNumber());
         user.setEmail(signupDto.getEmail());
+        
+        // Set password (required)
+        user.setPassword(passwordEncoder.encode(signupDto.getPassword()));
+        
         user.setEnabled(true);
         user.setMembershipNo(generateMemberShip("EMR"));
 
@@ -162,22 +176,51 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         user.setUserRole(userRole);
 
+        // Optional fields - only set if provided
+        if (signupDto.getPhoneNumber() != null && !signupDto.getPhoneNumber().trim().isEmpty()) {
+            user.setPhoneNumber(signupDto.getPhoneNumber());
+        }
+        if (signupDto.getDateOfBirth() != null && !signupDto.getDateOfBirth().trim().isEmpty()) {
+            user.setDateOfBirth(signupDto.getDateOfBirth());
+        }
+        if (signupDto.getGender() != null && !signupDto.getGender().trim().isEmpty()) {
+            user.setGender(signupDto.getGender());
+        }
+        if (signupDto.getAge() != null) {
+            user.setAge(signupDto.getAge());
+        }
+        if (signupDto.getMaritalStatus() != null && !signupDto.getMaritalStatus().trim().isEmpty()) {
+            user.setMaritalStatus(signupDto.getMaritalStatus());
+        }
+        if (signupDto.getProfilePicture() != null && !signupDto.getProfilePicture().trim().isEmpty()) {
+            user.setProfilePicture(signupDto.getProfilePicture());
+        }
+        if (signupDto.getBloodGroup() != null && !signupDto.getBloodGroup().trim().isEmpty()) {
+            user.setBloodGroup(signupDto.getBloodGroup());
+        }
+        if (signupDto.getBloodPressure() != null && !signupDto.getBloodPressure().trim().isEmpty()) {
+            user.setBloodPressure(signupDto.getBloodPressure());
+        }
+        if (signupDto.getSugar() != null && !signupDto.getSugar().trim().isEmpty()) {
+            user.setSugar(signupDto.getSugar());
+        }
+        if (signupDto.getInjuryCondition() != null && !signupDto.getInjuryCondition().trim().isEmpty()) {
+            user.setInjuryCondition(signupDto.getInjuryCondition());
+        }
+        if (signupDto.getAllergies() != null) {
+            user.setAllergies(signupDto.getAllergies());
+        }
 
-        user.setDateOfBirth(signupDto.getDateOfBirth());
-        user.setGender(signupDto.getGender());
-        user.setAge(signupDto.getAge());
-        user.setMaritalStatus(signupDto.getMaritalStatus());
-        user.setProfilePicture(signupDto.getProfilePicture());
-        user.setBloodGroup(signupDto.getBloodGroup());
-        user.setBloodPressure(signupDto.getBloodPressure());
-        user.setSugar(signupDto.getSugar());
-        user.setInjuryCondition(signupDto.getInjuryCondition());
-        user.setAllergies(signupDto.getAllergies());
-
-        // Address association, ensure Address entity exists and is set
-        Address address = new Address();
-        address.setStreetAddress(signupDto.getStreetAddress());
-        user.setAddress(address);
+        // Address association - only create if streetAddress is provided
+        if (signupDto.getStreetAddress() != null && !signupDto.getStreetAddress().trim().isEmpty()) {
+            Address address = new Address();
+            address.setStreetAddress(signupDto.getStreetAddress());
+            user.setAddress(address);
+        } else {
+            // Create empty address to avoid null pointer
+            Address address = new Address();
+            user.setAddress(address);
+        }
 
         user = userRepository.save(user);
 

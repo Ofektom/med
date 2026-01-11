@@ -1,9 +1,8 @@
 package com.ofektom.med.dto.request;
 
 import jakarta.validation.constraints.Email;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 import java.util.List;
 
@@ -12,16 +11,18 @@ public class AddPatientAndStaffDto {
     private String firstName;
     @NotEmpty(message = "Last name is required")
     private String lastName;
-    @NotEmpty(message = "Date of birth is required")
-    private String dateOfBirth;
-    @NotBlank(message = "Gender is required")
-    private String gender;
-    @NotNull(message = "Age is required")
-    private Integer age;
-    @NotEmpty(message = "Phone number is required")
-    private String phoneNumber;
     @Email(message = "Enter a valid email address")
+    @NotEmpty(message = "Email is required")
     private String email;
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$", message = "*Enter at least one uppercase,lowercase,digit and special character and minimum 8 characters")
+    @NotEmpty(message = "Password is required")
+    private String password;
+    
+    // Optional fields - can be updated later
+    private String dateOfBirth;
+    private String gender;
+    private Integer age;
+    private String phoneNumber;
     private String streetAddress;
     private String maritalStatus;
     private String userRole;
@@ -88,6 +89,14 @@ public class AddPatientAndStaffDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 
     public String getStreetAddress() {

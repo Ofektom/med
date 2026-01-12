@@ -60,6 +60,7 @@ public class User implements UserDetails {
 
     private String maritalStatus;
 
+    @Column(name = "profile_picture", columnDefinition = "TEXT")
     private String profilePicture;
 
     private String bloodGroup;

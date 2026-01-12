@@ -14,7 +14,7 @@ public class AddPatientAndStaffDto {
     @Email(message = "Enter a valid email address")
     @NotEmpty(message = "Email is required")
     private String email;
-    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=]).{8,}$", message = "*Enter at least one uppercase,lowercase,digit and special character and minimum 8 characters")
+    @Pattern(regexp = "^(?=.*[A-Z])(?=.*[a-z])(?=.*\\d)(?=.*[@#$%^&+=!]).{8,}$", message = "*Enter at least one uppercase,lowercase,digit and special character and minimum 8 characters")
     @NotEmpty(message = "Password is required")
     private String password;
     

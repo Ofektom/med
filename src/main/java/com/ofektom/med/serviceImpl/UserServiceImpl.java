@@ -337,7 +337,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         String capitalLetterPattern = "(?=.*[A-Z])";
         String lowercaseLetterPattern = "(?=.*[a-z])";
         String digitPattern = "(?=.*\\d)";
-        String symbolPattern = "(?=.*[@#$%^&+=])";
+        String symbolPattern = "(?=.*[@#$%^&+=!])";
         String lengthPattern = ".{8,}";
 
         String regex = capitalLetterPattern + lowercaseLetterPattern + digitPattern + symbolPattern + lengthPattern;

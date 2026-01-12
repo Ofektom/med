@@ -138,10 +138,10 @@
                 }
 
                 // Validate password complexity: at least one uppercase, one lowercase, one digit, one special character
-                // This matches the backend regex: ^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$
-                const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=]).{8,}$/;
+                // This matches the backend regex: ^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$
+                const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@#$%^&+=!]).{8,}$/;
                 if (!passwordRegex.test(password)) {
-                    alert('Password must contain at least:\n- 8 characters\n- One uppercase letter (A-Z)\n- One lowercase letter (a-z)\n- One digit (0-9)\n- One special character (@#$%^&+=)');
+                    alert('Password must contain at least:\n- 8 characters\n- One uppercase letter (A-Z)\n- One lowercase letter (a-z)\n- One digit (0-9)\n- One special character (@#$%^&+=!)');
                     return;
                 }
 

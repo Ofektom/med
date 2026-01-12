@@ -851,6 +851,10 @@
           }
 
           // Always send JSON (backend expects @RequestBody, not FormData)
+          console.log('Frontend: Sending POST /api/v1/auth/add request');
+          console.log('Frontend: Request data:', JSON.stringify(signupData, null, 2));
+          console.log('Frontend: Authorization token present:', token ? 'Yes (length: ' + token.length + ')' : 'No');
+          
           $.ajax({
           url: '/api/v1/auth/add',
           type: 'POST',
@@ -860,6 +864,7 @@
             'Authorization': 'Bearer ' + token
           },
           success: function (response) {
+            console.log('Frontend: Success response:', response);
             if (response.status_code === 200) {
               alert('Doctor registered successfully!');
               window.location.href = '/admin-doctorlist.html';
@@ -867,16 +872,43 @@
               alert('Registration failed: ' + response.message);
             }
           },
-          error: function (xhr) {
+          error: function (xhr, status, error) {
+            console.error('Frontend: AJAX Error occurred');
+            console.error('Frontend: Status:', xhr.status);
+            console.error('Frontend: Status Text:', xhr.statusText);
+            console.error('Frontend: Error:', error);
+            console.error('Frontend: Response Text:', xhr.responseText);
+            console.error('Frontend: Response JSON:', xhr.responseJSON);
+            console.error('Frontend: All Response Headers:', xhr.getAllResponseHeaders());
+            
             let message = 'Registration failed.';
+            let detailedMessage = '';
+            
             if (xhr.status === 401) {
+              console.error('Frontend: 401 Unauthorized - Token may be invalid or expired');
               message = 'Unauthorized: Please log in again.';
               localStorage.removeItem('access_token');
               localStorage.removeItem('user');
               window.location.href = '/index.html';
+              return;
             } else if (xhr.status === 403) {
+              console.error('Frontend: 403 Forbidden - User does not have required permissions');
+              console.error('Frontend: Response details:', xhr.responseJSON);
               message = 'Forbidden: You do not have permission to perform this action.';
+              if (xhr.responseJSON) {
+                if (xhr.responseJSON.userRoles) {
+                  detailedMessage = '\nYour roles: ' + xhr.responseJSON.userRoles;
+                }
+                if (xhr.responseJSON.requiredRoles) {
+                  detailedMessage += '\nRequired roles: ' + xhr.responseJSON.requiredRoles;
+                }
+                if (xhr.responseJSON.message && xhr.responseJSON.message !== message) {
+                  message = xhr.responseJSON.message;
+                }
+              }
+              message += detailedMessage;
             } else if (xhr.status === 422) {
+              console.error('Frontend: 422 Validation Error');
               // Handle validation errors
               let errorDetails = '';
               if (xhr.responseJSON && xhr.responseJSON.detail) {
@@ -892,6 +924,8 @@
             } else if (xhr.responseJSON && xhr.responseJSON.message) {
               message = xhr.responseJSON.message;
             }
+            
+            console.error('Frontend: Final error message:', message);
             alert(message);
           }
         });

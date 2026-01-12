@@ -4,22 +4,27 @@ package com.ofektom.med.controller;
 import com.ofektom.med.dto.request.AddPatientAndStaffDto;
 import com.ofektom.med.dto.request.LoginDto;
 import com.ofektom.med.dto.request.SignupDto;
-import com.ofektom.med.model.User;
 import com.ofektom.med.service.UserService;
-import com.ofektom.med.serviceImpl.UserServiceImpl;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin(origins = {"http://localhost:5173", "https://airway-ng.netlify.app"}, allowCredentials = "true")
 @RequestMapping("/api/v1/auth")
 public class AuthController {
+    
+    private static final Logger logger = LoggerFactory.getLogger(AuthController.class);
+    
     private final UserService userService;
     @Autowired
     public AuthController(ApplicationEventPublisher publisher, UserService userService) {
@@ -36,7 +41,24 @@ public class AuthController {
     @PostMapping("/add")
     @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN')")
     public ResponseEntity<?> addPatientAndStaff(@Valid @RequestBody AddPatientAndStaffDto addPatientAndStaffDto){
-        return userService.addStaffAndPatient(addPatientAndStaffDto);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        String username = auth != null ? auth.getName() : "anonymous";
+        String authorities = auth != null ? auth.getAuthorities().toString() : "none";
+        
+        logger.info("POST /api/v1/auth/add - User: {}, Authorities: {}, Requested role: {}", 
+                username, authorities, addPatientAndStaffDto.getUserRole());
+        logger.debug("POST /api/v1/auth/add - Request data: email={}, firstName={}, lastName={}", 
+                addPatientAndStaffDto.getEmail(), addPatientAndStaffDto.getFirstName(), addPatientAndStaffDto.getLastName());
+        
+        try {
+            ResponseEntity<?> response = userService.addStaffAndPatient(addPatientAndStaffDto);
+            logger.info("POST /api/v1/auth/add - Success for user: {}, added role: {}", 
+                    username, addPatientAndStaffDto.getUserRole());
+            return response;
+        } catch (Exception e) {
+            logger.error("POST /api/v1/auth/add - Error for user: {}", username, e);
+            throw e;
+        }
     }
 
     @PostMapping("/login")

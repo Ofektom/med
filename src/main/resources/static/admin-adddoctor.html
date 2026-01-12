@@ -804,98 +804,98 @@
           return;
         }
 
-        const signupData = {
-          firstName: $('#fname').val().trim(),
-          lastName: $('#lname').val().trim(),
-          email: $('#email').val().trim(),
-          phoneNumber: $('#mobile').val().trim(),
-          password: password,
-          education: $('#education').val().trim(),
-          designation: $('#designation').val().trim(),
-          department: $('#department').val().trim(),
-          city: $('#city').val().trim(),
-          state: $('#state').val().trim(),
-          country: $('#country').val().trim(),
-          postalCode: $('#postalcode').val().trim(),
-          dateOfBirth: $('#dob').val().trim(),
-          gender: $('input[name="gender"]:checked').val(),
-          about: $('#about').val().trim(),
-          status: $('input[name="status"]:checked').val(),
-          streetAddress: $('#streetAddress').val().trim(),
-          userRole: 'ROLE_DOCTOR'
-        };
+        // Function to convert file to base64
+        function fileToBase64(file, callback) {
+          if (!file) {
+            callback(null);
+            return;
+          }
+          const reader = new FileReader();
+          reader.onload = function(e) {
+            callback(e.target.result);
+          };
+          reader.onerror = function() {
+            callback(null);
+          };
+          reader.readAsDataURL(file);
+        }
 
         const profilePictureFile = $('#profilePicture')[0].files[0];
-        if (profilePictureFile) {
-          const formData = new FormData();
-          formData.append('signupDto', new Blob([JSON.stringify(signupData)], { type: 'application/json' }));
-          formData.append('profilePicture', profilePictureFile);
+        
+        // Convert profile picture to base64 if provided
+        fileToBase64(profilePictureFile, function(base64String) {
+          const signupData = {
+            firstName: $('#fname').val().trim(),
+            lastName: $('#lname').val().trim(),
+            email: $('#email').val().trim(),
+            phoneNumber: $('#mobile').val().trim(),
+            password: password,
+            education: $('#education').val().trim(),
+            designation: $('#designation').val().trim(),
+            department: $('#department').val().trim(),
+            city: $('#city').val().trim(),
+            state: $('#state').val().trim(),
+            country: $('#country').val().trim(),
+            postalCode: $('#postalcode').val().trim(),
+            dateOfBirth: $('#dob').val().trim(),
+            gender: $('input[name="gender"]:checked').val(),
+            about: $('#about').val().trim(),
+            status: $('input[name="status"]:checked').val(),
+            streetAddress: $('#streetAddress').val().trim(),
+            userRole: 'ROLE_DOCTOR'
+          };
 
+          // Include profile picture as base64 string if available
+          if (base64String) {
+            signupData.profilePicture = base64String;
+          }
+
+          // Always send JSON (backend expects @RequestBody, not FormData)
           $.ajax({
-            url: '/api/v1/auth/add',
-            type: 'POST',
-            data: formData,
-            contentType: false,
-            processData: false,
-            headers: {
-              'Authorization': 'Bearer ' + token
-            },
-            success: function (response) {
-              if (response.status_code === 200) {
-                alert('Doctor registered successfully!');
-                window.location.href = '/admin-doctorlist.html';
-              } else {
-                alert('Registration failed: ' + response.message);
-              }
-            },
-            error: function (xhr) {
-              let message = 'Registration failed.';
-              if (xhr.status === 401) {
-                message = 'Unauthorized: Please log in again.';
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('user');
-                window.location.href = '/index.html';
-              } else if (xhr.status === 403) {
-                message = 'Forbidden: You do not have permission to perform this action.';
-              } else if (xhr.responseJSON && xhr.responseJSON.message) {
-                message = xhr.responseJSON.message;
-              }
-              alert(message);
+          url: '/api/v1/auth/add',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(signupData),
+          headers: {
+            'Authorization': 'Bearer ' + token
+          },
+          success: function (response) {
+            if (response.status_code === 200) {
+              alert('Doctor registered successfully!');
+              window.location.href = '/admin-doctorlist.html';
+            } else {
+              alert('Registration failed: ' + response.message);
             }
-          });
-        } else {
-          $.ajax({
-            url: '/api/v1/auth/add',
-            type: 'POST',
-            contentType: 'application/json',
-            data: JSON.stringify(signupData),
-            headers: {
-              'Authorization': 'Bearer ' + token
-            },
-            success: function (response) {
-              if (response.status_code === 200) {
-                alert('Doctor registered successfully!');
-                window.location.href = '/admin-doctorlist.html';
-              } else {
-                alert('Registration failed: ' + response.message);
+          },
+          error: function (xhr) {
+            let message = 'Registration failed.';
+            if (xhr.status === 401) {
+              message = 'Unauthorized: Please log in again.';
+              localStorage.removeItem('access_token');
+              localStorage.removeItem('user');
+              window.location.href = '/index.html';
+            } else if (xhr.status === 403) {
+              message = 'Forbidden: You do not have permission to perform this action.';
+            } else if (xhr.status === 422) {
+              // Handle validation errors
+              let errorDetails = '';
+              if (xhr.responseJSON && xhr.responseJSON.detail) {
+                const errors = xhr.responseJSON.detail;
+                if (typeof errors === 'object') {
+                  errorDetails = Object.entries(errors).map(([field, msg]) => {
+                    const fieldName = field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase()).trim();
+                    return fieldName + ': ' + msg;
+                  }).join('\n');
+                }
               }
-            },
-            error: function (xhr) {
-              let message = 'Registration failed.';
-              if (xhr.status === 401) {
-                message = 'Unauthorized: Please log in again.';
-                localStorage.removeItem('access_token');
-                localStorage.removeItem('user');
-                window.location.href = '/index.html';
-              } else if (xhr.status === 403) {
-                message = 'Forbidden: You do not have permission to perform this action.';
-              } else if (xhr.responseJSON && xhr.responseJSON.message) {
-                message = xhr.responseJSON.message;
-              }
-              alert(message);
+              message = 'Validation errors:\n\n' + (errorDetails || (xhr.responseJSON && xhr.responseJSON.message ? xhr.responseJSON.message : 'Please check all required fields.'));
+            } else if (xhr.responseJSON && xhr.responseJSON.message) {
+              message = xhr.responseJSON.message;
             }
-          });
-        }
+            alert(message);
+          }
+        });
+        }); // End of fileToBase64 callback
       });
 
       $('#dob').datepicker({

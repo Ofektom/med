@@ -77,14 +77,14 @@ public class WebSecurityConfig {
                                 "/assets/**",        // Allow all files in assets/
                                 "/includes/**"       // Allow all files in includes/
                         ).permitAll()
-                        .requestMatchers("/api/v1/auth/**").permitAll()
+                        .requestMatchers("/api/v1/auth/login", "/api/v1/auth/register").permitAll()
                         .requestMatchers(
                                 "/api/v1/users/**",
                                 "/api/v1/medication/**",
                                 "/api/v1/assets/**",
                                 "/api/v1/rooms/**",
                                 "/api/v1/search/**").authenticated()
-                        .requestMatchers("/api/v1/auth/logout").authenticated()
+                        .requestMatchers("/api/v1/auth/add", "/api/v1/auth/logout").authenticated()
                         .anyRequest().authenticated()
                 )
                 .exceptionHandling(exception -> exception

@@ -20,9 +20,14 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
+import jakarta.servlet.http.HttpServletResponse;
+import java.io.IOException;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Configuration
 @EnableWebSecurity
@@ -89,8 +94,19 @@ public class WebSecurityConfig {
                 )
                 .exceptionHandling(exception -> exception
                         .accessDeniedHandler((request, response, accessDeniedException) -> {
-                            // Access denied - log only for debugging if needed
-                            // In production, remove or use proper logging framework
+                            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                            response.setContentType("application/json;charset=UTF-8");
+                            try {
+                                Map<String, Object> errorResponse = new HashMap<>();
+                                errorResponse.put("statusCode", 403);
+                                errorResponse.put("message", "You do not have permission to perform this action.");
+                                errorResponse.put("path", request.getRequestURI());
+                                ObjectMapper mapper = new ObjectMapper();
+                                response.getWriter().write(mapper.writeValueAsString(errorResponse));
+                            } catch (IOException e) {
+                                // Fallback if JSON writing fails
+                                response.getWriter().write("{\"statusCode\":403,\"message\":\"Access Denied\"}");
+                            }
                         })
                 )
                 .logout(logout -> logout

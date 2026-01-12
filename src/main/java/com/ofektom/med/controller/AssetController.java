@@ -28,19 +28,19 @@ public class AssetController {
     }
 
     @PostMapping("/add")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_ACCOUNTANT')")
     public ResponseEntity<?> addAsset(@Valid @RequestBody AssetDto assetDto) {
         return assetsService.addAsset(assetDto);
     }
 
     @GetMapping("/{id}")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_ACCOUNTANT')")
     public ResponseEntity<?> getAssetById(@PathVariable("id") UUID id) {
         return assetsService.getAssetById(id);
     }
 
     @GetMapping("/all")
-    @PreAuthorize("hasAnyRole('SUPER_ADMIN', 'ADMIN', 'ACCOUNTANT')")
+    @PreAuthorize("hasAnyRole('ROLE_SUPER_ADMIN', 'ROLE_ADMIN', 'ROLE_ACCOUNTANT')")
     public ResponseEntity<?> getAllAssets(
             @RequestParam(required = false) Integer page,
             @RequestParam(required = false) Integer size

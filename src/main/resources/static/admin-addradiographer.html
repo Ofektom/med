@@ -922,20 +922,72 @@
           return;
         }
 
-        // Function to convert file to base64
-        function fileToBase64(file, callback) {
+        // Function to compress and resize image before converting to base64
+        function compressImage(file, maxWidth, maxHeight, quality, callback) {
           if (!file) {
             callback(null);
             return;
           }
+          
+          // Check if file is an image
+          if (!file.type.match('image.*')) {
+            callback(null);
+            return;
+          }
+          
           const reader = new FileReader();
           reader.onload = function(e) {
-            callback(e.target.result);
+            const img = new Image();
+            img.onload = function() {
+              // Create canvas
+              const canvas = document.createElement('canvas');
+              let width = img.width;
+              let height = img.height;
+              
+              // Calculate new dimensions
+              if (width > height) {
+                if (width > maxWidth) {
+                  height = (height * maxWidth) / width;
+                  width = maxWidth;
+                }
+              } else {
+                if (height > maxHeight) {
+                  width = (width * maxHeight) / height;
+                  height = maxHeight;
+                }
+              }
+              
+              // Set canvas dimensions
+              canvas.width = width;
+              canvas.height = height;
+              
+              // Draw and compress
+              const ctx = canvas.getContext('2d');
+              ctx.drawImage(img, 0, 0, width, height);
+              
+              // Convert to base64 with compression
+              const base64String = canvas.toDataURL(file.type, quality);
+              callback(base64String);
+            };
+            img.onerror = function() {
+              callback(null);
+            };
+            img.src = e.target.result;
           };
           reader.onerror = function() {
             callback(null);
           };
           reader.readAsDataURL(file);
+        }
+        
+        // Function to convert file to base64 (with compression)
+        function fileToBase64(file, callback) {
+          if (!file) {
+            callback(null);
+            return;
+          }
+          // Compress image: max 800x800px, quality 0.7 (70%)
+          compressImage(file, 800, 800, 0.7, callback);
         }
 
         const profilePictureFile = $('#profilePicture')[0].files[0];
